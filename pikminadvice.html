@@ -373,17 +373,23 @@
             z-index: 2;
         }
 
+        /* 修正容器高度，改為自動適應內容 */
         .main-swipe-container {
             display: flex;
             width: 200%;
-            transition: transform 0.3s ease-out;
-            touch-action: pan-y;
+            transition: transform 0.3s ease;
+            height: auto;
+            min-height: 50vh;
+            /* 確保內容少的時候也不會太扁 */
         }
 
         .main-swipe-page {
-            width: 50%;
-            flex-shrink: 0;
+            width: 100%;
+            height: auto;
+            /* 改為自動，不再被螢幕高度鎖死 */
         }
+
+
 
         .empty-state {
             display: flex;
@@ -775,12 +781,14 @@
 
         /* === 橫式進度面板 (三層垂直排列) === */
         .dashboard {
+            margin-top: 20px;
+            /* 與上方分類 Icon 保持間距 */
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
             /* 三個白色塊之間的間距 */
-            margin: 5px auto 15px auto;
             position: relative;
             z-index: 2;
             width: 100%;
@@ -1937,6 +1945,21 @@
     </div>
 
 
+
+
+
+
+    <div class="main-swipe-viewport" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)">
+        <div class="main-swipe-container" id="main-swipe-container">
+            <div class="main-swipe-page">
+                <div id="category-nav" class="category-nav"></div>
+            </div>
+            <div class="main-swipe-page">
+                <div class="empty-state" style="margin-top:-25vh; color: #696969;">特殊圖鑑建置中...</div>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard">
         <div class="card-horizontal">
             <div class="stats-left">
@@ -1982,15 +2005,7 @@
     </div>
 
 
-    <div class="main-swipe-viewport" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)">
-        <div class="main-swipe-container" id="main-swipe-container">
-            <div class="main-swipe-page">
-                <div id="category-nav" class="category-nav"></div>
-            </div>
-            <div class="main-swipe-page">
-            </div>
-        </div>
-    </div>
+
 
     <div class="footer-info">
         <span>版本：v1.0｜最後修改：2026.05.29｜by Berice</span>
@@ -2345,7 +2360,7 @@
                 </p>
                 <p>管理器是由作者閒暇時間，一點一滴搭建起來。為了維持網站順暢，透過網路託管與營運成本的付出，期待能幫助大家：</p>
 
-                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0;">　✅ 避免培養到重複皮皮</p>
+                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0;">　✅ 更有效率的培養皮皮</p>
                 <p style="color: #F57C00; font-weight: 500;">　✅ 優化背包空間</p>
                 <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0;">　✅ 更快解鎖圖鑑</p>
 
@@ -2413,7 +2428,561 @@
 
         const specialIconUrl = "https://pikmin.wiki.gallery/images/thumb/0/01/Special_icon.png/24px-Special_icon.png";
         const rawUrlsData = "餐廳\nhttps://pikmin.wiki.gallery/images/5/5e/Decor_Red_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/41/Decor_Yellow_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/3/37/Decor_Blue_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/c/cf/Decor_White_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/0/0c/Decor_Purple_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/b/bc/Decor_Rock_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/5/59/Decor_Winged_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/b/b5/Decor_Ice_Chef_Hat_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/a7/Decor_Red_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/3/33/Decor_Yellow_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/e/ef/Decor_Blue_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/9/93/Decor_White_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/6/66/Decor_Purple_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/7/79/Decor_Rock_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/7/74/Decor_Winged_Chef_Hat.png\nhttps://pikmin.wiki.gallery/images/5/58/Decor_Ice_Chef_Hat.png\n咖啡廳\nhttps://pikmin.wiki.gallery/images/5/54/Decor_Red_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/2/29/Decor_Yellow_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/4d/Decor_Blue_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/9b/Decor_White_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/40/Decor_Purple_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/8/82/Decor_Rock_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/8/81/Decor_Winged_Coffee_Cup_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Red_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/1/1d/Decor_Yellow_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/b/ba/Decor_Blue_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/b/bf/Decor_White_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/3/37/Decor_Purple_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/1/1c/Decor_Rock_Coffee_Cup.png\nhttps://pikmin.wiki.gallery/images/2/29/Decor_Winged_Coffee_Cup.png\n甜點店\nhttps://pikmin.wiki.gallery/images/1/14/Decor_Red_Macaron.png\nhttps://pikmin.wiki.gallery/images/8/8e/Decor_Yellow_Macaron.png\nhttps://pikmin.wiki.gallery/images/3/3a/Decor_Blue_Macaron.png\nhttps://pikmin.wiki.gallery/images/6/6a/Decor_White_Macaron.png\nhttps://pikmin.wiki.gallery/images/d/de/Decor_Purple_Macaron.png\nhttps://pikmin.wiki.gallery/images/1/1d/Decor_Rock_Macaron.png\nhttps://pikmin.wiki.gallery/images/f/fb/Decor_Winged_Macaron.png\nhttps://pikmin.wiki.gallery/images/b/b1/Decor_Red_Donut.png\nhttps://pikmin.wiki.gallery/images/8/8d/Decor_Yellow_Donut.png\nhttps://pikmin.wiki.gallery/images/e/e9/Decor_Blue_Donut.png\nhttps://pikmin.wiki.gallery/images/c/cb/Decor_White_Donut.png\nhttps://pikmin.wiki.gallery/images/8/81/Decor_Purple_Donut.png\nhttps://pikmin.wiki.gallery/images/6/62/Decor_Rock_Donut.png\nhttps://pikmin.wiki.gallery/images/9/9b/Decor_Winged_Donut.png\n電影院\nhttps://pikmin.wiki.gallery/images/d/d5/Decor_Red_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/a/ad/Decor_Yellow_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/a/ab/Decor_Blue_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/b/ba/Decor_White_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/f/f1/Decor_Purple_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/a/a3/Decor_Rock_Popcorn_Snack.png\nhttps://pikmin.wiki.gallery/images/1/1c/Decor_Winged_Popcorn_Snack.png\n藥局\nhttps://pikmin.wiki.gallery/images/8/8d/Decor_Red_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/4/4a/Decor_Yellow_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/8/85/Decor_Blue_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/a/a4/Decor_White_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/a/a5/Decor_Purple_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/3/3d/Decor_Rock_Toothbrush.png\nhttps://pikmin.wiki.gallery/images/9/93/Decor_Winged_Toothbrush.png\n動物園\nhttps://pikmin.wiki.gallery/images/a/a9/Decor_Red_Dandelion.png\nhttps://pikmin.wiki.gallery/images/5/57/Decor_Yellow_Dandelion.png\nhttps://pikmin.wiki.gallery/images/0/07/Decor_Blue_Dandelion.png\nhttps://pikmin.wiki.gallery/images/0/0a/Decor_White_Dandelion.png\nhttps://pikmin.wiki.gallery/images/d/d7/Decor_Purple_Dandelion.png\nhttps://pikmin.wiki.gallery/images/b/b0/Decor_Rock_Dandelion.png\nhttps://pikmin.wiki.gallery/images/1/19/Decor_Winged_Dandelion.png\n森林\nhttps://pikmin.wiki.gallery/images/0/0b/Decor_Red_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/a/a7/Decor_Yellow_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/9/9e/Decor_Blue_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/b/bc/Decor_White_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/0/0e/Decor_Purple_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/c/c6/Decor_Rock_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/4/4c/Decor_Winged_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/4/4c/Decor_Ice_Stag_Beetle.png\nhttps://pikmin.wiki.gallery/images/a/a0/Decor_Red_Acorn.png\nhttps://pikmin.wiki.gallery/images/c/c9/Decor_Yellow_Acorn.png\nhttps://pikmin.wiki.gallery/images/c/c2/Decor_Blue_Acorn.png\nhttps://pikmin.wiki.gallery/images/e/e8/Decor_White_Acorn.png\nhttps://pikmin.wiki.gallery/images/4/4d/Decor_Purple_Acorn.png\nhttps://pikmin.wiki.gallery/images/f/f5/Decor_Rock_Acorn.png\nhttps://pikmin.wiki.gallery/images/9/94/Decor_Winged_Acorn.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Ice_Acorn.png\n水邊\nhttps://pikmin.wiki.gallery/images/d/df/Decor_Red_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/4f/Decor_Yellow_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/f2/Decor_Blue_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/99/Decor_White_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/a8/Decor_Purple_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/7/7d/Decor_Rock_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/1/19/Decor_Winged_Fishing_Lure_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/96/Decor_Red_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/2/25/Decor_Yellow_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/9/9a/Decor_Blue_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/7/75/Decor_White_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/8/89/Decor_Purple_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/f/f6/Decor_Rock_Fishing_Lure.png\nhttps://pikmin.wiki.gallery/images/7/79/Decor_Winged_Fishing_Lure.png\n郵局\nhttps://pikmin.wiki.gallery/images/6/69/Decor_Red_Stamp.png\nhttps://pikmin.wiki.gallery/images/d/da/Decor_Yellow_Stamp.png\nhttps://pikmin.wiki.gallery/images/8/88/Decor_Blue_Stamp.png\nhttps://pikmin.wiki.gallery/images/3/3d/Decor_White_Stamp.png\nhttps://pikmin.wiki.gallery/images/e/e1/Decor_Purple_Stamp.png\nhttps://pikmin.wiki.gallery/images/9/97/Decor_Rock_Stamp.png\nhttps://pikmin.wiki.gallery/images/2/2b/Decor_Winged_Stamp.png\n美術館\nhttps://pikmin.wiki.gallery/images/9/9b/Decor_Red_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/a/a1/Decor_Yellow_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/e/ee/Decor_Blue_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/d/db/Decor_White_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/6/6d/Decor_Purple_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/6/6d/Decor_Rock_Picture_Frame.png\nhttps://pikmin.wiki.gallery/images/d/dc/Decor_Winged_Picture_Frame.png\n機場\nhttps://pikmin.wiki.gallery/images/4/48/Decor_Red_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/2/23/Decor_Yellow_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/7/73/Decor_Blue_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/d/d0/Decor_White_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/b/b6/Decor_Purple_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/8/88/Decor_Rock_Toy_Airplane.png\nhttps://pikmin.wiki.gallery/images/f/fd/Decor_Winged_Toy_Airplane.png\n車站\nhttps://pikmin.wiki.gallery/images/5/5e/Decor_Red_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/b/ba/Decor_Yellow_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/e/e5/Decor_Blue_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/7/70/Decor_White_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/4/41/Decor_Purple_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/d/d4/Decor_Rock_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/8/84/Decor_Winged_Paper_Train.png\nhttps://pikmin.wiki.gallery/images/4/42/Decor_Red_Ticket.png\nhttps://pikmin.wiki.gallery/images/f/fc/Decor_Yellow_Ticket.png\nhttps://pikmin.wiki.gallery/images/7/78/Decor_Blue_Ticket.png\nhttps://pikmin.wiki.gallery/images/b/be/Decor_White_Ticket.png\nhttps://pikmin.wiki.gallery/images/f/f9/Decor_Purple_Ticket.png\nhttps://pikmin.wiki.gallery/images/4/42/Decor_Rock_Ticket.png\nhttps://pikmin.wiki.gallery/images/d/dc/Decor_Winged_Ticket.png\nhttps://pikmin.wiki.gallery/images/7/7a/Decor_Red_Gold_Ticket.png\n海灘\nhttps://pikmin.wiki.gallery/images/7/74/Decor_Red_Shell.png\nhttps://pikmin.wiki.gallery/images/6/6e/Decor_Yellow_Shell.png\nhttps://pikmin.wiki.gallery/images/d/de/Decor_Blue_Shell.png\nhttps://pikmin.wiki.gallery/images/0/0f/Decor_White_Shell.png\nhttps://pikmin.wiki.gallery/images/c/c6/Decor_Purple_Shell.png\nhttps://pikmin.wiki.gallery/images/3/3a/Decor_Rock_Shell.png\nhttps://pikmin.wiki.gallery/images/d/d4/Decor_Winged_Shell.png\n漢堡店\nhttps://pikmin.wiki.gallery/images/c/c6/Decor_Red_Burger.png\nhttps://pikmin.wiki.gallery/images/1/1b/Decor_Yellow_Burger.png\nhttps://pikmin.wiki.gallery/images/b/b2/Decor_Blue_Burger.png\nhttps://pikmin.wiki.gallery/images/c/c8/Decor_White_Burger.png\nhttps://pikmin.wiki.gallery/images/2/28/Decor_Purple_Burger.png\nhttps://pikmin.wiki.gallery/images/a/a8/Decor_Rock_Burger.png\nhttps://pikmin.wiki.gallery/images/7/78/Decor_Winged_Burger.png\n便利店\nhttps://pikmin.wiki.gallery/images/3/32/Decor_Red_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/1/10/Decor_Yellow_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/a/a1/Decor_Blue_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/2/2e/Decor_White_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/b/be/Decor_Purple_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/e/eb/Decor_Rock_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/5/58/Decor_Winged_Bottle_Cap.png\nhttps://pikmin.wiki.gallery/images/4/49/Decor_Red_Snack.png\nhttps://pikmin.wiki.gallery/images/0/0a/Decor_Yellow_Snack.png\nhttps://pikmin.wiki.gallery/images/4/4a/Decor_Blue_Snack.png\nhttps://pikmin.wiki.gallery/images/4/4b/Decor_White_Snack.png\nhttps://pikmin.wiki.gallery/images/f/fb/Decor_Purple_Snack.png\nhttps://pikmin.wiki.gallery/images/e/eb/Decor_Rock_Snack.png\nhttps://pikmin.wiki.gallery/images/1/1f/Decor_Winged_Snack.png\n超市\nhttps://pikmin.wiki.gallery/images/5/56/Decor_Red_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/fe/Decor_Yellow_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/aa/Decor_Blue_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/e/e2/Decor_White_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/3/35/Decor_Purple_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/41/Decor_Rock_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/d/d6/Decor_Winged_Banana_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/6/67/Decor_Red_Mushroom.png\nhttps://pikmin.wiki.gallery/images/c/ce/Decor_Yellow_Mushroom.png\nhttps://pikmin.wiki.gallery/images/d/db/Decor_Blue_Mushroom.png\nhttps://pikmin.wiki.gallery/images/1/10/Decor_White_Mushroom.png\nhttps://pikmin.wiki.gallery/images/b/b0/Decor_Purple_Mushroom.png\nhttps://pikmin.wiki.gallery/images/0/0f/Decor_Rock_Mushroom.png\nhttps://pikmin.wiki.gallery/images/7/7f/Decor_Winged_Mushroom.png\nhttps://pikmin.wiki.gallery/images/1/1c/Decor_Red_Banana.png\nhttps://pikmin.wiki.gallery/images/f/f7/Decor_Yellow_Banana.png\nhttps://pikmin.wiki.gallery/images/d/d1/Decor_Blue_Banana.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_White_Banana.png\nhttps://pikmin.wiki.gallery/images/9/98/Decor_Purple_Banana.png\nhttps://pikmin.wiki.gallery/images/b/b3/Decor_Rock_Banana.png\nhttps://pikmin.wiki.gallery/images/7/72/Decor_Winged_Banana.png\n麵包店\nhttps://pikmin.wiki.gallery/images/1/13/Decor_Red_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/3/3c/Decor_Yellow_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/e/e5/Decor_Blue_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/f8/Decor_White_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/2/29/Decor_Purple_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/2/25/Decor_Rock_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/1/14/Decor_Winged_Baguette_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/6/6c/Decor_Red_Baguette.png\nhttps://pikmin.wiki.gallery/images/b/be/Decor_Yellow_Baguette.png\nhttps://pikmin.wiki.gallery/images/9/95/Decor_Blue_Baguette.png\nhttps://pikmin.wiki.gallery/images/5/5b/Decor_White_Baguette.png\nhttps://pikmin.wiki.gallery/images/f/f9/Decor_Purple_Baguette.png\nhttps://pikmin.wiki.gallery/images/a/a2/Decor_Rock_Baguette.png\nhttps://pikmin.wiki.gallery/images/2/20/Decor_Winged_Baguette.png\n美容院\nhttps://pikmin.wiki.gallery/images/e/ef/Decor_Red_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/5/5e/Decor_Yellow_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/6/61/Decor_Blue_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/e/eb/Decor_White_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/1/17/Decor_Purple_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/8/85/Decor_Rock_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/b/bc/Decor_Winged_Scissors_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/5/5d/Decor_Red_Scissors.png\nhttps://pikmin.wiki.gallery/images/3/31/Decor_Yellow_Scissors.png\nhttps://pikmin.wiki.gallery/images/e/e2/Decor_Blue_Scissors.png\nhttps://pikmin.wiki.gallery/images/c/cd/Decor_White_Scissors.png\nhttps://pikmin.wiki.gallery/images/1/16/Decor_Purple_Scissors.png\nhttps://pikmin.wiki.gallery/images/8/80/Decor_Rock_Scissors.png\nhttps://pikmin.wiki.gallery/images/3/3c/Decor_Winged_Scissors.png\n服飾店\nhttps://pikmin.wiki.gallery/images/9/9a/Decor_Red_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/1/12/Decor_Yellow_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/1/1e/Decor_Blue_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_White_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/f/f0/Decor_Purple_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/7/76/Decor_Rock_Hair_Tie.png\nhttps://pikmin.wiki.gallery/images/6/62/Decor_Winged_Hair_Tie.png\n公園\nhttps://pikmin.wiki.gallery/images/3/33/Decor_Red_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/d/de/Decor_Yellow_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/f4/Decor_Blue_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/fa/Decor_White_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/3/3e/Decor_Purple_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/f/f0/Decor_Rock_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/91/Decor_Winged_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/9b/Decor_Ice_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/8/83/Decor_Red_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/2/2d/Decor_Yellow_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/d/de/Decor_Blue_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/a9/Decor_White_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/d/d8/Decor_Purple_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/a6/Decor_Rock_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/40/Decor_Winged_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/a/ad/Decor_Ice_Four-Leaf_Clover_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/5/5e/Decor_Red_Clover.png\nhttps://pikmin.wiki.gallery/images/2/22/Decor_Yellow_Clover.png\nhttps://pikmin.wiki.gallery/images/a/a6/Decor_Blue_Clover.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_White_Clover.png\nhttps://pikmin.wiki.gallery/images/b/b6/Decor_Purple_Clover.png\nhttps://pikmin.wiki.gallery/images/c/c3/Decor_Rock_Clover.png\nhttps://pikmin.wiki.gallery/images/3/3c/Decor_Winged_Clover.png\nhttps://pikmin.wiki.gallery/images/8/87/Decor_Ice_Clover.png\nhttps://pikmin.wiki.gallery/images/e/e2/Decor_Red_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/d/dd/Decor_Yellow_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/2/2d/Decor_Blue_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/c/cf/Decor_White_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/e/e4/Decor_Purple_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/8/8f/Decor_Rock_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/1/13/Decor_Winged_Four-Leaf_Clover.png\nhttps://pikmin.wiki.gallery/images/2/20/Decor_Ice_Four-Leaf_Clover.png\n圖書館\nhttps://pikmin.wiki.gallery/images/7/78/Decor_Red_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/6/6a/Decor_Yellow_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/f/f0/Decor_Blue_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/b/bd/Decor_White_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/e/ed/Decor_Purple_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/4/46/Decor_Rock_Tiny_Book.png\nhttps://pikmin.wiki.gallery/images/d/d8/Decor_Winged_Tiny_Book.png\n路邊\nhttps://pikmin.wiki.gallery/images/d/d8/Decor_Red_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/9/9d/Decor_Yellow_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/b/b0/Decor_Blue_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/7/7c/Decor_White_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/0/06/Decor_Purple_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/3/30/Decor_Rock_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/4/49/Decor_Winged_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/0/0b/Decor_Ice_Coin_%28Rare%29.png\nhttps://pikmin.wiki.gallery/images/0/08/Decor_Red_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/b/b1/Decor_Yellow_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Blue_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/6/64/Decor_White_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/6/69/Decor_Purple_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/7/7f/Decor_Rock_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/5/5f/Decor_Winged_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/a/ad/Decor_Ice_Sticker_1.png\nhttps://pikmin.wiki.gallery/images/e/ea/Decor_Red_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/a/af/Decor_Yellow_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/b/b6/Decor_Blue_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/4/4f/Decor_White_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/b/bd/Decor_Purple_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/3/38/Decor_Rock_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/0/00/Decor_Winged_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/2/26/Decor_Ice_Sticker_2.png\nhttps://pikmin.wiki.gallery/images/8/8f/Decor_Red_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/e/ea/Decor_Yellow_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/f/f4/Decor_Blue_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/0/0f/Decor_White_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/2/2d/Decor_Purple_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/a/ab/Decor_Rock_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/6/66/Decor_Winged_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/2/21/Decor_Ice_Sticker_3.png\nhttps://pikmin.wiki.gallery/images/9/97/Decor_Red_Coin.png\nhttps://pikmin.wiki.gallery/images/4/46/Decor_Yellow_Coin.png\nhttps://pikmin.wiki.gallery/images/f/f8/Decor_Blue_Coin.png\nhttps://pikmin.wiki.gallery/images/e/ea/Decor_White_Coin.png\nhttps://pikmin.wiki.gallery/images/4/4c/Decor_Purple_Coin.png\nhttps://pikmin.wiki.gallery/images/2/2a/Decor_Rock_Coin.png\nhttps://pikmin.wiki.gallery/images/0/05/Decor_Winged_Coin.png\nhttps://pikmin.wiki.gallery/images/c/c2/Decor_Ice_Coin.png\n壽司餐廳\nhttps://pikmin.wiki.gallery/images/7/7d/Decor_Red_Sushi.png\nhttps://pikmin.wiki.gallery/images/3/3d/Decor_Yellow_Sushi.png\nhttps://pikmin.wiki.gallery/images/7/7b/Decor_Blue_Sushi.png\nhttps://pikmin.wiki.gallery/images/8/80/Decor_White_Sushi.png\nhttps://pikmin.wiki.gallery/images/e/ee/Decor_Purple_Sushi.png\nhttps://pikmin.wiki.gallery/images/4/4d/Decor_Rock_Sushi.png\nhttps://pikmin.wiki.gallery/images/4/42/Decor_Winged_Sushi.png\n山丘\nhttps://pikmin.wiki.gallery/images/2/27/Decor_Red_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/a/aa/Decor_Yellow_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/3/3d/Decor_Blue_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/5/5a/Decor_White_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/7/72/Decor_Purple_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/c/cf/Decor_Rock_Mountain_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/5/52/Decor_Winged_Mountain_Pin_Badge.png\n體育場\nhttps://pikmin.wiki.gallery/images/7/71/Decor_Red_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/1/19/Decor_Yellow_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/d/d3/Decor_Blue_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/a/a8/Decor_White_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/3/31/Decor_Purple_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/6/6e/Decor_Rock_Ball_Keychain.png\nhttps://pikmin.wiki.gallery/images/4/44/Decor_Winged_Ball_Keychain.png\n雨天\nhttps://pikmin.wiki.gallery/images/0/0b/Decor_Blue_Leaf_Hat_1.png\nhttps://pikmin.wiki.gallery/images/3/3e/Decor_Blue_Leaf_Hat_2.png\nhttps://pikmin.wiki.gallery/images/b/bc/Decor_Blue_Leaf_Hat_3.png\n下雪\nhttps://pikmin.wiki.gallery/images/a/a8/Decor_Blue_Snow.png\nhttps://pikmin.wiki.gallery/images/8/82/Decor_White_Snow.png\nhttps://pikmin.wiki.gallery/images/8/8b/Decor_Ice_Snow.png\n主題樂園\nhttps://pikmin.wiki.gallery/images/0/0e/Decor_Red_Theme_Park_Ticket_1.png\nhttps://pikmin.wiki.gallery/images/e/e2/Decor_Yellow_Theme_Park_Ticket_1.png\nhttps://pikmin.wiki.gallery/images/4/40/Decor_Blue_Theme_Park_Ticket_1.png\nhttps://pikmin.wiki.gallery/images/8/88/Decor_Red_Theme_Park_Ticket_2.png\nhttps://pikmin.wiki.gallery/images/a/a6/Decor_Yellow_Theme_Park_Ticket_2.png\nhttps://pikmin.wiki.gallery/images/b/b3/Decor_Blue_Theme_Park_Ticket_2.png\n公車站\nhttps://pikmin.wiki.gallery/images/d/dd/Decor_Red_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/8/8b/Decor_Yellow_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/0/0f/Decor_Blue_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/2/27/Decor_White_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/a/a2/Decor_Purple_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/2/2d/Decor_Rock_Bus_Papercraft.png\nhttps://pikmin.wiki.gallery/images/7/7d/Decor_Winged_Bus_Papercraft.png\n義式餐廳\nhttps://pikmin.wiki.gallery/images/7/76/Decor_Red_Pizza.png\nhttps://pikmin.wiki.gallery/images/a/af/Decor_Yellow_Pizza.png\nhttps://pikmin.wiki.gallery/images/b/b7/Decor_Blue_Pizza.png\nhttps://pikmin.wiki.gallery/images/3/33/Decor_White_Pizza.png\nhttps://pikmin.wiki.gallery/images/6/60/Decor_Purple_Pizza.png\nhttps://pikmin.wiki.gallery/images/d/dd/Decor_Rock_Pizza.png\nhttps://pikmin.wiki.gallery/images/8/84/Decor_Winged_Pizza.png\nhttps://pikmin.wiki.gallery/images/0/06/Decor_Red_Pasta.png\nhttps://pikmin.wiki.gallery/images/d/d9/Decor_Yellow_Pasta.png\nhttps://pikmin.wiki.gallery/images/e/ed/Decor_Blue_Pasta.png\nhttps://pikmin.wiki.gallery/images/8/8d/Decor_White_Pasta.png\nhttps://pikmin.wiki.gallery/images/b/b1/Decor_Purple_Pasta.png\nhttps://pikmin.wiki.gallery/images/9/9f/Decor_Rock_Pasta.png\nhttps://pikmin.wiki.gallery/images/0/04/Decor_Winged_Pasta.png\n拉麵店\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Red_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/6/6f/Decor_Yellow_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/a/ad/Decor_Blue_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/6/69/Decor_White_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/5/5d/Decor_Purple_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/9/97/Decor_Rock_Ramen_Keychain.png\nhttps://pikmin.wiki.gallery/images/7/7c/Decor_Winged_Ramen_Keychain.png\n橋梁\nhttps://pikmin.wiki.gallery/images/3/34/Decor_Red_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/4/4e/Decor_Yellow_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/f/f9/Decor_Blue_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/6/6b/Decor_White_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/a/ad/Decor_Purple_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/a/aa/Decor_Rock_Bridge_Pin_Badge.png\nhttps://pikmin.wiki.gallery/images/f/ff/Decor_Winged_Bridge_Pin_Badge.png\n飯店\nhttps://pikmin.wiki.gallery/images/5/5b/Decor_Red_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/b/b7/Decor_Yellow_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/5/54/Decor_Blue_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/d/d8/Decor_White_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/3/3d/Decor_Purple_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/d/df/Decor_Rock_Hotel_Amenities.png\nhttps://pikmin.wiki.gallery/images/8/81/Decor_Winged_Hotel_Amenities.png\n化妝品商店\nhttps://pikmin.wiki.gallery/images/2/2d/Decor_Red_Makeup.png\nhttps://pikmin.wiki.gallery/images/e/e2/Decor_Yellow_Makeup.png\nhttps://pikmin.wiki.gallery/images/4/42/Decor_Blue_Makeup.png\nhttps://pikmin.wiki.gallery/images/4/42/Decor_White_Makeup.png\nhttps://pikmin.wiki.gallery/images/a/a6/Decor_Purple_Makeup.png\nhttps://pikmin.wiki.gallery/images/b/bd/Decor_Rock_Makeup.png\nhttps://pikmin.wiki.gallery/images/7/70/Decor_Winged_Makeup.png\n神社和寺廟\nhttps://pikmin.wiki.gallery/images/4/4a/Decor_Red_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/8/82/Decor_Yellow_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/9/9b/Decor_Blue_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/2/2a/Decor_White_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/c/ca/Decor_Purple_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Rock_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/4/4e/Decor_Winged_Fortune_1.png\nhttps://pikmin.wiki.gallery/images/8/87/Decor_Red_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/f/f1/Decor_Yellow_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/7/71/Decor_Blue_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/0/09/Decor_White_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/3/31/Decor_Purple_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/1/15/Decor_Rock_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/1/1c/Decor_Winged_Fortune_2.png\nhttps://pikmin.wiki.gallery/images/b/ba/Decor_Red_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/8/8c/Decor_Yellow_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/e/e6/Decor_Blue_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/d/d3/Decor_White_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/5/5c/Decor_Purple_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/3/3f/Decor_Rock_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/5/58/Decor_Winged_Fortune_3.png\nhttps://pikmin.wiki.gallery/images/7/70/Decor_Red_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/1/11/Decor_Yellow_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/b/b7/Decor_Blue_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/3/3b/Decor_White_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/4/4a/Decor_Purple_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/2/2b/Decor_Rock_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/f/fe/Decor_Winged_Fortune_4.png\nhttps://pikmin.wiki.gallery/images/2/2f/Decor_Red_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/6/65/Decor_Yellow_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/d/da/Decor_Blue_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/1/13/Decor_White_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/b/b2/Decor_Purple_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/e/e4/Decor_Rock_Fortune_5.png\nhttps://pikmin.wiki.gallery/images/d/d7/Decor_Winged_Fortune_5.png\n電器行\nhttps://pikmin.wiki.gallery/images/8/84/Decor_Yellow_Battery_1.png\nhttps://pikmin.wiki.gallery/images/6/61/Decor_Yellow_Battery_2.png\nhttps://pikmin.wiki.gallery/images/a/ae/Decor_Yellow_Battery_3.png\nhttps://pikmin.wiki.gallery/images/c/cb/Decor_Yellow_Battery_4.png\nhttps://pikmin.wiki.gallery/images/a/a8/Decor_Yellow_Battery_5.png\nhttps://pikmin.wiki.gallery/images/5/50/Decor_Yellow_Battery_6.png\nhttps://pikmin.wiki.gallery/images/4/4c/Decor_Yellow_Fairy_Lights_1.png\nhttps://pikmin.wiki.gallery/images/0/04/Decor_Yellow_Fairy_Lights_2.png\n咖哩餐廳\nhttps://pikmin.wiki.gallery/images/9/99/Decor_Red_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/5/57/Decor_Yellow_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/3/3c/Decor_Blue_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/8/87/Decor_White_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/9/96/Decor_Purple_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/6/63/Decor_Rock_Curry_Bowl.png\nhttps://pikmin.wiki.gallery/images/e/e1/Decor_Winged_Curry_Bowl.png\n五金行\nhttps://pikmin.wiki.gallery/images/1/1d/Decor_Red_Tool.png\nhttps://pikmin.wiki.gallery/images/a/a3/Decor_Yellow_Tool.png\nhttps://pikmin.wiki.gallery/images/5/5f/Decor_Blue_Tool.png\nhttps://pikmin.wiki.gallery/images/3/3b/Decor_White_Tool.png\nhttps://pikmin.wiki.gallery/images/a/ac/Decor_Purple_Tool.png\nhttps://pikmin.wiki.gallery/images/4/48/Decor_Rock_Tool.png\nhttps://pikmin.wiki.gallery/images/7/7b/Decor_Winged_Tool.png\n大學&學院\nhttps://pikmin.wiki.gallery/images/e/ee/Decor_Red_College_Crest_Patch.png\nhttps://pikmin.wiki.gallery/images/5/55/Decor_Yellow_College_Crest_Patch.png\nhttps://pikmin.wiki.gallery/images/c/cc/Decor_Blue_College_Crest_Patch.png\n墨西哥餐廳\nhttps://pikmin.wiki.gallery/images/9/9e/Decor_Red_Taco.png\nhttps://pikmin.wiki.gallery/images/b/b1/Decor_Yellow_Taco.png\nhttps://pikmin.wiki.gallery/images/f/f9/Decor_Blue_Taco.png\nhttps://pikmin.wiki.gallery/images/7/7d/Decor_White_Taco.png\nhttps://pikmin.wiki.gallery/images/4/44/Decor_Purple_Taco.png\nhttps://pikmin.wiki.gallery/images/4/47/Decor_Rock_Taco.png\nhttps://pikmin.wiki.gallery/images/1/1a/Decor_Winged_Taco.png\n自助洗衣店&乾洗店\nhttps://pikmin.wiki.gallery/images/1/12/Decor_Red_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/d/dd/Decor_Yellow_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/e/e9/Decor_Blue_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/6/64/Decor_White_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/3/30/Decor_Purple_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/7/71/Decor_Rock_Laundry_Item.png\nhttps://pikmin.wiki.gallery/images/b/b9/Decor_Winged_Laundry_Item.png\n韓國餐廳\nhttps://pikmin.wiki.gallery/images/a/a4/Decor_Red_Kimchi.png\nhttps://pikmin.wiki.gallery/images/3/31/Decor_Yellow_Kimchi.png\nhttps://pikmin.wiki.gallery/images/c/cf/Decor_Blue_Kimchi.png\nhttps://pikmin.wiki.gallery/images/b/ba/Decor_White_Kimchi.png\nhttps://pikmin.wiki.gallery/images/b/b4/Decor_Purple_Kimchi.png\nhttps://pikmin.wiki.gallery/images/f/f2/Decor_Rock_Kimchi.png\nhttps://pikmin.wiki.gallery/images/b/bb/Decor_Winged_Kimchi.png\nhttps://pikmin.wiki.gallery/images/4/43/Decor_Ice_Kimchi.png";
-        const specialRawUrlsData = `花冠 https://pikmin.wiki.gallery/images/d/d0/Decor_Red_Flower_Crown.png https://pikmin.wiki.gallery/images/3/31/Decor_Yellow_Flower_Crown.png https://pikmin.wiki.gallery/images/a/a4/Decor_Blue_Flower_Crown.png https://pikmin.wiki.gallery/images/c/c5/Decor_White_Flower_Crown.png https://pikmin.wiki.gallery/images/1/1a/Decor_Purple_Flower_Crown.png https://pikmin.wiki.gallery/images/f/f1/Decor_Rock_Flower_Crown.png https://pikmin.wiki.gallery/images/d/d5/Decor_Winged_Flower_Crown.png https://pikmin.wiki.gallery/images/e/e2/Decor_Ice_Flower_Crown.png 衝浪板鑰匙圈 https://pikmin.wiki.gallery/images/2/22/Decor_Red_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/d/dc/Decor_Yellow_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/a/ae/Decor_Blue_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/8/89/Decor_White_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/4/4c/Decor_Purple_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/0/0e/Decor_Rock_Surfboard_Keychain.png https://pikmin.wiki.gallery/images/d/d2/Decor_Winged_Surfboard_Keychain.png 拼圖：2022年夏日回憶 https://pikmin.wiki.gallery/images/c/c4/Decor_Red_Puzzle_2.png https://pikmin.wiki.gallery/images/c/c7/Decor_Yellow_Puzzle_2.png https://pikmin.wiki.gallery/images/1/13/Decor_Blue_Puzzle_2.png https://pikmin.wiki.gallery/images/6/66/Decor_White_Puzzle_2.png https://pikmin.wiki.gallery/images/7/7b/Decor_Purple_Puzzle_2.png https://pikmin.wiki.gallery/images/0/04/Decor_Rock_Puzzle_2.png https://pikmin.wiki.gallery/images/6/61/Decor_Winged_Puzzle_2.png 拼圖：2023年夏日回憶 https://pikmin.wiki.gallery/images/0/05/Decor_Red_Puzzle_4.png https://pikmin.wiki.gallery/images/8/87/Decor_Yellow_Puzzle_4.png https://pikmin.wiki.gallery/images/a/a0/Decor_Blue_Puzzle_4.png https://pikmin.wiki.gallery/images/c/c0/Decor_White_Puzzle_4.png https://pikmin.wiki.gallery/images/d/d7/Decor_Purple_Puzzle_4.png https://pikmin.wiki.gallery/images/9/90/Decor_Rock_Puzzle_4.png https://pikmin.wiki.gallery/images/d/d9/Decor_Winged_Puzzle_4.png 遊戲卡牌 https://pikmin.wiki.gallery/images/c/cf/Decor_Red_Playing_Card_3.png https://pikmin.wiki.gallery/images/5/5c/Decor_Red_Playing_Card_4.png https://pikmin.wiki.gallery/images/2/2a/Decor_Yellow_Playing_Card_3.png https://pikmin.wiki.gallery/images/4/45/Decor_Yellow_Playing_Card_4.png https://pikmin.wiki.gallery/images/d/d7/Decor_Blue_Playing_Card_3.png https://pikmin.wiki.gallery/images/5/52/Decor_Blue_Playing_Card_4.png https://pikmin.wiki.gallery/images/2/2f/Decor_White_Playing_Card_3.png https://pikmin.wiki.gallery/images/d/dd/Decor_Purple_Playing_Card_3.png https://pikmin.wiki.gallery/images/e/e8/Decor_Purple_Playing_Card_4.png https://pikmin.wiki.gallery/images/9/94/Decor_Rock_Playing_Card_3.png https://pikmin.wiki.gallery/images/3/38/Decor_Rock_Playing_Card_4.png https://pikmin.wiki.gallery/images/9/92/Decor_Winged_Playing_Card_3.png https://pikmin.wiki.gallery/images/2/2c/Decor_Winged_Playing_Card_4.png https://pikmin.wiki.gallery/images/4/45/Decor_Red_Playing_Card_1.png https://pikmin.wiki.gallery/images/e/e3/Decor_Red_Playing_Card_2.png https://pikmin.wiki.gallery/images/2/27/Decor_Yellow_Playing_Card_1.png https://pikmin.wiki.gallery/images/f/f0/Decor_Yellow_Playing_Card_2.png https://pikmin.wiki.gallery/images/0/06/Decor_Blue_Playing_Card_1.png https://pikmin.wiki.gallery/images/5/53/Decor_Blue_Playing_Card_2.png https://pikmin.wiki.gallery/images/9/9a/Decor_White_Playing_Card_1.png https://pikmin.wiki.gallery/images/f/f9/Decor_White_Playing_Card_2.png https://pikmin.wiki.gallery/images/1/18/Decor_Purple_Playing_Card_1.png https://pikmin.wiki.gallery/images/4/48/Decor_Rock_Playing_Card_1.png https://pikmin.wiki.gallery/images/6/6d/Decor_Rock_Playing_Card_2.png https://pikmin.wiki.gallery/images/c/ce/Decor_Winged_Playing_Card_1.png https://pikmin.wiki.gallery/images/b/bf/Decor_Winged_Playing_Card_2.png https://pikmin.wiki.gallery/images/b/bc/Decor_Purple_Playing_Card_2.png 玫瑰花結 https://pikmin.wiki.gallery/images/c/c3/Decor_Red_Rosette.png https://pikmin.wiki.gallery/images/f/f9/Decor_Yellow_Rosette.png https://pikmin.wiki.gallery/images/c/c4/Decor_Purple_Rosette.png 遊戲卡匣 https://pikmin.wiki.gallery/images/a/af/Decor_Red_Game_Pak.png https://pikmin.wiki.gallery/images/e/e6/Decor_Yellow_Game_Pak.png https://pikmin.wiki.gallery/images/6/68/Decor_Blue_Game_Pak.png https://pikmin.wiki.gallery/images/3/32/Decor_White_Game_Pak.png https://pikmin.wiki.gallery/images/8/82/Decor_Purple_Game_Pak.png https://pikmin.wiki.gallery/images/4/40/Decor_Rock_Game_Pak.png https://pikmin.wiki.gallery/images/8/87/Decor_Winged_Game_Pak.png https://pikmin.wiki.gallery/images/2/22/Decor_Ice_Game_Pak.png Nintendo遊戲機1980-1995 https://pikmin.wiki.gallery/images/b/b9/Decor_Red_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/7/7f/Decor_Yellow_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/5/5c/Decor_Blue_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/1/1f/Decor_White_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/3/3a/Decor_Purple_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/e/e3/Decor_Rock_Nintendo_Consoles_1.png https://pikmin.wiki.gallery/images/7/71/Decor_Winged_Nintendo_Consoles_1.png 起司店 https://pikmin.wiki.gallery/images/e/e2/Decor_Red_Cheese.png https://pikmin.wiki.gallery/images/c/c2/Decor_Yellow_Cheese.png https://pikmin.wiki.gallery/images/7/7d/Decor_Blue_Cheese.png https://pikmin.wiki.gallery/images/a/a7/Decor_White_Cheese.png https://pikmin.wiki.gallery/images/9/9c/Decor_Purple_Cheese.png https://pikmin.wiki.gallery/images/f/fb/Decor_Rock_Cheese.png https://pikmin.wiki.gallery/images/b/b1/Decor_Winged_Cheese.png 復活節彩蛋 https://pikmin.wiki.gallery/images/5/56/Decor_Red_Easter_Egg.png https://pikmin.wiki.gallery/images/7/71/Decor_Yellow_Easter_Egg.png https://pikmin.wiki.gallery/images/3/3e/Decor_Blue_Easter_Egg.png https://pikmin.wiki.gallery/images/a/a6/Decor_White_Easter_Egg.png https://pikmin.wiki.gallery/images/2/26/Decor_Purple_Easter_Egg.png https://pikmin.wiki.gallery/images/f/f9/Decor_Rock_Easter_Egg.png https://pikmin.wiki.gallery/images/e/e5/Decor_Winged_Easter_Egg.png 兔寶寶彩蛋 https://pikmin.wiki.gallery/images/4/4a/Decor_Red_Bunny_Egg.png https://pikmin.wiki.gallery/images/c/c8/Decor_Yellow_Bunny_Egg.png https://pikmin.wiki.gallery/images/2/24/Decor_Blue_Bunny_Egg.png https://pikmin.wiki.gallery/images/1/19/Decor_White_Bunny_Egg.png https://pikmin.wiki.gallery/images/8/88/Decor_Purple_Bunny_Egg.png https://pikmin.wiki.gallery/images/7/7d/Decor_Rock_Bunny_Egg.png https://pikmin.wiki.gallery/images/6/6a/Decor_Winged_Bunny_Egg.png 荷蘭木鞋鑰匙圈 https://pikmin.wiki.gallery/images/8/82/Decor_Red_Klompen_Keychain.png https://pikmin.wiki.gallery/images/6/66/Decor_Yellow_Klompen_Keychain.png https://pikmin.wiki.gallery/images/b/b3/Decor_Blue_Klompen_Keychain.png https://pikmin.wiki.gallery/images/a/a1/Decor_White_Klompen_Keychain.png https://pikmin.wiki.gallery/images/c/c7/Decor_Purple_Klompen_Keychain.png https://pikmin.wiki.gallery/images/9/9f/Decor_Rock_Klompen_Keychain.png https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Klompen_Keychain.png https://pikmin.wiki.gallery/images/5/51/Decor_Ice_Klompen_Keychain.png 超級瑪利歐鑰匙圈 https://pikmin.wiki.gallery/images/9/92/Decor_Red_Super_Mario_Keychain.png https://pikmin.wiki.gallery/images/b/b0/Decor_Yellow_Super_Mario_Keychain.png https://pikmin.wiki.gallery/images/9/96/Decor_Blue_Super_Mario_Keychain.png https://pikmin.wiki.gallery/images/4/42/Decor_Purple_Super_Mario_Keychain.png 彩色粉末 https://pikmin.wiki.gallery/images/0/09/Decor_Red_Color_Powder.png https://pikmin.wiki.gallery/images/3/36/Decor_Yellow_Color_Powder.png https://pikmin.wiki.gallery/images/a/a0/Decor_Blue_Color_Powder.png https://pikmin.wiki.gallery/images/e/e4/Decor_White_Color_Powder.png https://pikmin.wiki.gallery/images/3/39/Decor_Purple_Color_Powder.png https://pikmin.wiki.gallery/images/6/62/Decor_Rock_Color_Powder.png https://pikmin.wiki.gallery/images/1/17/Decor_Winged_Color_Powder.png https://pikmin.wiki.gallery/images/3/30/Decor_Ice_Color_Powder.png 春季貼紙 https://pikmin.wiki.gallery/images/e/e8/Decor_Red_Spring_Sticker.png https://pikmin.wiki.gallery/images/2/2f/Decor_Yellow_Spring_Sticker.png https://pikmin.wiki.gallery/images/e/eb/Decor_Blue_Spring_Sticker.png https://pikmin.wiki.gallery/images/7/78/Decor_White_Spring_Sticker.png https://pikmin.wiki.gallery/images/4/43/Decor_Purple_Spring_Sticker.png https://pikmin.wiki.gallery/images/4/43/Decor_Rock_Spring_Sticker.png https://pikmin.wiki.gallery/images/c/cd/Decor_Winged_Spring_Sticker.png 反向情人節貼紙 https://pikmin.wiki.gallery/images/a/a8/Decor_Red_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/0/0b/Decor_Yellow_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/3/38/Decor_Blue_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/9/9e/Decor_White_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/2/24/Decor_Purple_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/b/b8/Decor_Rock_Reverse_Valentine%27s_Day_Sticker.png https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Reverse_Valentine%27s_Day_Sticker.png 下午茶 https://pikmin.wiki.gallery/images/d/d6/Decor_Red_Afternoon_Tea.png https://pikmin.wiki.gallery/images/e/e0/Decor_Yellow_Afternoon_Tea.png https://pikmin.wiki.gallery/images/8/84/Decor_Blue_Afternoon_Tea.png https://pikmin.wiki.gallery/images/3/32/Decor_White_Afternoon_Tea.png https://pikmin.wiki.gallery/images/3/3b/Decor_Purple_Afternoon_Tea.png https://pikmin.wiki.gallery/images/7/7d/Decor_Rock_Afternoon_Tea.png https://pikmin.wiki.gallery/images/0/0d/Decor_Winged_Afternoon_Tea.png 2026巧克力 https://pikmin.wiki.gallery/images/c/ca/Decor_Red_2026_Chocolate.png https://pikmin.wiki.gallery/images/d/db/Decor_Yellow_2026_Chocolate.png https://pikmin.wiki.gallery/images/6/64/Decor_Blue_2026_Chocolate.png https://pikmin.wiki.gallery/images/4/44/Decor_White_2026_Chocolate.png https://pikmin.wiki.gallery/images/4/4d/Decor_Purple_2026_Chocolate.png https://pikmin.wiki.gallery/images/7/71/Decor_Rock_2026_Chocolate.png https://pikmin.wiki.gallery/images/6/6c/Decor_Winged_2026_Chocolate.png https://pikmin.wiki.gallery/images/3/34/Decor_Ice_2026_Chocolate.png 巧克力 https://pikmin.wiki.gallery/images/c/c3/Decor_Red_Chocolate.png https://pikmin.wiki.gallery/images/b/bb/Decor_Yellow_Chocolate.png https://pikmin.wiki.gallery/images/7/75/Decor_Blue_Chocolate.png https://pikmin.wiki.gallery/images/f/f9/Decor_White_Chocolate.png https://pikmin.wiki.gallery/images/e/e5/Decor_Purple_Chocolate.png https://pikmin.wiki.gallery/images/a/ae/Decor_Rock_Chocolate.png https://pikmin.wiki.gallery/images/4/4f/Decor_Winged_Chocolate.png 農曆新年飾品 https://pikmin.wiki.gallery/images/9/9d/Decor_Red_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/4/48/Decor_Yellow_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/b/b8/Decor_Blue_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/f/f1/Decor_White_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/4/43/Decor_Purple_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/0/01/Decor_Rock_Lunar_New_Year_Ornament_2.png https://pikmin.wiki.gallery/images/8/89/Decor_Winged_Lunar_New_Year_Ornament_2.png https://www.pikminwiki.com/images/b/b7/Decor_Red_Lunar_New_Year_Ornament_1.png?17cc7 https://www.pikminwiki.com/images/0/06/Decor_Yellow_Lunar_New_Year_Ornament_1.png?d8951 https://www.pikminwiki.com/images/4/45/Decor_Blue_Lunar_New_Year_Ornament_1.png?97235 https://www.pikminwiki.com/images/a/aa/Decor_White_Lunar_New_Year_Ornament_1.png?01996 https://www.pikminwiki.com/images/a/a4/Decor_Purple_Lunar_New_Year_Ornament_1.png?14959 https://www.pikminwiki.com/images/5/5e/Decor_Rock_Lunar_New_Year_Ornament_1.png?0c185 https://www.pikminwiki.com/images/2/27/Decor_Winged_Lunar_New_Year_Ornament_1.png?67d24 派對禮炮2025 https://pikmin.wiki.gallery/images/2/20/Decor_Red_Party_Popper_2025.png https://pikmin.wiki.gallery/images/b/b9/Decor_Yellow_Party_Popper_2025.png https://pikmin.wiki.gallery/images/c/c1/Decor_Blue_Party_Popper_2025.png https://pikmin.wiki.gallery/images/1/19/Decor_White_Party_Popper_2025.png https://pikmin.wiki.gallery/images/f/f8/Decor_Purple_Party_Popper_2025.png https://pikmin.wiki.gallery/images/1/1e/Decor_Rock_Party_Popper_2025.png https://pikmin.wiki.gallery/images/b/bc/Decor_Winged_Party_Popper_2025.png 2024年眼鏡 https://pikmin.wiki.gallery/images/1/1e/Decor_Red_2024_Glasses.png https://pikmin.wiki.gallery/images/c/cb/Decor_Yellow_2024_Glasses.png https://pikmin.wiki.gallery/images/d/dc/Decor_Blue_2024_Glasses.png https://pikmin.wiki.gallery/images/6/63/Decor_White_2024_Glasses.png https://pikmin.wiki.gallery/images/e/eb/Decor_Purple_2024_Glasses.png https://pikmin.wiki.gallery/images/9/96/Decor_Rock_2024_Glasses.png https://pikmin.wiki.gallery/images/6/64/Decor_Winged_2024_Glasses.png 2023年眼鏡 https://pikmin.wiki.gallery/images/4/42/Decor_Red_2023_Glasses.png https://pikmin.wiki.gallery/images/0/0e/Decor_Yellow_2023_Glasses.png https://pikmin.wiki.gallery/images/e/e2/Decor_Blue_2023_Glasses.png https://pikmin.wiki.gallery/images/a/a9/Decor_White_2023_Glasses.png https://pikmin.wiki.gallery/images/8/8a/Decor_Purple_2023_Glasses.png https://pikmin.wiki.gallery/images/7/72/Decor_Rock_2023_Glasses.png https://pikmin.wiki.gallery/images/a/ad/Decor_Winged_2023_Glasses.png 日式年菜 https://pikmin.wiki.gallery/images/5/53/Decor_Red_Osechi.png https://pikmin.wiki.gallery/images/7/7c/Decor_Yellow_Osechi.png https://pikmin.wiki.gallery/images/5/58/Decor_Blue_Osechi.png https://pikmin.wiki.gallery/images/c/c8/Decor_White_Osechi.png https://pikmin.wiki.gallery/images/c/c3/Decor_Purple_Osechi.png https://pikmin.wiki.gallery/images/1/18/Decor_Rock_Osechi.png https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Osechi.png https://pikmin.wiki.gallery/images/7/76/Decor_Ice_Osechi.png 2025年裝飾品 https://pikmin.wiki.gallery/images/7/73/Decor_Red_2025_Ornament.png https://pikmin.wiki.gallery/images/3/30/Decor_Yellow_2025_Ornament.png https://pikmin.wiki.gallery/images/9/96/Decor_Blue_2025_Ornament.png https://pikmin.wiki.gallery/images/f/ff/Decor_White_2025_Ornament.png https://pikmin.wiki.gallery/images/5/51/Decor_Purple_2025_Ornament.png https://pikmin.wiki.gallery/images/f/f4/Decor_Rock_2025_Ornament.png https://pikmin.wiki.gallery/images/4/44/Decor_Winged_2025_Ornament.png https://pikmin.wiki.gallery/images/8/85/Decor_Ice_2025_Ornament.png 照片鈕扣徽章 https://pikmin.wiki.gallery/images/1/1f/Decor_Red_Photo_Button_Badge.png 裝飾球 https://pikmin.wiki.gallery/images/0/0d/Decor_Red_Ball_Ornament.png https://pikmin.wiki.gallery/images/d/d6/Decor_Yellow_Ball_Ornament.png https://pikmin.wiki.gallery/images/7/72/Decor_Blue_Ball_Ornament.png https://pikmin.wiki.gallery/images/f/f0/Decor_White_Ball_Ornament.png https://pikmin.wiki.gallery/images/3/38/Decor_Purple_Ball_Ornament.png https://pikmin.wiki.gallery/images/3/32/Decor_Rock_Ball_Ornament.png https://pikmin.wiki.gallery/images/f/f4/Decor_Winged_Ball_Ornament.png 連指手套 https://pikmin.wiki.gallery/images/d/da/Decor_Red_Mitten.png https://pikmin.wiki.gallery/images/7/75/Decor_Yellow_Mitten.png https://pikmin.wiki.gallery/images/3/3f/Decor_Blue_Mitten.png https://pikmin.wiki.gallery/images/3/3d/Decor_White_Mitten.png https://pikmin.wiki.gallery/images/4/4c/Decor_Purple_Mitten.png https://pikmin.wiki.gallery/images/3/3f/Decor_Rock_Mitten.png https://pikmin.wiki.gallery/images/1/10/Decor_Winged_Mitten.png 冰淇淋 https://www.pikminwiki.com/images/1/1b/Decor_Red_Ice_Cream_1.png https://www.pikminwiki.com/images/0/0c/Decor_Yellow_Ice_Cream_1.png https://www.pikminwiki.com/images/e/e6/Decor_Blue_Ice_Cream_1.png https://www.pikminwiki.com/images/6/62/Decor_White_Ice_Cream_1.png https://www.pikminwiki.com/images/8/8b/Decor_Purple_Ice_Cream_1.png https://www.pikminwiki.com/images/9/9a/Decor_Rock_Ice_Cream_1.png https://www.pikminwiki.com/images/d/df/Decor_Winged_Ice_Cream_1.png https://www.pikminwiki.com/images/1/12/Decor_Red_Ice_Cream_2.png https://www.pikminwiki.com/images/7/7e/Decor_Yellow_Ice_Cream_2.png https://www.pikminwiki.com/images/8/81/Decor_Blue_Ice_Cream_2.png https://www.pikminwiki.com/images/c/c5/Decor_White_Ice_Cream_2.png https://www.pikminwiki.com/images/c/c4/Decor_Purple_Ice_Cream_2.png https://www.pikminwiki.com/images/8/8f/Decor_Rock_Ice_Cream_2.png https://www.pikminwiki.com/images/4/41/Decor_Winged_Ice_Cream_2.png https://pikmin.wiki.gallery/images/6/6b/Decor_Ice_Ice_Cream_1.png 奶嘴 https://pikmin.wiki.gallery/images/a/a0/Decor_Red_Pacifier.png 金色飛機玩具 https://pikmin.wiki.gallery/images/5/5b/Decor_Yellow_Golden_Toy_Airplane.png 四週年紀念零食 https://pikmin.wiki.gallery/images/7/71/Decor_Red_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/8/88/Decor_Yellow_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/9/98/Decor_Blue_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/2/2c/Decor_White_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/9/94/Decor_Purple_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/a/af/Decor_Rock_4th_Anniversary_Snack.png https://pikmin.wiki.gallery/images/2/22/Decor_Winged_4th_Anniversary_Snack.png 四週年紀念花盒 https://pikmin.wiki.gallery/images/e/ee/Decor_Red_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/6/66/Decor_Yellow_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/e/e9/Decor_Blue_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/a/a9/Decor_White_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/8/86/Decor_Purple_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/f/f7/Decor_Rock_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/2/24/Decor_Winged_4th_Anniversary_Flower_Box.png https://pikmin.wiki.gallery/images/8/88/Decor_Ice_4th_Anniversary_Flower_Box.png 三週年紀念紙杯蛋糕 https://pikmin.wiki.gallery/images/2/2b/Decor_Red_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/1/1b/Decor_Yellow_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/0/03/Decor_Blue_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/5/57/Decor_White_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/c/c7/Decor_Purple_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/0/05/Decor_Rock_3rd_Anniversary_Cupcake.png https://pikmin.wiki.gallery/images/f/f8/Decor_Winged_3rd_Anniversary_Cupcake.png 拼圖：2021年秋季回憶 https://pikmin.wiki.gallery/images/c/c1/Decor_Red_Puzzle_1.png https://pikmin.wiki.gallery/images/b/b0/Decor_Yellow_Puzzle_1.png https://pikmin.wiki.gallery/images/6/6b/Decor_Blue_Puzzle_1.png https://pikmin.wiki.gallery/images/6/64/Decor_White_Puzzle_1.png https://pikmin.wiki.gallery/images/f/f9/Decor_Purple_Puzzle_1.png https://pikmin.wiki.gallery/images/0/08/Decor_Rock_Puzzle_1.png https://pikmin.wiki.gallery/images/8/8d/Decor_Winged_Puzzle_1.png Pikmin4 玩具 https://pikmin.wiki.gallery/images/2/2d/Decor_Red_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/7/71/Decor_Yellow_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/c/cf/Decor_Blue_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/0/01/Decor_White_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/f/f7/Decor_Purple_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/8/83/Decor_Rock_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/f/f6/Decor_Winged_Pikmin_4_Toy.png https://pikmin.wiki.gallery/images/7/70/Decor_Ice_Pikmin_4_Toy.png 西洋棋 https://pikmin.wiki.gallery/images/2/2a/Decor_Blue_Chess_Piece_1.png https://pikmin.wiki.gallery/images/2/29/Decor_Yellow_Chess_Piece_2.png https://pikmin.wiki.gallery/images/e/e5/Decor_Purple_Chess_Piece_2.png https://pikmin.wiki.gallery/images/3/36/Decor_White_Chess_Piece_1.png https://pikmin.wiki.gallery/images/b/b6/Decor_Red_Chess_Piece_1.png https://pikmin.wiki.gallery/images/7/75/Decor_Yellow_Chess_Piece_1.png https://pikmin.wiki.gallery/images/8/89/Decor_Purple_Chess_Piece_1.png https://pikmin.wiki.gallery/images/9/95/Decor_Rock_Chess_Piece_1.png https://pikmin.wiki.gallery/images/2/21/Decor_Winged_Chess_Piece_1.png https://pikmin.wiki.gallery/images/2/2d/Decor_Red_Chess_Piece_2.png https://pikmin.wiki.gallery/images/2/2c/Decor_Blue_Chess_Piece_2.png https://pikmin.wiki.gallery/images/4/41/Decor_White_Chess_Piece_2.png https://pikmin.wiki.gallery/images/7/71/Decor_Rock_Chess_Piece_2.png https://pikmin.wiki.gallery/images/9/95/Decor_Winged_Chess_Piece_2.png 南瓜燈 https://pikmin.wiki.gallery/images/d/d2/Decor_Red_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/3/3e/Decor_Yellow_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/b/bf/Decor_Blue_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/b/bb/Decor_White_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/8/84/Decor_Purple_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/a/aa/Decor_Rock_Jack-o%27-Lantern.png https://pikmin.wiki.gallery/images/1/15/Decor_Winged_Jack-o%27-Lantern.png 萬聖節糖果 https://pikmin.wiki.gallery/images/4/4f/Decor_Red_Halloween_Treat.png https://pikmin.wiki.gallery/images/e/e7/Decor_Yellow_Halloween_Treat.png https://pikmin.wiki.gallery/images/e/ee/Decor_Blue_Halloween_Treat.png https://pikmin.wiki.gallery/images/d/de/Decor_White_Halloween_Treat.png https://pikmin.wiki.gallery/images/7/7c/Decor_Purple_Halloween_Treat.png https://pikmin.wiki.gallery/images/3/37/Decor_Rock_Halloween_Treat.png https://pikmin.wiki.gallery/images/4/48/Decor_Winged_Halloween_Treat.png 萬聖節燈籠 https://pikmin.wiki.gallery/images/2/25/Decor_Red_Halloween_Light.png https://pikmin.wiki.gallery/images/8/84/Decor_Yellow_Halloween_Light.png https://pikmin.wiki.gallery/images/d/d7/Decor_Blue_Halloween_Light.png https://pikmin.wiki.gallery/images/2/26/Decor_White_Halloween_Light.png https://pikmin.wiki.gallery/images/0/00/Decor_Purple_Halloween_Light.png https://pikmin.wiki.gallery/images/c/ca/Decor_Rock_Halloween_Light.png https://pikmin.wiki.gallery/images/b/b7/Decor_Winged_Halloween_Light.png 骷髏頭 https://pikmin.wiki.gallery/images/c/c0/Decor_Red_Calavera.png https://pikmin.wiki.gallery/images/a/a3/Decor_Yellow_Calavera.png https://pikmin.wiki.gallery/images/f/fe/Decor_Blue_Calavera.png https://pikmin.wiki.gallery/images/2/2d/Decor_White_Calavera.png https://pikmin.wiki.gallery/images/9/9d/Decor_Purple_Calavera.png https://pikmin.wiki.gallery/images/e/ef/Decor_Rock_Calavera.png https://pikmin.wiki.gallery/images/3/31/Decor_Winged_Calavera.png 月餅 https://pikmin.wiki.gallery/images/5/5d/Decor_Red_Mooncake.png https://pikmin.wiki.gallery/images/0/03/Decor_Yellow_Mooncake.png https://pikmin.wiki.gallery/images/e/ef/Decor_Blue_Mooncake.png https://pikmin.wiki.gallery/images/7/78/Decor_White_Mooncake.png https://pikmin.wiki.gallery/images/3/3f/Decor_Purple_Mooncake.png https://pikmin.wiki.gallery/images/f/f7/Decor_Rock_Mooncake.png https://pikmin.wiki.gallery/images/1/19/Decor_Winged_Mooncake.png 麻將 https://www.pikminwiki.com/images/4/4b/Decor_Red_Mahjong_Tile_1.png https://www.pikminwiki.com/images/9/92/Decor_Yellow_Mahjong_Tile_1.png https://www.pikminwiki.com/images/7/7b/Decor_Blue_Mahjong_Tile_1.png https://www.pikminwiki.com/images/b/bd/Decor_White_Mahjong_Tile_1.png https://www.pikminwiki.com/images/c/c2/Decor_Purple_Mahjong_Tile_1.png https://www.pikminwiki.com/images/8/85/Decor_Rock_Mahjong_Tile_1.png https://www.pikminwiki.com/images/a/a4/Decor_Winged_Mahjong_Tile_1.png https://www.pikminwiki.com/images/d/de/Decor_Red_Mahjong_Tile_2.png https://www.pikminwiki.com/images/6/64/Decor_Yellow_Mahjong_Tile_2.png https://www.pikminwiki.com/images/d/df/Decor_Blue_Mahjong_Tile_2.png https://www.pikminwiki.com/images/d/d1/Decor_White_Mahjong_Tile_2.png https://www.pikminwiki.com/images/b/b7/Decor_Purple_Mahjong_Tile_2.png https://www.pikminwiki.com/images/d/dc/Decor_Rock_Mahjong_Tile_2.png https://www.pikminwiki.com/images/d/d2/Decor_Winged_Mahjong_Tile_2.png https://www.pikminwiki.com/images/d/dc/Decor_Yellow_Mahjong_Tile_3.png https://www.pikminwiki.com/images/e/e2/Decor_Blue_Mahjong_Tile_3.png https://www.pikminwiki.com/images/5/5b/Decor_White_Mahjong_Tile_3.png https://www.pikminwiki.com/images/e/ef/Decor_Purple_Mahjong_Tile_3.png https://www.pikminwiki.com/images/f/f5/Decor_Rock_Mahjong_Tile_3.png https://www.pikminwiki.com/images/1/18/Decor_Winged_Mahjong_Tile_3.png https://www.pikminwiki.com/images/7/74/Decor_Yellow_Mahjong_Tile_4.png https://www.pikminwiki.com/images/c/c4/Decor_Blue_Mahjong_Tile_4.png https://www.pikminwiki.com/images/6/62/Decor_White_Mahjong_Tile_4.png https://www.pikminwiki.com/images/6/60/Decor_White_Mahjong_Tile_5.png https://www.pikminwiki.com/images/3/32/Decor_Purple_Mahjong_Tile_4.png https://www.pikminwiki.com/images/d/d9/Decor_Rock_Mahjong_Tile_4.png https://www.pikminwiki.com/images/b/b7/Decor_Winged_Mahjong_Tile_4.png 夏季貼紙 https://pikmin.wiki.gallery/images/f/f7/Decor_Red_Summer_Sticker.png https://pikmin.wiki.gallery/images/9/95/Decor_Yellow_Summer_Sticker.png https://pikmin.wiki.gallery/images/6/67/Decor_Blue_Summer_Sticker.png https://pikmin.wiki.gallery/images/a/ae/Decor_White_Summer_Sticker.png https://pikmin.wiki.gallery/images/6/64/Decor_Purple_Summer_Sticker.png https://pikmin.wiki.gallery/images/b/bc/Decor_Rock_Summer_Sticker.png https://pikmin.wiki.gallery/images/d/d4/Decor_Winged_Summer_Sticker.png 刨冰 https://pikmin.wiki.gallery/images/7/7f/Decor_Red_Shaved_Ice.png https://pikmin.wiki.gallery/images/6/6b/Decor_Yellow_Shaved_Ice.png https://pikmin.wiki.gallery/images/a/ab/Decor_Blue_Shaved_Ice.png https://pikmin.wiki.gallery/images/a/aa/Decor_White_Shaved_Ice.png https://pikmin.wiki.gallery/images/8/8e/Decor_Purple_Shaved_Ice.png https://pikmin.wiki.gallery/images/0/01/Decor_Rock_Shaved_Ice.png https://pikmin.wiki.gallery/images/1/1f/Decor_Winged_Shaved_Ice.png 珊瑚 https://pikmin.wiki.gallery/images/c/cc/Decor_Red_Coral.png https://pikmin.wiki.gallery/images/6/64/Decor_Yellow_Coral.png https://pikmin.wiki.gallery/images/4/4a/Decor_Blue_Coral.png https://pikmin.wiki.gallery/images/0/0e/Decor_White_Coral.png https://pikmin.wiki.gallery/images/7/72/Decor_Purple_Coral.png https://pikmin.wiki.gallery/images/b/b1/Decor_Rock_Coral.png https://pikmin.wiki.gallery/images/a/a7/Decor_Winged_Coral.png 迷你樂器 https://pikmin.wiki.gallery/images/1/19/Decor_Red_Tiny_Instrument.png https://pikmin.wiki.gallery/images/f/fa/Decor_Yellow_Tiny_Instrument.png https://pikmin.wiki.gallery/images/4/47/Decor_Blue_Tiny_Instrument.png https://pikmin.wiki.gallery/images/6/67/Decor_White_Tiny_Instrument.png https://pikmin.wiki.gallery/images/7/7d/Decor_Purple_Tiny_Instrument.png https://pikmin.wiki.gallery/images/f/f5/Decor_Rock_Tiny_Instrument.png https://pikmin.wiki.gallery/images/e/e0/Decor_Winged_Tiny_Instrument.png 里約狂歡節 https://pikmin.wiki.gallery/images/0/07/Decor_Red_Rio_Carnival.png https://pikmin.wiki.gallery/images/9/94/Decor_Yellow_Rio_Carnival.png https://pikmin.wiki.gallery/images/5/50/Decor_Blue_Rio_Carnival.png https://pikmin.wiki.gallery/images/f/f4/Decor_White_Rio_Carnival.png https://pikmin.wiki.gallery/images/4/45/Decor_Purple_Rio_Carnival.png https://pikmin.wiki.gallery/images/0/0d/Decor_Rock_Rio_Carnival.png https://pikmin.wiki.gallery/images/9/93/Decor_Winged_Rio_Carnival.png 情人節貼紙 https://pikmin.wiki.gallery/images/3/38/Decor_Red_Valentine_Sticker.png https://pikmin.wiki.gallery/images/8/86/Decor_Yellow_Valentine_Sticker.png https://pikmin.wiki.gallery/images/c/c9/Decor_Blue_Valentine_Sticker.png https://pikmin.wiki.gallery/images/a/a2/Decor_White_Valentine_Sticker.png https://pikmin.wiki.gallery/images/1/1a/Decor_Purple_Valentine_Sticker.png https://pikmin.wiki.gallery/images/d/d1/Decor_Rock_Valentine_Sticker.png https://pikmin.wiki.gallery/images/8/85/Decor_Winged_Valentine_Sticker.png 花札 https://www.pikminwiki.com/images/c/cb/Decor_Red_Flower_Card_5.png https://www.pikminwiki.com/images/9/9e/Decor_Red_Flower_Card_6.png https://www.pikminwiki.com/images/4/48/Decor_Red_Flower_Card_4.png https://www.pikminwiki.com/images/4/45/Decor_Red_Flower_Card_3.png https://www.pikminwiki.com/images/5/5a/Decor_Red_Flower_Card_1.png https://www.pikminwiki.com/images/2/2b/Decor_Red_Flower_Card_2.png https://www.pikminwiki.com/images/0/06/Decor_Yellow_Flower_Card_6.png https://www.pikminwiki.com/images/2/20/Decor_Yellow_Flower_Card_5.png https://www.pikminwiki.com/images/5/58/Decor_Yellow_Flower_Card_4.png https://www.pikminwiki.com/images/b/b4/Decor_Yellow_Flower_Card_3.png https://www.pikminwiki.com/images/e/ee/Decor_Yellow_Flower_Card_1.png https://www.pikminwiki.com/images/e/ea/Decor_Yellow_Flower_Card_2.png https://www.pikminwiki.com/images/d/de/Decor_Blue_Flower_Card_1.png https://www.pikminwiki.com/images/b/b4/Decor_Blue_Flower_Card_6.png https://www.pikminwiki.com/images/4/40/Decor_Blue_Flower_Card_5.png https://www.pikminwiki.com/images/7/72/Decor_Blue_Flower_Card_3.png https://www.pikminwiki.com/images/2/22/Decor_Blue_Flower_Card_4.png https://www.pikminwiki.com/images/5/58/Decor_Blue_Flower_Card_2.png https://www.pikminwiki.com/images/c/c3/Decor_Purple_Flower_Card_6.png https://www.pikminwiki.com/images/3/3e/Decor_Purple_Flower_Card_1.png https://www.pikminwiki.com/images/a/ad/Decor_Purple_Flower_Card_5.png https://www.pikminwiki.com/images/2/2e/Decor_Purple_Flower_Card_3.png https://www.pikminwiki.com/images/0/07/Decor_Purple_Flower_Card_4.png https://www.pikminwiki.com/images/d/d7/Decor_Purple_Flower_Card_2.png https://www.pikminwiki.com/images/a/a1/Decor_Red_Flower_Card_8.png https://www.pikminwiki.com/images/9/9a/Decor_Red_Flower_Card_7.png https://www.pikminwiki.com/images/6/62/Decor_Yellow_Flower_Card_7.png https://www.pikminwiki.com/images/4/4c/Decor_Yellow_Flower_Card_8.png https://www.pikminwiki.com/images/0/09/Decor_Blue_Flower_Card_8.png https://www.pikminwiki.com/images/e/ef/Decor_Blue_Flower_Card_7.png https://www.pikminwiki.com/images/f/fb/Decor_White_Flower_Card_2.png https://www.pikminwiki.com/images/d/d2/Decor_White_Flower_Card_1.png https://www.pikminwiki.com/images/b/bb/Decor_Purple_Flower_Card_8.png https://www.pikminwiki.com/images/4/40/Decor_Purple_Flower_Card_7.png https://www.pikminwiki.com/images/f/f4/Decor_Rock_Flower_Card_3.png https://www.pikminwiki.com/images/6/61/Decor_Rock_Flower_Card_2.png https://www.pikminwiki.com/images/1/17/Decor_Rock_Flower_Card_1.png https://www.pikminwiki.com/images/2/2b/Decor_Winged_Flower_Card_3.png https://www.pikminwiki.com/images/b/b5/Decor_Winged_Flower_Card_2.png https://www.pikminwiki.com/images/c/cd/Decor_Winged_Flower_Card_1.png 冬季貼紙 https://pikmin.wiki.gallery/images/3/3f/Decor_Red_Winter_Sticker.png https://pikmin.wiki.gallery/images/5/59/Decor_Yellow_Winter_Sticker.png https://pikmin.wiki.gallery/images/0/05/Decor_Blue_Winter_Sticker.png https://pikmin.wiki.gallery/images/8/81/Decor_White_Winter_Sticker.png https://pikmin.wiki.gallery/images/6/67/Decor_Purple_Winter_Sticker.png https://pikmin.wiki.gallery/images/8/85/Decor_Rock_Winter_Sticker.png https://pikmin.wiki.gallery/images/d/d2/Decor_Winged_Winter_Sticker.png 一週年紀念零食 https://pikmin.wiki.gallery/images/f/f5/Decor_Red_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/6/6f/Decor_Yellow_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/c/c4/Decor_Blue_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/1/1c/Decor_White_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/4/46/Decor_Purple_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/3/34/Decor_Rock_First_Anniversary_Snack.png https://pikmin.wiki.gallery/images/1/13/Decor_Winged_First_Anniversary_Snack.png 禮物貼紙(金色) https://pikmin.wiki.gallery/images/8/85/Decor_Red_Present_Sticker_%28Gold%29.png https://pikmin.wiki.gallery/images/3/35/Decor_Yellow_Present_Sticker_%28Gold%29.png https://pikmin.wiki.gallery/images/e/ee/Decor_Blue_Present_Sticker_%28Gold%29.png https://pikmin.wiki.gallery/images/3/33/Decor_White_Present_Sticker_%28Gold%29.png https://pikmin.wiki.gallery/images/d/db/Decor_Purpl`;
+        const specialRawUrlsData = `花冠
+https://pikmin.wiki.gallery/images/d/d0/Decor_Red_Flower_Crown.png
+https://pikmin.wiki.gallery/images/3/31/Decor_Yellow_Flower_Crown.png
+https://pikmin.wiki.gallery/images/a/a4/Decor_Blue_Flower_Crown.png
+https://pikmin.wiki.gallery/images/c/c5/Decor_White_Flower_Crown.png
+https://pikmin.wiki.gallery/images/1/1a/Decor_Purple_Flower_Crown.png
+https://pikmin.wiki.gallery/images/f/f1/Decor_Rock_Flower_Crown.png
+https://pikmin.wiki.gallery/images/d/d5/Decor_Winged_Flower_Crown.png
+https://pikmin.wiki.gallery/images/e/e2/Decor_Ice_Flower_Crown.png
+衝浪板鑰匙圈
+https://pikmin.wiki.gallery/images/2/22/Decor_Red_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/d/dc/Decor_Yellow_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/a/ae/Decor_Blue_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/8/89/Decor_White_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/4/4c/Decor_Purple_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/0/0e/Decor_Rock_Surfboard_Keychain.png
+https://pikmin.wiki.gallery/images/d/d2/Decor_Winged_Surfboard_Keychain.png
+拼圖：2022年夏日回憶
+https://pikmin.wiki.gallery/images/c/c4/Decor_Red_Puzzle_2.png
+https://pikmin.wiki.gallery/images/c/c7/Decor_Yellow_Puzzle_2.png
+https://pikmin.wiki.gallery/images/1/13/Decor_Blue_Puzzle_2.png
+https://pikmin.wiki.gallery/images/6/66/Decor_White_Puzzle_2.png
+https://pikmin.wiki.gallery/images/7/7b/Decor_Purple_Puzzle_2.png
+https://pikmin.wiki.gallery/images/0/04/Decor_Rock_Puzzle_2.png
+https://pikmin.wiki.gallery/images/6/61/Decor_Winged_Puzzle_2.png
+拼圖：2023年夏日回憶
+https://pikmin.wiki.gallery/images/0/05/Decor_Red_Puzzle_4.png
+https://pikmin.wiki.gallery/images/8/87/Decor_Yellow_Puzzle_4.png
+https://pikmin.wiki.gallery/images/a/a0/Decor_Blue_Puzzle_4.png
+https://pikmin.wiki.gallery/images/c/c0/Decor_White_Puzzle_4.png
+https://pikmin.wiki.gallery/images/d/d7/Decor_Purple_Puzzle_4.png
+https://pikmin.wiki.gallery/images/9/90/Decor_Rock_Puzzle_4.png
+https://pikmin.wiki.gallery/images/d/d9/Decor_Winged_Puzzle_4.png
+遊戲卡牌
+https://pikmin.wiki.gallery/images/c/cf/Decor_Red_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/5/5c/Decor_Red_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/2/2a/Decor_Yellow_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/4/45/Decor_Yellow_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/d/d7/Decor_Blue_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/5/52/Decor_Blue_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/2/2f/Decor_White_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/d/dd/Decor_Purple_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/e/e8/Decor_Purple_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/9/94/Decor_Rock_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/3/38/Decor_Rock_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/9/92/Decor_Winged_Playing_Card_3.png
+https://pikmin.wiki.gallery/images/2/2c/Decor_Winged_Playing_Card_4.png
+https://pikmin.wiki.gallery/images/4/45/Decor_Red_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/e/e3/Decor_Red_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/2/27/Decor_Yellow_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/f/f0/Decor_Yellow_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/0/06/Decor_Blue_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/5/53/Decor_Blue_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/9/9a/Decor_White_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/f/f9/Decor_White_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/1/18/Decor_Purple_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/4/48/Decor_Rock_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/6/6d/Decor_Rock_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/c/ce/Decor_Winged_Playing_Card_1.png
+https://pikmin.wiki.gallery/images/b/bf/Decor_Winged_Playing_Card_2.png
+https://pikmin.wiki.gallery/images/b/bc/Decor_Purple_Playing_Card_2.png
+玫瑰花結
+https://pikmin.wiki.gallery/images/c/c3/Decor_Red_Rosette.png
+https://pikmin.wiki.gallery/images/f/f9/Decor_Yellow_Rosette.png
+https://pikmin.wiki.gallery/images/c/c4/Decor_Purple_Rosette.png
+遊戲卡匣
+https://pikmin.wiki.gallery/images/a/af/Decor_Red_Game_Pak.png
+https://pikmin.wiki.gallery/images/e/e6/Decor_Yellow_Game_Pak.png
+https://pikmin.wiki.gallery/images/6/68/Decor_Blue_Game_Pak.png
+https://pikmin.wiki.gallery/images/3/32/Decor_White_Game_Pak.png
+https://pikmin.wiki.gallery/images/8/82/Decor_Purple_Game_Pak.png
+https://pikmin.wiki.gallery/images/4/40/Decor_Rock_Game_Pak.png
+https://pikmin.wiki.gallery/images/8/87/Decor_Winged_Game_Pak.png
+https://pikmin.wiki.gallery/images/2/22/Decor_Ice_Game_Pak.png
+Nintendo遊戲機1980-1995
+https://pikmin.wiki.gallery/images/b/b9/Decor_Red_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/7/7f/Decor_Yellow_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/5/5c/Decor_Blue_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/1/1f/Decor_White_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/3/3a/Decor_Purple_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/e/e3/Decor_Rock_Nintendo_Consoles_1.png
+https://pikmin.wiki.gallery/images/7/71/Decor_Winged_Nintendo_Consoles_1.png
+起司店
+https://pikmin.wiki.gallery/images/e/e2/Decor_Red_Cheese.png
+https://pikmin.wiki.gallery/images/c/c2/Decor_Yellow_Cheese.png
+https://pikmin.wiki.gallery/images/7/7d/Decor_Blue_Cheese.png
+https://pikmin.wiki.gallery/images/a/a7/Decor_White_Cheese.png
+https://pikmin.wiki.gallery/images/9/9c/Decor_Purple_Cheese.png
+https://pikmin.wiki.gallery/images/f/fb/Decor_Rock_Cheese.png
+https://pikmin.wiki.gallery/images/b/b1/Decor_Winged_Cheese.png
+復活節彩蛋
+https://pikmin.wiki.gallery/images/5/56/Decor_Red_Easter_Egg.png
+https://pikmin.wiki.gallery/images/7/71/Decor_Yellow_Easter_Egg.png
+https://pikmin.wiki.gallery/images/3/3e/Decor_Blue_Easter_Egg.png
+https://pikmin.wiki.gallery/images/a/a6/Decor_White_Easter_Egg.png
+https://pikmin.wiki.gallery/images/2/26/Decor_Purple_Easter_Egg.png
+https://pikmin.wiki.gallery/images/f/f9/Decor_Rock_Easter_Egg.png
+https://pikmin.wiki.gallery/images/e/e5/Decor_Winged_Easter_Egg.png
+兔寶寶彩蛋
+https://pikmin.wiki.gallery/images/4/4a/Decor_Red_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/c/c8/Decor_Yellow_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/2/24/Decor_Blue_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/1/19/Decor_White_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/8/88/Decor_Purple_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/7/7d/Decor_Rock_Bunny_Egg.png
+https://pikmin.wiki.gallery/images/6/6a/Decor_Winged_Bunny_Egg.png
+荷蘭木鞋鑰匙圈
+https://pikmin.wiki.gallery/images/8/82/Decor_Red_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/6/66/Decor_Yellow_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/b/b3/Decor_Blue_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/a/a1/Decor_White_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/c/c7/Decor_Purple_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/9/9f/Decor_Rock_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Klompen_Keychain.png
+https://pikmin.wiki.gallery/images/5/51/Decor_Ice_Klompen_Keychain.png
+超級瑪利歐鑰匙圈
+https://pikmin.wiki.gallery/images/9/92/Decor_Red_Super_Mario_Keychain.png
+https://pikmin.wiki.gallery/images/b/b0/Decor_Yellow_Super_Mario_Keychain.png
+https://pikmin.wiki.gallery/images/9/96/Decor_Blue_Super_Mario_Keychain.png
+https://pikmin.wiki.gallery/images/4/42/Decor_Purple_Super_Mario_Keychain.png
+彩色粉末
+https://pikmin.wiki.gallery/images/0/09/Decor_Red_Color_Powder.png
+https://pikmin.wiki.gallery/images/3/36/Decor_Yellow_Color_Powder.png
+https://pikmin.wiki.gallery/images/a/a0/Decor_Blue_Color_Powder.png
+https://pikmin.wiki.gallery/images/e/e4/Decor_White_Color_Powder.png
+https://pikmin.wiki.gallery/images/3/39/Decor_Purple_Color_Powder.png
+https://pikmin.wiki.gallery/images/6/62/Decor_Rock_Color_Powder.png
+https://pikmin.wiki.gallery/images/1/17/Decor_Winged_Color_Powder.png
+https://pikmin.wiki.gallery/images/3/30/Decor_Ice_Color_Powder.png
+春季貼紙
+https://pikmin.wiki.gallery/images/e/e8/Decor_Red_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/2/2f/Decor_Yellow_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/e/eb/Decor_Blue_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/7/78/Decor_White_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/4/43/Decor_Purple_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/4/43/Decor_Rock_Spring_Sticker.png
+https://pikmin.wiki.gallery/images/c/cd/Decor_Winged_Spring_Sticker.png
+反向情人節貼紙
+https://pikmin.wiki.gallery/images/a/a8/Decor_Red_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/0/0b/Decor_Yellow_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/3/38/Decor_Blue_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/9/9e/Decor_White_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/2/24/Decor_Purple_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/b/b8/Decor_Rock_Reverse_Valentine%27s_Day_Sticker.png
+https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Reverse_Valentine%27s_Day_Sticker.png
+下午茶
+https://pikmin.wiki.gallery/images/d/d6/Decor_Red_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/e/e0/Decor_Yellow_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/8/84/Decor_Blue_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/3/32/Decor_White_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/3/3b/Decor_Purple_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/7/7d/Decor_Rock_Afternoon_Tea.png
+https://pikmin.wiki.gallery/images/0/0d/Decor_Winged_Afternoon_Tea.png
+2026巧克力
+https://pikmin.wiki.gallery/images/c/ca/Decor_Red_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/d/db/Decor_Yellow_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/6/64/Decor_Blue_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/4/44/Decor_White_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/4/4d/Decor_Purple_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/7/71/Decor_Rock_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/6/6c/Decor_Winged_2026_Chocolate.png
+https://pikmin.wiki.gallery/images/3/34/Decor_Ice_2026_Chocolate.png
+巧克力
+https://pikmin.wiki.gallery/images/c/c3/Decor_Red_Chocolate.png
+https://pikmin.wiki.gallery/images/b/bb/Decor_Yellow_Chocolate.png
+https://pikmin.wiki.gallery/images/7/75/Decor_Blue_Chocolate.png
+https://pikmin.wiki.gallery/images/f/f9/Decor_White_Chocolate.png
+https://pikmin.wiki.gallery/images/e/e5/Decor_Purple_Chocolate.png
+https://pikmin.wiki.gallery/images/a/ae/Decor_Rock_Chocolate.png
+https://pikmin.wiki.gallery/images/4/4f/Decor_Winged_Chocolate.png
+農曆新年飾品
+https://pikmin.wiki.gallery/images/9/9d/Decor_Red_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/4/48/Decor_Yellow_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/b/b8/Decor_Blue_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/f/f1/Decor_White_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/4/43/Decor_Purple_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/0/01/Decor_Rock_Lunar_New_Year_Ornament_2.png
+https://pikmin.wiki.gallery/images/8/89/Decor_Winged_Lunar_New_Year_Ornament_2.png
+https://www.pikminwiki.com/images/b/b7/Decor_Red_Lunar_New_Year_Ornament_1.png?17cc7
+https://www.pikminwiki.com/images/0/06/Decor_Yellow_Lunar_New_Year_Ornament_1.png?d8951
+https://www.pikminwiki.com/images/4/45/Decor_Blue_Lunar_New_Year_Ornament_1.png?97235
+https://www.pikminwiki.com/images/a/aa/Decor_White_Lunar_New_Year_Ornament_1.png?01996
+https://www.pikminwiki.com/images/a/a4/Decor_Purple_Lunar_New_Year_Ornament_1.png?14959
+https://www.pikminwiki.com/images/5/5e/Decor_Rock_Lunar_New_Year_Ornament_1.png?0c185
+https://www.pikminwiki.com/images/2/27/Decor_Winged_Lunar_New_Year_Ornament_1.png?67d24
+派對禮炮2025
+https://pikmin.wiki.gallery/images/2/20/Decor_Red_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/b/b9/Decor_Yellow_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/c/c1/Decor_Blue_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/1/19/Decor_White_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/f/f8/Decor_Purple_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/1/1e/Decor_Rock_Party_Popper_2025.png
+https://pikmin.wiki.gallery/images/b/bc/Decor_Winged_Party_Popper_2025.png
+2024年眼鏡
+https://pikmin.wiki.gallery/images/1/1e/Decor_Red_2024_Glasses.png
+https://pikmin.wiki.gallery/images/c/cb/Decor_Yellow_2024_Glasses.png
+https://pikmin.wiki.gallery/images/d/dc/Decor_Blue_2024_Glasses.png
+https://pikmin.wiki.gallery/images/6/63/Decor_White_2024_Glasses.png
+https://pikmin.wiki.gallery/images/e/eb/Decor_Purple_2024_Glasses.png
+https://pikmin.wiki.gallery/images/9/96/Decor_Rock_2024_Glasses.png
+https://pikmin.wiki.gallery/images/6/64/Decor_Winged_2024_Glasses.png
+2023年眼鏡
+https://pikmin.wiki.gallery/images/4/42/Decor_Red_2023_Glasses.png
+https://pikmin.wiki.gallery/images/0/0e/Decor_Yellow_2023_Glasses.png
+https://pikmin.wiki.gallery/images/e/e2/Decor_Blue_2023_Glasses.png
+https://pikmin.wiki.gallery/images/a/a9/Decor_White_2023_Glasses.png
+https://pikmin.wiki.gallery/images/8/8a/Decor_Purple_2023_Glasses.png
+https://pikmin.wiki.gallery/images/7/72/Decor_Rock_2023_Glasses.png
+https://pikmin.wiki.gallery/images/a/ad/Decor_Winged_2023_Glasses.png
+日式年菜
+https://pikmin.wiki.gallery/images/5/53/Decor_Red_Osechi.png
+https://pikmin.wiki.gallery/images/7/7c/Decor_Yellow_Osechi.png
+https://pikmin.wiki.gallery/images/5/58/Decor_Blue_Osechi.png
+https://pikmin.wiki.gallery/images/c/c8/Decor_White_Osechi.png
+https://pikmin.wiki.gallery/images/c/c3/Decor_Purple_Osechi.png
+https://pikmin.wiki.gallery/images/1/18/Decor_Rock_Osechi.png
+https://pikmin.wiki.gallery/images/4/4a/Decor_Winged_Osechi.png
+https://pikmin.wiki.gallery/images/7/76/Decor_Ice_Osechi.png
+2025年裝飾品
+https://pikmin.wiki.gallery/images/7/73/Decor_Red_2025_Ornament.png
+https://pikmin.wiki.gallery/images/3/30/Decor_Yellow_2025_Ornament.png
+https://pikmin.wiki.gallery/images/9/96/Decor_Blue_2025_Ornament.png
+https://pikmin.wiki.gallery/images/f/ff/Decor_White_2025_Ornament.png
+https://pikmin.wiki.gallery/images/5/51/Decor_Purple_2025_Ornament.png
+https://pikmin.wiki.gallery/images/f/f4/Decor_Rock_2025_Ornament.png
+https://pikmin.wiki.gallery/images/4/44/Decor_Winged_2025_Ornament.png
+https://pikmin.wiki.gallery/images/8/85/Decor_Ice_2025_Ornament.png
+照片鈕扣徽章
+https://pikmin.wiki.gallery/images/1/1f/Decor_Red_Photo_Button_Badge.png
+裝飾球
+https://pikmin.wiki.gallery/images/0/0d/Decor_Red_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/d/d6/Decor_Yellow_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/7/72/Decor_Blue_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/f/f0/Decor_White_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/3/38/Decor_Purple_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/3/32/Decor_Rock_Ball_Ornament.png
+https://pikmin.wiki.gallery/images/f/f4/Decor_Winged_Ball_Ornament.png
+連指手套
+https://pikmin.wiki.gallery/images/d/da/Decor_Red_Mitten.png
+https://pikmin.wiki.gallery/images/7/75/Decor_Yellow_Mitten.png
+https://pikmin.wiki.gallery/images/3/3f/Decor_Blue_Mitten.png
+https://pikmin.wiki.gallery/images/3/3d/Decor_White_Mitten.png
+https://pikmin.wiki.gallery/images/4/4c/Decor_Purple_Mitten.png
+https://pikmin.wiki.gallery/images/3/3f/Decor_Rock_Mitten.png
+https://pikmin.wiki.gallery/images/1/10/Decor_Winged_Mitten.png
+冰淇淋
+https://www.pikminwiki.com/images/1/1b/Decor_Red_Ice_Cream_1.png
+https://www.pikminwiki.com/images/0/0c/Decor_Yellow_Ice_Cream_1.png
+https://www.pikminwiki.com/images/e/e6/Decor_Blue_Ice_Cream_1.png
+https://www.pikminwiki.com/images/6/62/Decor_White_Ice_Cream_1.png
+https://www.pikminwiki.com/images/8/8b/Decor_Purple_Ice_Cream_1.png
+https://www.pikminwiki.com/images/9/9a/Decor_Rock_Ice_Cream_1.png
+https://www.pikminwiki.com/images/d/df/Decor_Winged_Ice_Cream_1.png
+https://www.pikminwiki.com/images/1/12/Decor_Red_Ice_Cream_2.png
+https://www.pikminwiki.com/images/7/7e/Decor_Yellow_Ice_Cream_2.png
+https://www.pikminwiki.com/images/8/81/Decor_Blue_Ice_Cream_2.png
+https://www.pikminwiki.com/images/c/c5/Decor_White_Ice_Cream_2.png
+https://www.pikminwiki.com/images/c/c4/Decor_Purple_Ice_Cream_2.png
+https://www.pikminwiki.com/images/8/8f/Decor_Rock_Ice_Cream_2.png
+https://www.pikminwiki.com/images/4/41/Decor_Winged_Ice_Cream_2.png
+https://pikmin.wiki.gallery/images/6/6b/Decor_Ice_Ice_Cream_1.png
+奶嘴
+https://pikmin.wiki.gallery/images/a/a0/Decor_Red_Pacifier.png
+金色飛機玩具
+https://pikmin.wiki.gallery/images/5/5b/Decor_Yellow_Golden_Toy_Airplane.png
+四週年紀念零食
+https://pikmin.wiki.gallery/images/7/71/Decor_Red_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/8/88/Decor_Yellow_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/9/98/Decor_Blue_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/2/2c/Decor_White_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/9/94/Decor_Purple_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/a/af/Decor_Rock_4th_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/2/22/Decor_Winged_4th_Anniversary_Snack.png
+四週年紀念花盒
+https://pikmin.wiki.gallery/images/e/ee/Decor_Red_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/6/66/Decor_Yellow_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/e/e9/Decor_Blue_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/a/a9/Decor_White_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/8/86/Decor_Purple_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/f/f7/Decor_Rock_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/2/24/Decor_Winged_4th_Anniversary_Flower_Box.png
+https://pikmin.wiki.gallery/images/8/88/Decor_Ice_4th_Anniversary_Flower_Box.png
+三週年紀念紙杯蛋糕
+https://pikmin.wiki.gallery/images/2/2b/Decor_Red_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/1/1b/Decor_Yellow_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/0/03/Decor_Blue_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/5/57/Decor_White_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/c/c7/Decor_Purple_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/0/05/Decor_Rock_3rd_Anniversary_Cupcake.png
+https://pikmin.wiki.gallery/images/f/f8/Decor_Winged_3rd_Anniversary_Cupcake.png
+拼圖：2021年秋季回憶
+https://pikmin.wiki.gallery/images/c/c1/Decor_Red_Puzzle_1.png
+https://pikmin.wiki.gallery/images/b/b0/Decor_Yellow_Puzzle_1.png
+https://pikmin.wiki.gallery/images/6/6b/Decor_Blue_Puzzle_1.png
+https://pikmin.wiki.gallery/images/6/64/Decor_White_Puzzle_1.png
+https://pikmin.wiki.gallery/images/f/f9/Decor_Purple_Puzzle_1.png
+https://pikmin.wiki.gallery/images/0/08/Decor_Rock_Puzzle_1.png
+https://pikmin.wiki.gallery/images/8/8d/Decor_Winged_Puzzle_1.png
+Pikmin4 玩具
+https://pikmin.wiki.gallery/images/2/2d/Decor_Red_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/7/71/Decor_Yellow_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/c/cf/Decor_Blue_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/0/01/Decor_White_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/f/f7/Decor_Purple_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/8/83/Decor_Rock_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/f/f6/Decor_Winged_Pikmin_4_Toy.png
+https://pikmin.wiki.gallery/images/7/70/Decor_Ice_Pikmin_4_Toy.png
+西洋棋
+https://pikmin.wiki.gallery/images/2/2a/Decor_Blue_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/2/29/Decor_Yellow_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/e/e5/Decor_Purple_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/3/36/Decor_White_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/b/b6/Decor_Red_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/7/75/Decor_Yellow_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/8/89/Decor_Purple_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/9/95/Decor_Rock_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/2/21/Decor_Winged_Chess_Piece_1.png
+https://pikmin.wiki.gallery/images/2/2d/Decor_Red_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/2/2c/Decor_Blue_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/4/41/Decor_White_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/7/71/Decor_Rock_Chess_Piece_2.png
+https://pikmin.wiki.gallery/images/9/95/Decor_Winged_Chess_Piece_2.png
+南瓜燈
+https://pikmin.wiki.gallery/images/d/d2/Decor_Red_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/3/3e/Decor_Yellow_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/b/bf/Decor_Blue_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/b/bb/Decor_White_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/8/84/Decor_Purple_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/a/aa/Decor_Rock_Jack-o%27-Lantern.png
+https://pikmin.wiki.gallery/images/1/15/Decor_Winged_Jack-o%27-Lantern.png
+萬聖節糖果
+https://pikmin.wiki.gallery/images/4/4f/Decor_Red_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/e/e7/Decor_Yellow_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/e/ee/Decor_Blue_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/d/de/Decor_White_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/7/7c/Decor_Purple_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/3/37/Decor_Rock_Halloween_Treat.png
+https://pikmin.wiki.gallery/images/4/48/Decor_Winged_Halloween_Treat.png
+萬聖節燈籠
+https://pikmin.wiki.gallery/images/2/25/Decor_Red_Halloween_Light.png
+https://pikmin.wiki.gallery/images/8/84/Decor_Yellow_Halloween_Light.png
+https://pikmin.wiki.gallery/images/d/d7/Decor_Blue_Halloween_Light.png
+https://pikmin.wiki.gallery/images/2/26/Decor_White_Halloween_Light.png
+https://pikmin.wiki.gallery/images/0/00/Decor_Purple_Halloween_Light.png
+https://pikmin.wiki.gallery/images/c/ca/Decor_Rock_Halloween_Light.png
+https://pikmin.wiki.gallery/images/b/b7/Decor_Winged_Halloween_Light.png
+骷髏頭
+https://pikmin.wiki.gallery/images/c/c0/Decor_Red_Calavera.png
+https://pikmin.wiki.gallery/images/a/a3/Decor_Yellow_Calavera.png
+https://pikmin.wiki.gallery/images/f/fe/Decor_Blue_Calavera.png
+https://pikmin.wiki.gallery/images/2/2d/Decor_White_Calavera.png
+https://pikmin.wiki.gallery/images/9/9d/Decor_Purple_Calavera.png
+https://pikmin.wiki.gallery/images/e/ef/Decor_Rock_Calavera.png
+https://pikmin.wiki.gallery/images/3/31/Decor_Winged_Calavera.png
+月餅
+https://pikmin.wiki.gallery/images/5/5d/Decor_Red_Mooncake.png
+https://pikmin.wiki.gallery/images/0/03/Decor_Yellow_Mooncake.png
+https://pikmin.wiki.gallery/images/e/ef/Decor_Blue_Mooncake.png
+https://pikmin.wiki.gallery/images/7/78/Decor_White_Mooncake.png
+https://pikmin.wiki.gallery/images/3/3f/Decor_Purple_Mooncake.png
+https://pikmin.wiki.gallery/images/f/f7/Decor_Rock_Mooncake.png
+https://pikmin.wiki.gallery/images/1/19/Decor_Winged_Mooncake.png
+麻將
+https://www.pikminwiki.com/images/4/4b/Decor_Red_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/9/92/Decor_Yellow_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/7/7b/Decor_Blue_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/b/bd/Decor_White_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/c/c2/Decor_Purple_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/8/85/Decor_Rock_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/a/a4/Decor_Winged_Mahjong_Tile_1.png
+https://www.pikminwiki.com/images/d/de/Decor_Red_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/6/64/Decor_Yellow_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/d/df/Decor_Blue_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/d/d1/Decor_White_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/b/b7/Decor_Purple_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/d/dc/Decor_Rock_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/d/d2/Decor_Winged_Mahjong_Tile_2.png
+https://www.pikminwiki.com/images/d/dc/Decor_Yellow_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/e/e2/Decor_Blue_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/5/5b/Decor_White_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/e/ef/Decor_Purple_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/f/f5/Decor_Rock_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/1/18/Decor_Winged_Mahjong_Tile_3.png
+https://www.pikminwiki.com/images/7/74/Decor_Yellow_Mahjong_Tile_4.png
+https://www.pikminwiki.com/images/c/c4/Decor_Blue_Mahjong_Tile_4.png
+https://www.pikminwiki.com/images/6/62/Decor_White_Mahjong_Tile_4.png
+https://www.pikminwiki.com/images/6/60/Decor_White_Mahjong_Tile_5.png
+https://www.pikminwiki.com/images/3/32/Decor_Purple_Mahjong_Tile_4.png
+https://www.pikminwiki.com/images/d/d9/Decor_Rock_Mahjong_Tile_4.png
+https://www.pikminwiki.com/images/b/b7/Decor_Winged_Mahjong_Tile_4.png
+夏季貼紙
+https://pikmin.wiki.gallery/images/f/f7/Decor_Red_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/9/95/Decor_Yellow_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/6/67/Decor_Blue_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/a/ae/Decor_White_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/6/64/Decor_Purple_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/b/bc/Decor_Rock_Summer_Sticker.png
+https://pikmin.wiki.gallery/images/d/d4/Decor_Winged_Summer_Sticker.png
+刨冰
+https://pikmin.wiki.gallery/images/7/7f/Decor_Red_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/6/6b/Decor_Yellow_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/a/ab/Decor_Blue_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/a/aa/Decor_White_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/8/8e/Decor_Purple_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/0/01/Decor_Rock_Shaved_Ice.png
+https://pikmin.wiki.gallery/images/1/1f/Decor_Winged_Shaved_Ice.png
+珊瑚
+https://pikmin.wiki.gallery/images/c/cc/Decor_Red_Coral.png
+https://pikmin.wiki.gallery/images/6/64/Decor_Yellow_Coral.png
+https://pikmin.wiki.gallery/images/4/4a/Decor_Blue_Coral.png
+https://pikmin.wiki.gallery/images/0/0e/Decor_White_Coral.png
+https://pikmin.wiki.gallery/images/7/72/Decor_Purple_Coral.png
+https://pikmin.wiki.gallery/images/b/b1/Decor_Rock_Coral.png
+https://pikmin.wiki.gallery/images/a/a7/Decor_Winged_Coral.png
+迷你樂器
+https://pikmin.wiki.gallery/images/1/19/Decor_Red_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/f/fa/Decor_Yellow_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/4/47/Decor_Blue_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/6/67/Decor_White_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/7/7d/Decor_Purple_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/f/f5/Decor_Rock_Tiny_Instrument.png
+https://pikmin.wiki.gallery/images/e/e0/Decor_Winged_Tiny_Instrument.png
+里約狂歡節
+https://pikmin.wiki.gallery/images/0/07/Decor_Red_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/9/94/Decor_Yellow_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/5/50/Decor_Blue_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/f/f4/Decor_White_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/4/45/Decor_Purple_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/0/0d/Decor_Rock_Rio_Carnival.png
+https://pikmin.wiki.gallery/images/9/93/Decor_Winged_Rio_Carnival.png
+情人節貼紙
+https://pikmin.wiki.gallery/images/3/38/Decor_Red_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/8/86/Decor_Yellow_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/c/c9/Decor_Blue_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/a/a2/Decor_White_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/1/1a/Decor_Purple_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/d/d1/Decor_Rock_Valentine_Sticker.png
+https://pikmin.wiki.gallery/images/8/85/Decor_Winged_Valentine_Sticker.png
+花札
+https://www.pikminwiki.com/images/c/cb/Decor_Red_Flower_Card_5.png
+https://www.pikminwiki.com/images/9/9e/Decor_Red_Flower_Card_6.png
+https://www.pikminwiki.com/images/4/48/Decor_Red_Flower_Card_4.png
+https://www.pikminwiki.com/images/4/45/Decor_Red_Flower_Card_3.png
+https://www.pikminwiki.com/images/5/5a/Decor_Red_Flower_Card_1.png
+https://www.pikminwiki.com/images/2/2b/Decor_Red_Flower_Card_2.png
+https://www.pikminwiki.com/images/0/06/Decor_Yellow_Flower_Card_6.png
+https://www.pikminwiki.com/images/2/20/Decor_Yellow_Flower_Card_5.png
+https://www.pikminwiki.com/images/5/58/Decor_Yellow_Flower_Card_4.png
+https://www.pikminwiki.com/images/b/b4/Decor_Yellow_Flower_Card_3.png
+https://www.pikminwiki.com/images/e/ee/Decor_Yellow_Flower_Card_1.png
+https://www.pikminwiki.com/images/e/ea/Decor_Yellow_Flower_Card_2.png
+https://www.pikminwiki.com/images/d/de/Decor_Blue_Flower_Card_1.png
+https://www.pikminwiki.com/images/b/b4/Decor_Blue_Flower_Card_6.png
+https://www.pikminwiki.com/images/4/40/Decor_Blue_Flower_Card_5.png
+https://www.pikminwiki.com/images/7/72/Decor_Blue_Flower_Card_3.png
+https://www.pikminwiki.com/images/2/22/Decor_Blue_Flower_Card_4.png
+https://www.pikminwiki.com/images/5/58/Decor_Blue_Flower_Card_2.png
+https://www.pikminwiki.com/images/c/c3/Decor_Purple_Flower_Card_6.png
+https://www.pikminwiki.com/images/3/3e/Decor_Purple_Flower_Card_1.png
+https://www.pikminwiki.com/images/a/ad/Decor_Purple_Flower_Card_5.png
+https://www.pikminwiki.com/images/2/2e/Decor_Purple_Flower_Card_3.png
+https://www.pikminwiki.com/images/0/07/Decor_Purple_Flower_Card_4.png
+https://www.pikminwiki.com/images/d/d7/Decor_Purple_Flower_Card_2.png
+https://www.pikminwiki.com/images/a/a1/Decor_Red_Flower_Card_8.png
+https://www.pikminwiki.com/images/9/9a/Decor_Red_Flower_Card_7.png
+https://www.pikminwiki.com/images/6/62/Decor_Yellow_Flower_Card_7.png
+https://www.pikminwiki.com/images/4/4c/Decor_Yellow_Flower_Card_8.png
+https://www.pikminwiki.com/images/0/09/Decor_Blue_Flower_Card_8.png
+https://www.pikminwiki.com/images/e/ef/Decor_Blue_Flower_Card_7.png
+https://www.pikminwiki.com/images/f/fb/Decor_White_Flower_Card_2.png
+https://www.pikminwiki.com/images/d/d2/Decor_White_Flower_Card_1.png
+https://www.pikminwiki.com/images/b/bb/Decor_Purple_Flower_Card_8.png
+https://www.pikminwiki.com/images/4/40/Decor_Purple_Flower_Card_7.png
+https://www.pikminwiki.com/images/f/f4/Decor_Rock_Flower_Card_3.png
+https://www.pikminwiki.com/images/6/61/Decor_Rock_Flower_Card_2.png
+https://www.pikminwiki.com/images/1/17/Decor_Rock_Flower_Card_1.png
+https://www.pikminwiki.com/images/2/2b/Decor_Winged_Flower_Card_3.png
+https://www.pikminwiki.com/images/b/b5/Decor_Winged_Flower_Card_2.png
+https://www.pikminwiki.com/images/c/cd/Decor_Winged_Flower_Card_1.png
+冬季貼紙
+https://pikmin.wiki.gallery/images/3/3f/Decor_Red_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/5/59/Decor_Yellow_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/0/05/Decor_Blue_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/8/81/Decor_White_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/6/67/Decor_Purple_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/8/85/Decor_Rock_Winter_Sticker.png
+https://pikmin.wiki.gallery/images/d/d2/Decor_Winged_Winter_Sticker.png
+一週年紀念零食
+https://pikmin.wiki.gallery/images/f/f5/Decor_Red_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/6/6f/Decor_Yellow_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/c/c4/Decor_Blue_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/1/1c/Decor_White_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/4/46/Decor_Purple_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/3/34/Decor_Rock_First_Anniversary_Snack.png
+https://pikmin.wiki.gallery/images/1/13/Decor_Winged_First_Anniversary_Snack.png
+禮物貼紙(金色)
+https://pikmin.wiki.gallery/images/8/85/Decor_Red_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/3/35/Decor_Yellow_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/e/ee/Decor_Blue_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/3/33/Decor_White_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/d/db/Decor_Purple_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/f/fd/Decor_Rock_Present_Sticker_%28Gold%29.png
+https://pikmin.wiki.gallery/images/5/54/Decor_Winged_Present_Sticker_%28Gold%29.png
+秋季貼紙
+https://pikmin.wiki.gallery/images/3/3e/Decor_Red_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/8/83/Decor_Yellow_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/2/28/Decor_Blue_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/c/ca/Decor_White_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/c/cb/Decor_Purple_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/0/0a/Decor_Rock_Fall_Sticker.png
+https://pikmin.wiki.gallery/images/8/87/Decor_Winged_Fall_Sticker.png
+拼圖：2024年秋季回憶
+https://pikmin.wiki.gallery/images/0/06/Decor_Red_Puzzle_3.png
+https://pikmin.wiki.gallery/images/9/9b/Decor_Yellow_Puzzle_3.png
+https://pikmin.wiki.gallery/images/9/99/Decor_Blue_Puzzle_3.png
+https://pikmin.wiki.gallery/images/a/ad/Decor_White_Puzzle_3.png
+https://pikmin.wiki.gallery/images/1/18/Decor_Purple_Puzzle_3.png
+https://pikmin.wiki.gallery/images/6/65/Decor_Rock_Puzzle_3.png
+https://pikmin.wiki.gallery/images/9/9a/Decor_Winged_Puzzle_3.png
+繪畫
+https://pikmin.wiki.gallery/images/d/da/Decor_Red_Paint.png
+https://pikmin.wiki.gallery/images/a/ae/Decor_Yellow_Paint.png
+https://pikmin.wiki.gallery/images/7/7f/Decor_Blue_Paint.png
+https://pikmin.wiki.gallery/images/8/8f/Decor_White_Paint.png
+https://pikmin.wiki.gallery/images/b/b9/Decor_Purple_Paint.png
+https://pikmin.wiki.gallery/images/6/6a/Decor_Rock_Paint.png
+https://pikmin.wiki.gallery/images/e/ec/Decor_Winged_Paint.png
+Koppaite太空衣
+https://pikmin.wiki.gallery/images/c/c3/Decor_Red_Koppaite_Space_Suit.png
+https://pikmin.wiki.gallery/images/c/cd/Decor_Yellow_Koppaite_Space_Suit.png
+https://pikmin.wiki.gallery/images/2/29/Decor_Blue_Koppaite_Space_Suit.png
+Pikmin4 飛船
+https://pikmin.wiki.gallery/images/e/e1/Decor_Red_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/f/f3/Decor_Yellow_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/7/7e/Decor_Blue_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/0/00/Decor_White_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/a/a8/Decor_Purple_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/c/c9/Decor_Rock_Pikmin_4_Spaceship.png
+https://pikmin.wiki.gallery/images/2/29/Decor_Winged_Pikmin_4_Spaceship.png
+手指滑板
+https://pikmin.wiki.gallery/images/d/dc/Decor_Red_Fingerboard.png
+https://pikmin.wiki.gallery/images/9/92/Decor_Yellow_Fingerboard.png
+https://pikmin.wiki.gallery/images/2/29/Decor_Blue_Fingerboard.png
+https://pikmin.wiki.gallery/images/c/ca/Decor_White_Fingerboard.png
+https://pikmin.wiki.gallery/images/6/69/Decor_Purple_Fingerboard.png
+https://pikmin.wiki.gallery/images/e/ef/Decor_Rock_Fingerboard.png
+https://pikmin.wiki.gallery/images/1/19/Decor_Winged_Fingerboard.png
+運動鞋鑰匙圈
+https://pikmin.wiki.gallery/images/1/12/Decor_Red_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/d/d8/Decor_Yellow_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/d/d9/Decor_Blue_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/5/5f/Decor_White_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/2/2f/Decor_Purple_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/9/95/Decor_Rock_Sneaker_Keychain.png
+https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         let myCollection = [];
         let historyStack = [];
@@ -2455,9 +3024,8 @@
             if (saved) {
                 myCollection = JSON.parse(saved);
             } else {
-                // 【修正】將特殊圖鑑字串中的「空白」全部轉為「換行」，解決資料黏在一起的問題
-                const parsedSpecialData = specialRawUrlsData.replace(/\s+/g, '\n');
-                const lines = (rawUrlsData + "\n" + parsedSpecialData).split('\n').map(l => l.trim()).filter(l => l !== '');
+                // 【修正】移除容易導致誤判的空白轉換，直接使用標準換行分割
+                const lines = (rawUrlsData + "\n" + specialRawUrlsData).split('\n').map(l => l.trim()).filter(l => l !== '');
                 let currentCategory = "";
                 const colorMap = { "Red": "紅色", "Yellow": "黃色", "Blue": "藍色", "White": "白色", "Purple": "紫色", "Rock": "岩石", "Winged": "羽翅", "Ice": "冰凍" };
 
@@ -2519,6 +3087,7 @@
             historyStack = [JSON.stringify(myCollection)];
             historyIndex = 0;
             updateUI();
+            switchMainTab(0, true); // 【新增】初始化時收起沒開的分頁，消除底部空白
         }
 
         // --- 核心系統 ---
@@ -3730,39 +4299,64 @@
             document.getElementById('welcome-modal').style.display = 'none';
         }
 
-        // --- 主圖鑑左右滑動切換邏輯 (防誤觸優化版) ---
+
+
+
+
+
+
+        // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、去空白) ---
         let mainTouchStartX = 0;
-        let mainTouchStartY = 0; // 【新增】記錄起始 Y 座標
+        let mainTouchStartY = 0;
         let currentMainTab = 0; // 0: 一般, 1: 特殊
 
         function mainSwipeStart(e) {
             mainTouchStartX = e.touches[0].clientX;
-            mainTouchStartY = e.touches[0].clientY; // 記錄 Y
+            mainTouchStartY = e.touches[0].clientY;
         }
 
         function mainSwipeEnd(e) {
             let diffX = mainTouchStartX - e.changedTouches[0].clientX;
-            let diffY = mainTouchStartY - e.changedTouches[0].clientY; // 計算 Y 軸位移
+            let diffY = mainTouchStartY - e.changedTouches[0].clientY;
 
-            // 【關鍵防誤觸邏輯】
-            // 1. Math.abs(diffX) > 60：將觸發門檻稍微拉高，必須滑動超過 60px。
-            // 2. Math.abs(diffX) > Math.abs(diffY)：確保「左右滑動的距離」嚴格大於「上下滾動的距離」。
+            // 判斷必須是水平滑動，且距離超過 60px
             if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY)) {
-                if (diffX > 0 && currentMainTab === 0) {
-                    switchMainTab(1); // 往左滑 -> 特殊
-                } else if (diffX < 0 && currentMainTab === 1) {
-                    switchMainTab(0); // 往右滑 -> 一般
-                }
+                // 【新增】循環切換：只要水平滑動，就直接切換到另一頁 (0變1，1變0)
+                switchMainTab(currentMainTab === 0 ? 1 : 0);
             }
         }
 
-        function switchMainTab(index) {
+        function switchMainTab(index, isInit = false) {
             currentMainTab = index;
             const container = document.getElementById('main-swipe-container');
             const btns = document.querySelectorAll('.main-tab-btn');
+            const pages = document.querySelectorAll('.main-swipe-page');
+
             btns.forEach((b, i) => b.classList.toggle('active', i === index));
+
+            // 【新增】動態控制頁面高度：沒選中的頁面高度歸零，徹底解決下方大片空白
+            pages.forEach((page, i) => {
+                if (i === index) {
+                    page.style.height = 'auto';
+                    page.style.overflow = 'visible';
+                } else {
+                    page.style.height = '0px';
+                    page.style.overflow = 'hidden';
+                }
+            });
+
             container.style.transform = `translateX(-${index * 50}%)`;
+
+            // 【新增】觸發瞬移置頂 (如果是玩家主動點擊或滑動才置頂)
+            if (!isInit) {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
         }
+
+
+
+
+
 
         // 啟動教學視窗
         initWelcomeModal();
