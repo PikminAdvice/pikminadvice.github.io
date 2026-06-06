@@ -292,31 +292,22 @@
             opacity: 1;
         }
 
-        /* 綠背景與浮水印圖層 */
-        .watermark-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            background-color: var(--bg-color);
-            transition: background-color 0.3s;
-        }
 
         .bg-watermark {
-            position: absolute;
-            bottom: calc(var(--panel-height) + 20px);
-            right: 0px;
-            width: 200px;
-            height: 200px;
-            background-image: url('https://www.nintendo.com/app/znsa/dl/assets/images/dl/pikmin_1440_2560.png');
+            position: fixed;
+            /* 改為 fixed 確保它在視窗最下方 */
+            left: 200px;
+            top: 370px;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://pikminadvice.github.io/images/bgicon_.png');
             background-size: contain;
             background-repeat: no-repeat;
-            opacity: 0.3;
-            transition: bottom 0s;
-            z-index: 0;
+            opacity: 0.5;
+            z-index: 1;
+            /* 確保在內容下方 */
+            pointer-events: none;
+            /* 確保不會被 body 或其他 overflow:hidden 截掉 */
         }
 
         /* === 種類圖鑑切換標籤 === */
@@ -497,10 +488,13 @@
         /* === 導覽列 ICON === */
         .category-nav {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-            gap: 20px 10px;
+            /* 改用 auto-fit，讓它在寬度足夠時自動增加排數，不用手動寫死 */
+            grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+            gap: 12px 25px;
             margin-bottom: 30px;
             margin-top: 10px;
+            /* 左右邊緣留出更多寬度 */
+            padding: 0 5vw;
             justify-items: center;
         }
 
@@ -660,35 +654,36 @@
             display: grid;
             grid-template-columns: 1fr;
             /* 手機一排一個 */
-            gap: 15px;
+            gap: 12px;
+            /* 膠囊之間的距離 */
             overflow: hidden;
             transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
-            padding: 5px;
+            padding: 5px 0px;
+            /* 【修改這裡】左右邊距從 5px 改為 8px，讓膠囊更貼近螢幕邊緣 */
             padding-bottom: 40px;
-            /* 給予陰影空間 */
         }
 
         @media (min-width: 700px) {
             .special-grid {
-                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                grid-template-columns: 1fr 1fr;
             }
         }
 
         .special-capsule {
             display: flex;
             align-items: center;
-            height: 45px;
+            height: 40px;
+            /* 【加高】膠囊按鈕高度稍微增加，看起來更厚實 */
             width: 100%;
-            /* 【新增】鎖死寬度 */
             box-sizing: border-box;
-            /* 【新增】確保內距不影響寬度計算 */
-            border-radius: 25px;
+            border-radius: 30px;
+            /* 【加大】圓角讓膠囊感更強 */
             background: linear-gradient(135deg, #a68b32 0%, #efdeaa 50%, #d8be6f 100%);
             padding: 2px;
             cursor: pointer;
             position: relative;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
         .special-capsule:hover {
@@ -703,7 +698,7 @@
             height: 100%;
             border-radius: 23px;
             background: linear-gradient(180deg, #ffffe9 0%, #ffeead 100%);
-            padding: 0 15px;
+            padding: 0 10px;
             position: relative;
             min-width: 0;
             box-sizing: border-box;
@@ -714,7 +709,7 @@
         .special-icon {
             width: 24px;
             height: 24px;
-            margin-right: 12px;
+            margin-right: 5px;
             flex-shrink: 0;
             /* 【新增】防止圖示被壓縮 */
             filter: invert(60%) sepia(35%) saturate(404%) hue-rotate(3deg) brightness(115%) contrast(105%) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
@@ -1881,6 +1876,10 @@
 
 <body>
 
+
+    <div class="bg-watermark" id="bg-watermark"></div>
+
+
     <div class="top-header">
         <div class="header-left">
             <img src="./images/pikminbloomlogo2022.png" alt="Logo" class="header-logo">
@@ -1928,9 +1927,7 @@
 
     <div id="toast" class="toast">已更新</div>
 
-    <div class="watermark-container">
-        <div class="bg-watermark" id="bg-watermark"></div>
-    </div>
+
 
     <div id="backup-warning-bar" class="backup-warning-bar">
         <marquee class="backup-marquee" scrollamount="4">你已經7天沒有備份資料囉，趕緊「匯出資料」保存進度吧！</marquee>
@@ -1955,12 +1952,12 @@
                 <div id="category-nav" class="category-nav"></div>
             </div>
             <div class="main-swipe-page">
-                <div class="empty-state" style="margin-top:-25vh; color: #696969;">特殊圖鑑建置中...</div>
+                <div class="empty-state" style="margin-top:-25vh; color: #696969;">--</div>
             </div>
         </div>
     </div>
 
-    <div class="dashboard">
+    <div class="dashboard" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)">
         <div class="card-horizontal">
             <div class="stats-left">
                 <h3>一般圖鑑完成度</h3>
@@ -2984,6 +2981,10 @@ https://pikmin.wiki.gallery/images/2/2f/Decor_Purple_Sneaker_Keychain.png
 https://pikmin.wiki.gallery/images/9/95/Decor_Rock_Sneaker_Keychain.png
 https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
+
+
+
+
         let myCollection = [];
         let historyStack = [];
         let historyIndex = -1;
@@ -3740,7 +3741,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const menu = document.getElementById('custom-status-menu');
 
             // 客製化選單內容
-            if (item.subcategory === '大花盆') {
+            if (item.subcategory === '大花盆' || item.subcategory === '金色大花盆') {
                 menu.innerHTML = `
                     <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【孵出】請選擇孵出的顏色與子分類')">!</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
@@ -3894,13 +3895,15 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-
         function renderRecommendations() {
             // 1. 清除過期的隱藏設定
             myCollection.forEach(item => {
                 item.instances.forEach(ins => { if (ins.hideRec && ins.hideUntil && Date.now() > ins.hideUntil) { ins.hideRec = false; delete ins.hideUntil; } });
                 if (item.hideExploreRec && item.hideExploreUntil && Date.now() > item.hideExploreUntil) { item.hideExploreRec = false; delete item.hideExploreUntil; }
             });
+
+            // 【新增】取得所有特殊圖鑑的名稱，用於判斷是否要推薦純點與更換 Icon
+            const specialCatNames = Object.values(specialCategories).flat();
 
             let incubateList = [];
             let discardList = [];
@@ -3909,10 +3912,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const keepOne = document.getElementById('setting-keep-one').checked;
             const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊"];
 
-            // 輔助函式：安全地推入丟棄清單 (會自動檢查用戶是否勾選了"不建議丟棄")
+            // 輔助函式：安全地推入丟棄清單
             let discardUids = new Set();
             let pushDiscard = (item, target, isWarning) => {
-                if (excludeDiscardList.includes(item.category)) return; // 【關鍵】用戶勾選保留，立刻攔截！
+                if (excludeDiscardList.includes(item.category)) return;
                 if (!discardUids.has(target.uid)) {
                     discardUids.add(target.uid);
                     discardList.push({ item, target, isWarning });
@@ -3924,7 +3927,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             // ==========================================
             myCollection.filter(i => i.subcategory === '大花盆' || i.subcategory === '金色大花盆').forEach(hugeItem => {
                 let availableHuge = hugeItem.instances.filter(i => i.status === '花盆' && !i.hideRec);
-                if (availableHuge.length === 0) return; // 沒有大花盆則不做建議
+                if (availableHuge.length === 0) return;
 
                 let catItems = myCollection.filter(i => i.category === hugeItem.category && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
                 let hasHidden = hiddenCategories.includes(hugeItem.category);
@@ -3935,23 +3938,18 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 availableHuge.forEach(seed => {
                     if (!hasHidden) {
                         if (isAllNormalUnlocked) pushDiscard(hugeItem, seed, false);
-                        else incubateList.push({ item: hugeItem, target: seed, score: -999 }); // 特權最優先
+                        else incubateList.push({ item: hugeItem, target: seed, score: -999 });
                     } else {
                         if (isAllHiddenUnlocked) pushDiscard(hugeItem, seed, false);
-                        else incubateList.push({ item: hugeItem, target: seed, score: -999 }); // 農積分
+                        else incubateList.push({ item: hugeItem, target: seed, score: -999 });
                     }
                 });
             });
-
-
-
-
 
             // ==========================================
             // 【邏輯 1】一般圖鑑判定機制 (依據顏色群組)
             // ==========================================
             const cats = [...new Set(myCollection.map(i => i.category))];
-            // 【修復】加入 Gold 以防排序出錯
             const colorOrder = ["Red", "Yellow", "Blue", "Purple", "White", "Winged", "Rock", "Ice", "Gold"];
             const discardPrio = { "花盆": 1, "待機": 2, "孵盆": 3, "培育": 4, "飾品": 5 };
 
@@ -3959,16 +3957,13 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 if (cat === '大花盆') return;
                 const hasHidden = hiddenCategories.includes(cat);
 
-                // 在這裡計算整個「大分類」的未解鎖總數，而不是在顏色裡面算
                 let catNormalItems = myCollection.filter(i => i.category === cat && !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && i.subcategory !== '大花盆');
                 let catMissingCount = catNormalItems.filter(i => !i.isUnlocked).length;
 
                 colorOrder.forEach(color => {
-                    // 【致命錯誤修復】將原本錯誤的 hugeItem.category 改為 cat，並加上 i.colorName === color
                     let items = myCollection.filter(i => i.category === cat && i.colorName === color && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
                     if (items.length === 0) return;
 
-                    // 變數定義區
                     let n = items.length;
                     let isNormalUnlocked = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏')).every(i => i.isUnlocked);
                     let isHiddenUnlocked = hasHidden ? items.filter(i => i.subcategory.includes('稀有') || i.subcategory.includes('隱藏')).every(i => i.isUnlocked) : true;
@@ -3976,60 +3971,43 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     let instances = [];
                     items.forEach(item => { item.instances.forEach(ins => { if (!ins.hideRec) instances.push({ item, ins }); }); });
 
-                    let totalStatus = instances.filter(x => x.ins.status !== '飾品').length; // 身上非飾品總數
-                    let x = totalStatus > n ? totalStatus - n : 0; // 溢出數量
+                    let totalStatus = instances.filter(x => x.ins.status !== '飾品').length;
+                    let x = totalStatus > n ? totalStatus - n : 0;
 
                     let seeds = instances.filter(i => i.ins.status === '花盆');
                     let nonSeeds = instances.filter(i => i.ins.status === '待機' || i.ins.status === '孵盆' || i.ins.status === '培育');
 
-                    // ------------------------------------
-                    // 該圖鑑是否已解鎖? (指一般圖鑑)
-                    // ------------------------------------
+                    // --- 圖鑑解鎖與否邏輯 ---
                     if (isNormalUnlocked) {
-                        // 【Yes 已解鎖】
                         if (!hasHidden) {
-                            // 丟棄全部(花盆/待機/孵盆/培育)
                             instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
                         } else {
                             if (isHiddenUnlocked) {
-                                // 丟棄全部
                                 instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
                             } else {
                                 if (seeds.length > 0) {
-                                    // 【新增】精準計算：只看這顆花盆所屬的「子分類」，還差幾個圖鑑沒解鎖
                                     let targetSubcat = seeds[0].item.subcategory;
                                     let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === targetSubcat && !i.isUnlocked).length;
 
-                                    // 【包含花盆】
                                     if (seeds.length === totalStatus) {
-                                        // 只有花盆
-                                        if (totalStatus <= n) {
+                                        if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
+                                        else {
                                             incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                        } else {
-                                            if (hasHidden) {
-                                                incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                            } else {
-                                                incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
+                                            if (!hasHidden) {
                                                 let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                                 for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                             }
                                         }
                                     } else {
-                                        // 混和狀態
-                                        if (totalStatus <= n) {
+                                        if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
+                                        else {
                                             incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                        } else {
-                                            if (hasHidden) {
-                                                incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                            } else {
+                                            if (!hasHidden) {
                                                 if (nonSeeds.length < n) {
-                                                    incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                                    // 只丟棄多餘花盆
                                                     let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                                     let dropCount = Math.min(x, seeds.length);
                                                     for (let i = 0; i < dropCount; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                                 } else {
-                                                    // 丟棄優先序: 花盆>待機>孵盆>培育
                                                     let sortedToDiscard = [...seeds, ...nonSeeds].sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                                     for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                                 }
@@ -4040,7 +4018,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                             }
                         }
 
-                        // 處理「飾品」的保留判定 (適用於全畢業的狀況)
                         if ((!hasHidden && isNormalUnlocked) || (hasHidden && isHiddenUnlocked)) {
                             items.forEach(item => {
                                 let decors = item.instances.filter(i => i.status === '飾品' && !i.hideRec);
@@ -4051,64 +4028,49 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
                     } else {
                         // 【No 未解鎖】
-
-                        // --- 新增：開圖建議 (探索 & 培育) ---
                         let missingNormal = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && !i.isUnlocked);
-                        let threshold = (cat === '雨天' || cat === '下雪') ? 1 : 2; // 雨雪特例門檻
+                        let threshold = (cat === '雨天' || cat === '下雪') ? 1 : 2;
 
                         if (missingNormal.length > 0 && catMissingCount <= threshold) {
                             let targetItem = missingNormal[0];
                             if (!targetItem.hideExploreRec) {
                                 if (totalStatus === 0) {
-                                    // 身上沒有任何狀態 ➔ 探索建議
-                                    exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: catMissingCount, item: targetItem });
+                                    // 【修改 1】身上沒有任何狀態 ➔ 探索建議 (特殊圖鑑不建議純點)
+                                    if (!specialCatNames.includes(cat)) {
+                                        exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: catMissingCount, item: targetItem });
+                                    }
                                 } else {
-                                    // 身上有狀態，檢查是否有「待機」或「培育」➔ 培育建議
-                                    let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機' || i.ins.status === '培育');
+                                    // 【修改 4】身上有狀態，只檢查「待機」，有才建議培育 (忽略培育中)
+                                    let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機');
                                     if (cultivateCandidates.length > 0) {
-                                        // 優先抓培育中的，沒有再抓待機
-                                        let targetIns = cultivateCandidates.find(i => i.ins.status === '培育') || cultivateCandidates[0];
+                                        let targetIns = cultivateCandidates[0];
                                         exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: catMissingCount, item: targetItem, targetUid: targetIns.ins.uid });
                                     }
                                 }
                             }
                         }
 
-                        // --- 原有邏輯：孵盆與丟棄判定 ---
-                        if (totalStatus === 0) {
-                            // 無任何狀態 ➔ (探索邏輯已移至上方，此處不再重複處理)
-                        } else {
+                        if (totalStatus > 0) {
                             if (seeds.length > 0) {
-                                // 【包含花盆】
                                 if (seeds.length === totalStatus) {
-                                    // 只有花盆
-                                    if (totalStatus <= n) {
-                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
-                                    } else {
-                                        if (hasHidden) {
-                                            incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
-                                        } else {
-                                            incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
+                                    if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
+                                    else {
+                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
+                                        if (!hasHidden) {
                                             let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                             for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                         }
                                     }
                                 } else {
-                                    // 混和狀態
-                                    if (totalStatus <= n) {
-                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
-                                    } else {
-                                        if (hasHidden) {
-                                            incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
-                                        } else {
+                                    if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
+                                    else {
+                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
+                                        if (!hasHidden) {
                                             if (nonSeeds.length < n) {
-                                                incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
-                                                // 只丟棄多餘花盆
                                                 let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                                 let dropCount = Math.min(x, seeds.length);
                                                 for (let i = 0; i < dropCount; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                             } else {
-                                                // 丟棄優先序: 花盆>待機>孵盆>培育
                                                 let sortedToDiscard = [...seeds, ...nonSeeds].sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
                                                 for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                             }
@@ -4116,15 +4078,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                     }
                                 }
                             } else {
-                                // 【沒有花盆】
-                                if (totalStatus <= n) {
-                                    // 不做建議
-                                } else {
-                                    if (!hasHidden) {
-                                        // 丟棄優先序: 待機>孵盆>培育
-                                        let sortedToDiscard = nonSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                        for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                    }
+                                if (totalStatus > n && !hasHidden) {
+                                    let sortedToDiscard = nonSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
+                                    for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
                                 }
                             }
                         }
@@ -4132,18 +4088,15 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 });
             });
 
-
-
-
-
-
-            // 排序與渲染準備
             incubateList = incubateList.sort((a, b) => a.score - b.score).slice(0, 10);
             discardList = discardList.slice(0, 15);
             exploreList = exploreList.sort((a, b) => a.left - b.left).slice(0, 10);
 
+            // 【修改 2】輔助函式：判斷是否為特殊圖鑑，若是則替換為灰色花花圖示
+            const getCatIcon = (cat) => specialCatNames.includes(cat) ? specialIconUrl : categoryIcons[cat];
+
             // ==========================================
-            // 【UI 渲染輸出區】 (維持原本你喜歡的無對話框流暢排版)
+            // 【UI 渲染輸出區】
             // ==========================================
 
             // 渲染：孵化建議
@@ -4154,7 +4107,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     <div class="rec-item no-left-pad" ontouchstart="handleSwipeStart(event)" ontouchmove="handleSwipeMove(event, this)" ontouchend="handleItemSwipeEnd(event, this, '${obj.target.uid}', 'incubate')" style="position:relative; z-index:2; margin-bottom:0; background:var(--card-bg); transition: transform 0.2s; border-radius:6px; border:none; min-height:70px;">
                         <div class="rec-color-bar color-${obj.item.colorName}"></div>
                         <div class="rec-img-box">
-                            ${categoryIcons[obj.item.category] ? `<img src="${categoryIcons[obj.item.category]}" class="rec-category-icon">` : ''}
+                            ${getCatIcon(obj.item.category) ? `<img src="${getCatIcon(obj.item.category)}" class="rec-category-icon">` : ''}
                             <img src="${obj.item.subcategory === '大花盆' ? seedlingMap['Huge'] : seedlingMap[obj.item.colorName]}" class="rec-img-fg" onclick="openLightbox(this.src); event.stopPropagation();">
                         </div>
                         <div class="rec-info-wrapper" onclick="viewItemInModal('${obj.item.category}', '${obj.item.id}', '${obj.target.uid}')">
@@ -4172,7 +4125,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (incubateList.length > 0) iList.innerHTML += `<div class="rec-swipe-hint">← 左滑可刪除建議</div>`;
 
 
-
             // 渲染：丟棄建議
             const dList = document.getElementById('recommend-discard-list');
             dList.innerHTML = discardList.length === 0 ? '<div class="empty-state">背包空間很乾淨</div>' : discardList.map(d => `
@@ -4181,7 +4133,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     <div class="rec-item no-left-pad" ontouchstart="handleSwipeStart(event)" ontouchmove="handleSwipeMove(event, this)" ontouchend="handleItemSwipeEnd(event, this, '${d.target.uid}', 'discard')" style="position:relative; z-index:2; margin-bottom:0; background:var(--card-bg); transition: transform 0.2s; border-radius:6px; border:none; min-height:70px;">
                         <div class="rec-color-bar color-${d.item.colorName}"></div>
                         <div class="rec-img-box">
-                            ${categoryIcons[d.item.category] ? `<img src="${categoryIcons[d.item.category]}" class="rec-category-icon">` : ''}
+                            ${getCatIcon(d.item.category) ? `<img src="${getCatIcon(d.item.category)}" class="rec-category-icon">` : ''}
                             <img src="${d.target.status === '花盆' ? seedlingMap[d.item.colorName] : (d.target.status === '飾品' ? d.item.imageUrl : nakedPikminMap[d.item.colorName])}" class="rec-img-fg" onclick="openLightbox(this.src); event.stopPropagation();">
                         </div>
                         <div class="rec-info-wrapper" onclick="viewItemInModal('${d.item.category}', '${d.item.id}', '${d.target.uid}')">
@@ -4199,8 +4151,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (discardList.length > 0) dList.innerHTML += `<div class="rec-swipe-hint">← 左滑可刪除建議</div>`;
 
 
-
-
             // 渲染：開圖建議 (探索 + 培育)
             const eList = document.getElementById('recommend-explore-list');
             eList.innerHTML = exploreList.length === 0 ? '<div class="empty-state">目前沒有快集滿的圖鑑</div>' : exploreList.map(e => {
@@ -4211,7 +4161,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         <div class="rec-item no-left-pad" ontouchstart="handleSwipeStart(event)" ontouchmove="handleSwipeMove(event, this)" ontouchend="handleItemSwipeEnd(event, this, '${e.item.id}', 'explore')" style="position:relative; z-index:2; margin-bottom:0; background:var(--card-bg); transition: transform 0.2s; border-radius:6px; border:none; min-height:70px;">
                             <div class="rec-color-bar color-${e.colorName}"></div>
                             <div class="rec-img-box">
-                                ${categoryIcons[e.cat] ? `<img src="${categoryIcons[e.cat]}" class="rec-category-icon">` : ''}
+                                ${getCatIcon(e.cat) ? `<img src="${getCatIcon(e.cat)}" class="rec-category-icon">` : ''}
                                 <img src="${seedlingMap[e.colorName]}" class="rec-img-fg" onclick="openLightbox(this.src); event.stopPropagation();">
                             </div>
                             <div class="rec-info-wrapper" onclick="viewItemInModal('${e.cat}', '${e.item.id}', null)">
@@ -4233,26 +4183,24 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         <div class="rec-item no-left-pad" ontouchstart="handleSwipeStart(event)" ontouchmove="handleSwipeMove(event, this)" ontouchend="handleItemSwipeEnd(event, this, '${e.item.id}', 'explore')" style="position:relative; z-index:2; margin-bottom:0; background:var(--card-bg); transition: transform 0.2s; border-radius:6px; border:none; min-height:70px;">
                             <div class="rec-color-bar color-${e.colorName}"></div>
                             <div class="rec-img-box">
-                                ${categoryIcons[e.cat] ? `<img src="${categoryIcons[e.cat]}" class="rec-category-icon">` : ''}
+                                ${getCatIcon(e.cat) ? `<img src="${getCatIcon(e.cat)}" class="rec-category-icon">` : ''}
                                 <img src="${nakedPikminMap[e.colorName]}" class="rec-img-fg" onclick="openLightbox(this.src); event.stopPropagation();">
                             </div>
                             <div class="rec-info-wrapper" onclick="viewItemInModal('${e.cat}', '${e.item.id}', '${e.targetUid}')">
                                 <div class="rec-info-top">
                                     <span class="rec-title">${e.cat} / ${e.colorZh}</span>
-                                    <div class="info-icon question" onclick="alert('此分類只差 ${e.left} 個即可集滿圖鑑，建議優先餵食這隻皮克敏到4心，以獲得飾品，解鎖圖鑑！'); event.stopPropagation();" style="background:#ff9780;">?</div>
+                                    <div class="info-icon question" onclick="alert('此分類只差 ${e.left} 個即可集滿圖鑑，建議優先餵食這隻皮克敏到4心，以獲得飾品，解鎖圖鑑！'); event.stopPropagation();" style="background:#D32F2F;">?</div>
                                 </div>
-                                <div style="font-size:12px; color:#ff9780; font-weight:bold; margin-top:-3px;">❤️ 培育建議</div>
+                                <div style="font-size:12px; color:#D32F2F; font-weight:bold; margin-top:-3px;">❤️ 培育建議</div>
                             </div>
                             <div class="rec-actions">
-                                <button class="action-btn" style="background-color:#ff9780;" onclick="viewItemInModal('${e.cat}', '${e.item.id}', '${e.targetUid}'); event.stopPropagation();">前往培育</button>
+                                <button class="action-btn" style="background-color:#ff9780;" onclick="triggerAutoActionAnimation('${e.item.id}', '${e.targetUid}', '待機', '培育', '確認培育'); event.stopPropagation();">確認培育</button>
                             </div>
                         </div>
                     </li>`;
                 }
             }).join('');
             if (exploreList.length > 0) eList.innerHTML += `<div class="rec-swipe-hint">← 左滑可隱藏建議</div>`;
-
-
         }
 
 
@@ -4302,10 +4250,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-
-
-
-        // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、去空白) ---
+        // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、同步手指方向、消除空白) ---
         let mainTouchStartX = 0;
         let mainTouchStartY = 0;
         let currentMainTab = 0; // 0: 一般, 1: 特殊
@@ -4321,36 +4266,90 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             // 判斷必須是水平滑動，且距離超過 60px
             if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY)) {
-                // 【新增】循環切換：只要水平滑動，就直接切換到另一頁 (0變1，1變0)
-                switchMainTab(currentMainTab === 0 ? 1 : 0);
+                // 1: 往左滑 (拉出右邊), -1: 往右滑 (拉出左邊)
+                let direction = diffX > 0 ? 1 : -1;
+                // 循環切換：只要水平滑動，就直接切換到另一頁 (0變1，1變0)
+                let nextTab = currentMainTab === 0 ? 1 : 0;
+                switchMainTab(nextTab, false, direction);
             }
         }
 
-        function switchMainTab(index, isInit = false) {
-            currentMainTab = index;
+        function switchMainTab(index, isInit = false, swipeDirection = null) {
+            if (index === currentMainTab && !isInit) return; // 避免重複觸發
+
+            // 【新增】瞬移置頂 (在動畫開始前直接跳到頂部)
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
             const container = document.getElementById('main-swipe-container');
             const btns = document.querySelectorAll('.main-tab-btn');
             const pages = document.querySelectorAll('.main-swipe-page');
 
             btns.forEach((b, i) => b.classList.toggle('active', i === index));
 
-            // 【新增】動態控制頁面高度：沒選中的頁面高度歸零，徹底解決下方大片空白
-            pages.forEach((page, i) => {
-                if (i === index) {
-                    page.style.height = 'auto';
-                    page.style.overflow = 'visible';
-                } else {
-                    page.style.height = '0px';
-                    page.style.overflow = 'hidden';
-                }
-            });
-
-            container.style.transform = `translateX(-${index * 50}%)`;
-
-            // 【新增】觸發瞬移置頂 (如果是玩家主動點擊或滑動才置頂)
-            if (!isInit) {
-                window.scrollTo({ top: 0, behavior: 'instant' });
+            // 初次載入或不需動畫時，直接設定狀態即可
+            if (isInit) {
+                currentMainTab = index;
+                pages.forEach((page, i) => {
+                    if (i === index) {
+                        page.style.height = 'auto';
+                        page.style.overflow = 'visible';
+                    } else {
+                        page.style.height = '0px';
+                        page.style.overflow = 'hidden';
+                    }
+                });
+                container.style.transition = 'none';
+                pages[0].style.order = '0';
+                pages[1].style.order = '1';
+                container.style.transform = `translateX(-${index * 50}%)`;
+                return;
             }
+
+            // 如果是點擊按鈕，判斷預設滑動方向
+            if (swipeDirection === null) swipeDirection = index > currentMainTab ? 1 : -1;
+
+            // 動畫準備：將兩頁的高度都設為 auto，避免過場時被裁切
+            pages.forEach(p => { p.style.height = 'auto'; p.style.overflow = 'hidden'; });
+            container.style.transition = 'none';
+
+            // 利用 order 屬性，動態改變兩頁的先後順序，讓畫面完美配合手指滑動方向！
+            if (swipeDirection === 1) { // 新頁面從右邊來
+                pages[currentMainTab].style.order = '0';
+                pages[index].style.order = '1';
+                container.style.transform = `translateX(0%)`;
+            } else { // 新頁面從左邊來
+                pages[index].style.order = '0';
+                pages[currentMainTab].style.order = '1';
+                container.style.transform = `translateX(-50%)`; // 當前畫面暫時放右側
+            }
+
+            void container.offsetWidth; // 強制重繪
+            container.style.transition = 'transform 0.3s ease-out';
+
+            // 執行滑動動畫
+            if (swipeDirection === 1) container.style.transform = `translateX(-50%)`;
+            else container.style.transform = `translateX(0%)`;
+
+            currentMainTab = index;
+
+            // 動畫結束後的清理機制
+            setTimeout(() => {
+                pages.forEach((page, i) => {
+                    if (i === index) {
+                        page.style.height = 'auto';
+                        page.style.overflow = 'visible';
+                    } else {
+                        // 【關鍵】將沒選中的頁面高度歸零，徹底解決下方大片空白問題！
+                        page.style.height = '0px';
+                        page.style.overflow = 'hidden';
+                    }
+                });
+                // 將結構恢復原狀，避免下次滑動錯亂
+                container.style.transition = 'none';
+                pages[0].style.order = '0';
+                pages[1].style.order = '1';
+                container.style.transform = `translateX(-${index * 50}%)`;
+            }, 300);
         }
 
 
@@ -4360,6 +4359,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         // 啟動教學視窗
         initWelcomeModal();
+
+        // 修復收合後的空白問題
+        document.querySelectorAll('.year-header').forEach(header => {
+            header.addEventListener('click', () => {
+                setTimeout(() => {
+                    // 強制重繪內容區
+                    document.getElementById('main-swipe-container').style.height = 'auto';
+                }, 350); // 對應 CSS transition 時間
+            });
+        });
 
 
         // 終極鎖定背景滾動 (MutationObserver 原生監聽 + 觸控攔截)
