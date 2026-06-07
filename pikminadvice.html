@@ -478,11 +478,12 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border: 3px solid #27d686;
+            margin: 15px 0;
         }
 
         .carousel-slide p {
-            font-size: 15px;
-            margin-top: 15px;
+            font-size: 16px;
+            margin-bottom: -5px;
             line-height: 1.5;
             color: var(--text-color);
             font-weight: 500;
@@ -549,7 +550,7 @@
             margin-top: 15px;
             font-size: 12px;
             color: #999;
-            text-align: center;
+            text-align: left;
             border-top: 1px solid var(--border-color);
             padding-top: 5px;
             line-height: 1.3;
@@ -1881,7 +1882,6 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            height: 80vh;
             max-height: 80vh;
             margin: 0 auto;
             position: relative;
@@ -2052,7 +2052,9 @@
 
 
 
-    <div class="main-swipe-viewport" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)">
+    <div class="main-swipe-viewport" 
+        ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
+        onmousedown="mainSwipeStart(event)" onmouseup="mainSwipeEnd(event)" onmouseleave="mainSwipeEnd(event)">
         <div class="main-swipe-container" id="main-swipe-container">
             <div class="main-swipe-page">
                 <div id="category-nav" class="category-nav"></div>
@@ -2063,7 +2065,9 @@
         </div>
     </div>
 
-    <div class="dashboard" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)">
+    <div class="dashboard" 
+        ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
+        onmousedown="mainSwipeStart(event)" onmouseup="mainSwipeEnd(event)" onmouseleave="mainSwipeEnd(event)">
         <div class="card-horizontal">
             <div class="stats-left">
                 <h3>一般圖鑑完成度</h3>
@@ -2235,36 +2239,42 @@
         <div class="welcome-modal">
             <h1 class="welcome-title">皮克敏孵盆建議管理器</h1>
             <div class="welcome-divider"></div>
-            <h3 style="color: #F57C00; font-size: 24px; margin-top: -10px; margin-bottom: 10px; font-weight:900;">《
+            <h3 style="color: #F57C00; font-size: 26px; margin-top: -10px; margin-bottom:-15px; font-weight:900;">《
                 如何快速上手 》</h3>
 
 
-            <div class="carousel-wrapper" id="welcome-carousel-wrapper" ontouchstart="carouselTouchStart(event)"
-                ontouchend="carouselTouchEnd(event)">
+            <div class="carousel-wrapper" id="welcome-carousel-wrapper" 
+                ontouchstart="carouselStart(event)" ontouchend="carouselEnd(event)"
+                onmousedown="carouselStart(event)" onmouseup="carouselEnd(event)" onmouseleave="carouselEnd(event)">
                 <div class="carousel-container" id="welcome-carousel-container">
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome1.gif">
                         <p>1. 將《Pikmin Bloom》中的皮克敏與花盆，<strong>登錄進本系統</strong>。</p>
+                        <img src="https://pikminadvice.github.io/images/welcome1.gif">
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome2.gif">
                         <p>2. 系統會根據你的圖鑑現況，提供孵盆建議，<strong>讓你管理更直覺</strong>!</p>
+                        <img src="https://pikminadvice.github.io/images/welcome2.gif">
+
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome3.gif">
                         <p>3. 如有重複或多餘的皮克敏與花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</p>
+                        <img src="https://pikminadvice.github.io/images/welcome3.gif">
+
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome4.gif">
                         <p>4. 即將集滿的圖鑑，也有提供<strong>純點地圖與培養建議，加速解鎖圖鑑</strong>！</p>
+                        <img src="https://pikminadvice.github.io/images/welcome4.gif">
+
                     </div>
                     <div class="carousel-slide">
+                        <p>5. 本系統未與《Pikmin Bloom》連動，請經常備份<strong>避免資料遺失</strong>。</p>
                         <img src="https://pikminadvice.github.io/images/welcome5.gif">
-                        <p>5. 需注意，本系統未與《Pikmin Bloom》連動，請經常備份<strong>避免資料遺失</strong>。</p>
+
                     </div>
                     <div class="carousel-slide">
+                        <p>6. 祝大家<strong>早日集滿全圖鑑，獲得所有皮皮飾品</strong>！</p>
                         <img src="https://pikminadvice.github.io/images/welcome6.gif">
-                        <p>6. 祝大家<strong>早日集滿全圖鑑</strong>！</p>
+
                     </div>
                 </div>
             </div>
@@ -2414,7 +2424,7 @@
 
                 <h4 style="margin:15px 0 5px; color:var(--text-color);">第三方贊助平台</h4>
                 <p style="margin-top:0;">
-                    本工具贊助機制透過第三方金流平台(Buy Me a Coffee)進行。若您在使用第三方平台時遇到任何交易糾紛、個資外洩或系統故障，請直接聯繫該第三方平台客服尋求協助，本站恕不負責。
+                    本工具贊助機制透過第三方金流平台(Portaly)進行。若您在使用第三方平台時遇到任何交易糾紛、個資外洩或系統故障，請直接聯繫該第三方平台客服尋求協助，本站恕不負責。
                 </p>
 
 
@@ -2510,15 +2520,14 @@
 
 
                 <button class="welcome-btn" style="margin: 10px 0 18px 0; font-size: 18px; padding: 12px;"
-                    onclick="window.open('https://www.buymeacoffee.com/'); document.getElementById('coffee-modal').style.display='none';">
+                    onclick="window.open('https://portaly.cc/pikminadvice/support'); document.getElementById('coffee-modal').style.display='none';">
                     前往贊助平台
                 </button>
 
 
                 <div class="welcome-disclaimer">
                     *本工具所提供的「☕
-                    小額贊助作者」功能，純屬用戶出於自願給予開發者的無償贊助與精神支持。贊助行為<strong>不代表</strong>購買任何特定功能、亦不構成任何形式的商業實質契約。無論是否進行贊助，所有用戶皆可無償使用本工具，開發者亦不因收到贊助而對本工具的永久營運、無限期更新承擔法律義務。<strong>贊助款項恕不退款。</strong>本工具贊助機制透過第三方金流平台(Buy
-                    Me a Coffee)進行。若您在使用第三方平台時遇到任何交易糾紛、個資外洩或系統故障，請直接聯繫該第三方平台客服尋求協助，本站恕不負責。點擊下方按鈕將引導您至安全的第三方金流支付平台。
+                    小額贊助作者」功能，純屬用戶出於自願給予開發者的無償贊助與精神支持。贊助行為<strong>不代表</strong>購買任何特定功能、亦不構成任何形式的商業實質契約。無論是否進行贊助，所有用戶皆可無償使用本工具，開發者亦不因收到贊助而對本工具的永久營運、無限期更新承擔法律義務。<strong>贊助款項恕不退款。</strong>本工具贊助機制透過第三方金流平台(Portaly)進行。若您在使用第三方平台時遇到任何交易糾紛、個資外洩或系統故障，請直接聯繫該第三方平台客服尋求協助，本站恕不負責。點擊下方按鈕將引導您至安全的第三方金流支付平台。
                     <a onclick="document.getElementById('disclaimer-modal').style.display='flex'">免責聲明</a>。
                 </div>
             </div>
@@ -3531,7 +3540,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const hiddenCategories = ["餐廳", "咖啡廳", "麵包店", "公園", "路邊", "水邊", "美容院", "超市"];
             if (hiddenCategories.includes(category)) {
                 list.innerHTML += `<div style="padding: 12px 15px; background: #fff8e1; color: #f57c00; font-size: 14px; font-weight: bold; border-bottom: 1px solid var(--border-color); line-height: 1.1;">
-                    📌 此種類有隱藏圖鑑，建議勾選"不要建議丟棄"，重複的皮克敏，未來解任務會用到。<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block;" onclick="openLightbox('./images/appicon.png')">隱藏任務怎麼解?</a>
+                    📌 此種類有隱藏圖鑑，建議勾選"不要建議丟棄"，重複的皮克敏，未來解任務會用到。<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddencategorie.jpg')">隱藏任務怎麼解?</a>
                 </div>`;
             }
             list.innerHTML += `<div style="padding: 12px 15px; background: var(--card-bg); font-size: 15px; font-weight: bold; border-bottom: 2px solid var(--pikmin-green); display: flex; align-items: center; gap: 8px;">
@@ -4336,7 +4345,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                 <div style="font-size:12px; color:#1E88E5; font-weight:bold; margin-top:-3px;">🧭 探索建議</div>
                             </div>
                             <div class="rec-actions">
-                                <button class="action-btn btn-explore" onclick="window.open('https://www.google.com/maps/@29.2589188,124.7450084,6z/data=!4m2!11m1!2sGW9xcdh8RAW-ySI3aQtk3w'); event.stopPropagation();">純點地圖</button>
+                                <button class="action-btn btn-explore" onclick="window.open('https://treelazy.com/pikmin'); event.stopPropagation();">純點地圖</button>
                             </div>
                         </div>
                     </li>`;
@@ -4413,16 +4422,35 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-
-        // --- 歡迎對話框 輪播邏輯 ---
+// --- 歡迎對話框 輪播邏輯 (支援電腦版滑鼠 + 自動輪播) ---
         let currentCarouselIndex = 0;
         let carouselStartX = 0;
+        let isCarouselDragging = false;
         const totalCarouselSlides = 6;
+        let carouselInterval; // 【新增】儲存自動輪播的計時器
+
+        // 【新增】啟動自動輪播
+        function startCarouselAutoPlay() {
+            clearInterval(carouselInterval); // 先清除舊的計時器，避免加速重疊
+            carouselInterval = setInterval(() => {
+                currentCarouselIndex = (currentCarouselIndex + 1) % totalCarouselSlides;
+                // 更新畫面
+                document.getElementById('welcome-carousel-container').style.transform = `translateX(-${currentCarouselIndex * 16.666}%)`;
+                document.querySelectorAll('#welcome-carousel-dots .dot').forEach((d, i) => {
+                    d.classList.toggle('active', i === currentCarouselIndex);
+                });
+            }, 4000); // 1000 毫秒 = 1 秒
+        }
+
+        // 【新增】停止自動輪播
+        function stopCarouselAutoPlay() {
+            clearInterval(carouselInterval);
+        }
 
         function initWelcomeModal() {
             if (localStorage.getItem('hideWelcome_v25') !== 'true') {
                 document.getElementById('welcome-modal').style.display = 'flex';
-                goToCarouselSlide(0);
+                goToCarouselSlide(0); // 這裡面已經會呼叫 startCarouselAutoPlay 啟動輪播
             }
         }
 
@@ -4431,14 +4459,22 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 localStorage.setItem('hideWelcome_v25', 'true');
             }
             document.getElementById('welcome-modal').style.display = 'none';
+            stopCarouselAutoPlay(); // 視窗關閉時，停止背景輪播以節省效能
         }
 
-        function carouselTouchStart(e) {
-            carouselStartX = e.touches[0].clientX;
+        function carouselStart(e) {
+            isCarouselDragging = true;
+            carouselStartX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            stopCarouselAutoPlay(); // 【關鍵】玩家準備手動操作時，立刻暫停自動輪播
         }
 
-        function carouselTouchEnd(e) {
-            let diffX = carouselStartX - e.changedTouches[0].clientX;
+        function carouselEnd(e) {
+            if (!isCarouselDragging) return;
+            isCarouselDragging = false;
+            
+            let endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let diffX = carouselStartX - endX;
+
             if (Math.abs(diffX) > 40) {
                 if (diffX > 0) { // 往左滑，看下一張
                     currentCarouselIndex = (currentCarouselIndex + 1) % totalCarouselSlides;
@@ -4446,6 +4482,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     currentCarouselIndex = (currentCarouselIndex - 1 + totalCarouselSlides) % totalCarouselSlides;
                 }
                 goToCarouselSlide(currentCarouselIndex);
+            } else {
+                startCarouselAutoPlay(); // 如果沒滑動成功放開，也要恢復計時器
             }
         }
 
@@ -4455,8 +4493,13 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             document.querySelectorAll('#welcome-carousel-dots .dot').forEach((d, i) => {
                 d.classList.toggle('active', i === index);
             });
+            startCarouselAutoPlay(); // 每次手動點擊圓點或滑動切換後，重新開始倒數 4 秒
         }
 
+
+
+
+        
 
         // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、同步手指方向、消除空白) ---
         let mainTouchStartX = 0;
