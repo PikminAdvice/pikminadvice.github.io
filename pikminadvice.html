@@ -566,11 +566,11 @@
             display: grid;
             /* 改用 auto-fit，讓它在寬度足夠時自動增加排數，不用手動寫死 */
             grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
-            gap: 12px 25px;
+            gap: 12px 35px;
             margin-bottom: 30px;
             margin-top: 10px;
             /* 左右邊緣留出更多寬度 */
-            padding: 0 20px;
+            padding: 0 25px;
             justify-items: center;
         }
 
@@ -3930,17 +3930,27 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
+// 點擊事件監聽器 (包含背景點擊關閉對話框)
         window.onclick = function (e) {
-            // 【UX優化】只要點擊到任何 Modal 的半透明背景 (modal-overlay)，就自動關閉該對話框
+            // 【修復】如果直接點擊到對話框四周圍暗色的半透明黑底 (modal-overlay)，就將其關閉
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.style.display = 'none';
-                if (e.target.id === 'swipe-action-modal') renderRecommendations(); // 還原滑動視覺
             }
             // 原本的細部選單防誤觸防呆
             if (!e.target.closest('#custom-status-menu') && !e.target.closest('.tag') && !e.target.closest('.add-btn')) closeContextMenu();
             if (!e.target.closest('#batch-menu') && !e.target.closest('.hamburger-x1') && !e.target.closest('.hamburger-x2')) document.getElementById('batch-menu').style.display = 'none';
             if (!e.target.closest('#hamburger-container')) document.getElementById('hamburger-menu').style.display = 'none';
         }
+
+        // 【雙重保險】確保手機版與桌機版都能精準判定「點擊黑底外部」即時關閉對話框
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                // 只有當真正點到暗色背景本身時才關閉，點到對話框裡面的內容則不會誤關
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
 
         function openLightbox(url) { document.getElementById('lightbox-img').src = url; document.getElementById('image-lightbox').style.display = 'flex'; }
         function closeLightbox() { document.getElementById('image-lightbox').style.display = 'none'; }
