@@ -400,7 +400,7 @@
             width: 85%;
             max-width: 400px;
             border-radius: 16px;
-            padding: 30px;
+            padding: 20px;
             box-sizing: border-box;
             text-align: center;
             color: var(--text-color);
@@ -420,7 +420,7 @@
         .welcome-title {
             color: var(--pikmin-green);
             font-size: 22px;
-            margin: 0 0 15px;
+            margin: 0 0 10px 0;
             font-weight: bold;
             letter-spacing: 1px;
         }
@@ -433,10 +433,10 @@
         }
 
         .welcome-step {
-            text-align: left;
+            text-align: center;
             font-size: 16px;
             margin-bottom: 15px;
-            line-height: 1.6;
+            line-height: 1.3;
             font-weight: 500;
         }
 
@@ -494,6 +494,7 @@
             display: flex;
             justify-content: center;
             gap: 8px;
+            margin-top: -15px;
             margin-bottom: 20px;
         }
 
@@ -522,7 +523,7 @@
             font-size: 18px;
             font-weight: bold;
             padding: 9px 30px 13px 33px;
-            margin: 10px 0 20px;
+            margin: 0px 0 20px;
             cursor: pointer;
             width: 100%;
             box-shadow: 0 4px 6px rgba(39, 214, 134, 0.3);
@@ -545,12 +546,12 @@
         }
 
         .welcome-disclaimer {
-            margin-top: 25px;
+            margin-top: 15px;
             font-size: 12px;
             color: #999;
-            text-align: left;
+            text-align: center;
             border-top: 1px solid var(--border-color);
-            padding-top: 15px;
+            padding-top: 5px;
             line-height: 1.3;
         }
 
@@ -2218,10 +2219,9 @@
 
     <div id="welcome-modal" class="modal-overlay" style="z-index:4000;">
         <div class="welcome-modal">
-            <h3 class="welcome-subtitle">歡迎使用</h3>
             <h1 class="welcome-title">皮克敏孵盆建議管理器</h1>
             <div class="welcome-divider"></div>
-            <h3 style="color: #F57C00; font-size: 24px; margin-top: -10px; margin-bottom: 10px;">如何快速上手?</h3>
+            <h3 style="color: #F57C00; font-size: 24px; margin-top: -10px; margin-bottom: 10px;">《 如何快速上手 》</h3>
 
 
             <div class="carousel-wrapper" id="welcome-carousel-wrapper" ontouchstart="carouselTouchStart(event)"
@@ -2261,8 +2261,7 @@
                 <input type="checkbox" id="welcome-checkbox"> 不再出現此視窗
             </label>
             <div class="welcome-disclaimer">
-                公告：本工具為《皮克敏》(Pikmin)系列之粉絲向非官方工具網站，與任天堂(Nintendo)無任何關聯，與遊戲相關素材之版權皆為任天堂(Nintendo)所有。本站提供之建議僅供參考，請依個人實際需求判斷來進行遊戲內的操作，本站將不負任何相關責任。按下"開始使用"即代表同意本站聲明。遊玩前請先詳讀
-                <a onclick="document.getElementById('disclaimer-modal').style.display='flex'">免責聲明</a>。
+                點擊"開始使用"前請先詳閱 <a onclick="document.getElementById('disclaimer-modal').style.display='flex'">免責聲明</a>。
             </div>
         </div>
     </div>
