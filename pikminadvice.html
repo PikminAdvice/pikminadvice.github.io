@@ -408,6 +408,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
+
         .welcome-subtitle {
             font-size: 16px;
             font-weight: bold;
@@ -439,6 +440,79 @@
             font-weight: 500;
         }
 
+
+
+        /* === 歡迎對話框 輪播圖 === */
+        .carousel-wrapper {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+            margin: 5px 0 15px;
+            touch-action: pan-y;
+        }
+
+        .carousel-container {
+            display: flex;
+            width: 400%;
+            /* 4張圖片的總寬度 */
+            transition: transform 0.3s ease-out;
+        }
+
+        .carousel-slide {
+            width: 25%;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-slide p {
+            font-size: 15px;
+            margin-top: 15px;
+            line-height: 1.5;
+            color: var(--text-color);
+            font-weight: 500;
+            text-align: left;
+            width: 100%;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .carousel-dots .dot {
+            width: 10px;
+            height: 10px;
+            background: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .carousel-dots .dot.active {
+            background: var(--pikmin-green);
+            width: 25px;
+            border-radius: 5px;
+        }
+
+
+
         .welcome-btn {
             background: var(--pikmin-green);
             color: white;
@@ -459,13 +533,14 @@
         }
 
         .welcome-checkbox {
-            font-size: 16px;
+            font-size: 14px;
             color: #555;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 5px;
             cursor: pointer;
+            margin: -5px 0 -8px 0;
         }
 
         .welcome-disclaimer {
@@ -494,8 +569,16 @@
             margin-bottom: 30px;
             margin-top: 10px;
             /* 左右邊緣留出更多寬度 */
-            padding: 0 5vw;
+            padding: 0 20px;
             justify-items: center;
+        }
+
+
+        @media (min-width: 700px) {
+            .category-nav {
+                padding: 0 20px;
+                gap: 15px 35px;
+            }
         }
 
         .nav-item-wrapper {
@@ -1899,6 +1982,13 @@
                 <div class="hamburger-icon" onclick="toggleMenu(event)">☰</div>
 
                 <div class="hamburger-menu" id="hamburger-menu">
+                    <div onclick="document.getElementById('welcome-modal').style.display='flex'; goToCarouselSlide(0); toggleMenu(event);"
+                        style="display: flex; align-items: center; color: #F57C00; font-weight: 900;">
+                        <img src="https://pikminadvice.github.io/images/bgicon.png"
+                            style="width: 20px; height: 20px; border-radius: 4px; object-fit: cover; margin-right: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                        如何快速上手?
+                    </div>
+                    <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
                     <div onclick="openLogModal()">✏️　步驟記錄</div>
                     <div onclick="document.getElementById('pwa-modal').style.display='flex'"
                         style="display: flex; align-items: center;">
@@ -2130,11 +2220,40 @@
             <h3 class="welcome-subtitle">歡迎使用</h3>
             <h1 class="welcome-title">皮克敏孵盆建議管理器</h1>
             <div class="welcome-divider"></div>
-            <h3 style="color: #F57C00; font-size: 24px; margin: 10px 0 20px;">如何快速上手?</h3>
-            <div class="welcome-step">1. 將《Pikmin Bloom》中的皮克敏與花盆，<strong>登錄進本系統</strong>。</div>
-            <div class="welcome-step">2. 系統會根據你的圖鑑現況，提供孵盆建議，<strong>協助管理圖鑑</strong>。</div>
-            <div class="welcome-step">3. 如有重複的皮克品或花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</div>
-            <div class="welcome-step" style="color: #F57C00;">注意：本系統未與《Pikmin Bloom》連動。</div>
+            <h3 style="color: #F57C00; font-size: 24px; margin-top: -10px; margin-bottom: 10px;">如何快速上手?</h3>
+
+
+            <div class="carousel-wrapper" id="welcome-carousel-wrapper" ontouchstart="carouselTouchStart(event)"
+                ontouchend="carouselTouchEnd(event)">
+                <div class="carousel-container" id="welcome-carousel-container">
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome1.png">
+                        <p>1. 將《Pikmin Bloom》中的皮克敏與花盆，<strong>登錄進本系統</strong>。</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome1.png" >
+                        <p>2. 系統會根據你的圖鑑現況，提供孵盆建議，<strong>協助管理圖鑑</strong>。</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome1.png">
+                        <p>3. 如有重複的皮克敏或花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome1.png">
+                        <p>4. 善用系統提供的開圖與培育推薦，助你<strong>輕鬆集滿全圖鑑</strong>！</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-dots" id="welcome-carousel-dots">
+                <span class="dot active" onclick="goToCarouselSlide(0)"></span>
+                <span class="dot" onclick="goToCarouselSlide(1)"></span>
+                <span class="dot" onclick="goToCarouselSlide(2)"></span>
+                <span class="dot" onclick="goToCarouselSlide(3)"></span>
+            </div>
+
+
+            <div class="welcome-step" style="color: #F57C00;">⚠️ 注意：本系統未與《Pikmin Bloom》連動，請經常備份，避免資料遺失。</div>
             <button class="welcome-btn" onclick="closeWelcomeModal()"
                 style="font-size: 24px; font-weight: 600; letter-spacing: 3px;">開始使用</button>
             <label class="welcome-checkbox">
@@ -2167,23 +2286,24 @@
                 </div>
 
 
-                <p style="font-weight:bold; color:#F57C00; margin: 40px 0 20px 0; font-size:20px;">🍎 蘋果 iOS 用戶請依步驟新增：
+                <p style="font-weight:bold; color:#F57C00; margin: 40px 0 20px 0; font-size:20px; margin-top: 50px;">🍎
+                    蘋果 iOS 用戶請依步驟新增：
                 </p>
                 <div
                     style="display:flex; flex-direction:column; gap:25px; text-align:left; font-size:16px; font-weight:500;">
-                    <div>1. 點選瀏覽器右下方「圓形三個點」圖示
+                    <div>1. 點選瀏覽器右下方【圓形三個點】圖示。
                         <img src="./images/iosstep1.png"
                             style="width:98%; height:auto; object-fit:cover; margin-top:6px; border-radius:6px; border:1px solid #ccc; display:block;">
                     </div>
-                    <div>2. 選擇「分享」
+                    <div>2. 選擇【分享】。
                         <img src="./images/iosstep2.png"
                             style="width:98%; height:auto; object-fit:cover; margin-top:6px; border-radius:6px; border:1px solid #ccc; display:block;">
                     </div>
-                    <div>3. 選擇「加入主畫面」
+                    <div>3. 選擇【加入主畫面】。
                         <img src="./images/iosstep3.png"
                             style="width:98%; height:auto; object-fit:cover; margin-top:6px; border-radius:6px; border:1px solid #ccc; display:block;">
                     </div>
-                    <div>4. 最後點擊「加入」即完成!
+                    <div>4. 最後點擊【加入】即完成!。
                         <img src="./images/iosstep4.png"
                             style="width:98%; height:auto; object-fit:cover; margin-top:6px; border-radius:6px; border:1px solid #ccc; display:block;">
                     </div>
@@ -3702,10 +3822,19 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         function openBatchMenu(e, cat, sub = null) {
             e.stopPropagation();
-            batchTargetCategory = cat === 'all' ? document.getElementById('modal-title-text').innerText.split(' ')[0] : cat;
+            const menu = document.getElementById('batch-menu');
+            let targetCat = cat === 'all' ? document.getElementById('modal-title-text').innerText.split(' ')[0] : cat;
+
+            // 【修復】如果點擊同一個漢堡選單且已開啟，則將其關閉
+            if (menu.style.display === 'flex' && batchTargetCategory === targetCat && batchTargetSubcategory === sub) {
+                menu.style.display = 'none';
+                return;
+            }
+
+            batchTargetCategory = targetCat;
             batchTargetSubcategory = sub;
             document.getElementById('batch-context-text').textContent = `針對 [ ${batchTargetSubcategory ? batchTargetSubcategory : batchTargetCategory} ] 子分類`;
-            const menu = document.getElementById('batch-menu');
+
             menu.style.display = 'flex';
             let calcTop = e.clientY + 10; let calcLeft = e.clientX - 160;
             if (calcLeft < 10) calcLeft = 10;
@@ -4248,6 +4377,50 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         }
 
 
+
+
+// --- 歡迎對話框 輪播邏輯 ---
+        let currentCarouselIndex = 0;
+        let carouselStartX = 0;
+        const totalCarouselSlides = 4;
+
+        function initWelcomeModal() {
+            if (localStorage.getItem('hideWelcome_v25') !== 'true') {
+                document.getElementById('welcome-modal').style.display = 'flex';
+                goToCarouselSlide(0);
+            }
+        }
+
+        function closeWelcomeModal() {
+            if (document.getElementById('welcome-checkbox').checked) {
+                localStorage.setItem('hideWelcome_v25', 'true');
+            }
+            document.getElementById('welcome-modal').style.display = 'none';
+        }
+
+        function carouselTouchStart(e) {
+            carouselStartX = e.touches[0].clientX;
+        }
+
+        function carouselTouchEnd(e) {
+            let diffX = carouselStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diffX) > 40) {
+                if (diffX > 0) { // 往左滑，看下一張
+                    currentCarouselIndex = (currentCarouselIndex + 1) % totalCarouselSlides;
+                } else { // 往右滑，看上一張
+                    currentCarouselIndex = (currentCarouselIndex - 1 + totalCarouselSlides) % totalCarouselSlides;
+                }
+                goToCarouselSlide(currentCarouselIndex);
+            }
+        }
+
+        function goToCarouselSlide(index) {
+            currentCarouselIndex = index;
+            document.getElementById('welcome-carousel-container').style.transform = `translateX(-${index * 25}%)`;
+            document.querySelectorAll('#welcome-carousel-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+        }
 
 
         // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、同步手指方向、消除空白) ---
