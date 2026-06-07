@@ -562,23 +562,33 @@
         }
 
         /* === 導覽列 ICON === */
+/* === 導覽列 ICON === */
         .category-nav {
             display: grid;
-            /* 改用 auto-fit，讓它在寬度足夠時自動增加排數，不用手動寫死 */
-            grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
-            gap: 12px 35px;
+            /* 手機版 (包含大尺寸 iPhone)：強制規定 5 個一排 */
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px 5px; /* 上下間距15px，左右間距5px */
             margin-bottom: 30px;
             margin-top: 10px;
-            /* 左右邊緣留出更多寬度 */
-            padding: 0 25px;
+            padding: 0 10px; /* 左右邊距，數值越大越往中間集中 */
             justify-items: center;
         }
 
-
-        @media (min-width: 700px) {
+        /* 平板與桌機版 (螢幕大於 600px)：取消 5 個限制，改為自動適應排數 */
+        @media (min-width: 600px) {
             .category-nav {
-                padding: 0 20px;
-                gap: 15px 35px;
+                grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+                gap: 20px 30px;
+                padding: 0 5vw; /* 讓兩側留出更寬的白邊 */
+            }
+        }
+
+                /* 平板與桌機版 (螢幕大於 600px)：取消 5 個限制，改為自動適應排數 */
+        @media (min-width: 300px) {
+            .category-nav {
+                grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+                gap: 20px 30px;
+                padding: 0 5vw; /* 讓兩側留出更寬的白邊 */
             }
         }
 
