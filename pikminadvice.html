@@ -454,13 +454,13 @@
 
         .carousel-container {
             display: flex;
-            width: 400%;
-            /* 4張圖片的總寬度 */
+            width: 600%;
+            /* 變更為 600% */
             transition: transform 0.3s ease-out;
         }
 
         .carousel-slide {
-            width: 25%;
+            width: 16.666%; /* 變更為 16.666% (100 / 6) */
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -472,12 +472,11 @@
         .carousel-slide img {
             width: 100%;
             height: auto;
-            max-height: 300px;
             object-fit: contain;
             cursor: pointer;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border: 3px solid #27d686; 
+            border: 3px solid #27d686;
         }
 
         .carousel-slide p {
@@ -2003,10 +2002,10 @@
                     <div onclick="importData()">📂　匯入資料 <b>(還原)</b></div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
                     <div onclick="window.open('mailto:berice927@gmail.com?subject=《皮克敏孵盆建議管理器》意見與問題回報')">🐛　意見與回報</div>
-                    <div onclick="document.getElementById('changelog-modal').style.display='flex'">📅　更新日誌</div>
+                    <!-- <div onclick="document.getElementById('changelog-modal').style.display='flex'">📅　更新日誌</div> -->
                     <div onclick="document.getElementById('disclaimer-modal').style.display='flex'">📃　免責聲明</div>
                     <div onclick="document.getElementById('coffee-modal').style.display='flex'"
-                        style="font-weight: bold;">☕　請作者喝咖啡</div>
+                        style="font-weight: bold;">☕　小額贊助作者</div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
                     <div onclick="clearAllData()" style="color: #D32F2F; font-weight: bold; text-align:left;">🗑️　清除所有資料
                     </div>
@@ -2228,20 +2227,28 @@
                 ontouchend="carouselTouchEnd(event)">
                 <div class="carousel-container" id="welcome-carousel-container">
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome1.png">
+                        <img src="https://pikminadvice.github.io/images/welcome1.gif">
                         <p>1. 將《Pikmin Bloom》中的皮克敏與花盆，<strong>登錄進本系統</strong>。</p>
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome1.png" >
-                        <p>2. 系統會根據你的圖鑑現況，提供孵盆建議，<strong>協助管理圖鑑</strong>。</p>
+                        <img src="https://pikminadvice.github.io/images/welcome2.gif">
+                        <p>2. 系統會根據你的圖鑑現況，提供孵盆建議，<strong>讓你管理更直覺</strong>!</p>
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome1.png">
-                        <p>3. 如有重複的皮克敏或花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</p>
+                        <img src="https://pikminadvice.github.io/images/welcome3.gif">
+                        <p>3. 如有重複或多餘的皮克敏與花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</p>
                     </div>
                     <div class="carousel-slide">
-                        <img src="https://pikminadvice.github.io/images/welcome1.png">
-                        <p>4. 善用系統提供的開圖與培育推薦，助你<strong>輕鬆集滿全圖鑑</strong>！</p>
+                        <img src="https://pikminadvice.github.io/images/welcome4.gif">
+                        <p>4. 即將集滿的圖鑑，也有提供<strong>純點地圖與培養建議，加速解鎖圖鑑</strong>！</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome5.gif">
+                        <p>5. 需注意，本系統未與《Pikmin Bloom》連動，請經常備份<strong>避免資料遺失</strong>。</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://pikminadvice.github.io/images/welcome6.gif">
+                        <p>6. 祝大家<strong>早日集滿全圖鑑</strong>！</p>
                     </div>
                 </div>
             </div>
@@ -2251,6 +2258,8 @@
                 <span class="dot" onclick="goToCarouselSlide(1)"></span>
                 <span class="dot" onclick="goToCarouselSlide(2)"></span>
                 <span class="dot" onclick="goToCarouselSlide(3)"></span>
+                <span class="dot" onclick="goToCarouselSlide(4)"></span>
+                <span class="dot" onclick="goToCarouselSlide(5)"></span>
             </div>
 
 
@@ -2477,9 +2486,9 @@
                 </p>
                 <p>管理器是由作者閒暇時間，一點一滴搭建起來。為了維持網站順暢，透過網路託管與營運成本的付出，期待能幫助大家：</p>
 
-                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0;">　✅ 更有效率的培養皮皮</p>
-                <p style="color: #F57C00; font-weight: 500;">　✅ 優化背包空間</p>
-                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0;">　✅ 更快解鎖圖鑑</p>
+                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0;">　✅ 輕鬆up！ 更直覺培養皮皮</p>
+                <p style="color: #F57C00; font-weight: 500;">　✅ 優化up！ 高效管理背包空間</p>
+                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0;">　✅ 效率up！ 加速解鎖圖鑑</p>
 
                 <p>你的每一份心意，無論多寡，都是珍貴的星星之火，支持管理器持續運轉、不斷更新的最佳動力。讓我們一起把愛皮皮的熱情延續下去吧！❤️</p>
 
@@ -2491,8 +2500,7 @@
 
 
                 <div class="welcome-disclaimer">
-                    *本工具所提供的「☕
-                    請作者喝咖啡」贊助功能，純屬用戶出於自願給予開發者的無償贊助與精神支持。贊助行為<strong>不代表</strong>購買任何特定功能、亦不構成任何形式的商業實質契約。無論是否進行贊助，所有用戶皆可無償使用本工具，開發者亦不因收到贊助而對本工具的永久營運、無限期更新承擔法律義務。<strong>贊助款項概不退款。</strong>本工具贊助機制透過第三方金流平台(Buy
+                    *本工具所提供的「☕ 小額贊助作者」功能，純屬用戶出於自願給予開發者的無償贊助與精神支持。贊助行為<strong>不代表</strong>購買任何特定功能、亦不構成任何形式的商業實質契約。無論是否進行贊助，所有用戶皆可無償使用本工具，開發者亦不因收到贊助而對本工具的永久營運、無限期更新承擔法律義務。<strong>贊助款項概不退款。</strong>本工具贊助機制透過第三方金流平台(Buy
                     Me a Coffee)進行。若您在使用第三方平台時遇到任何交易糾紛、個資外洩或系統故障，請直接聯繫該第三方平台客服尋求協助，本站恕不負責。點擊下方按鈕將引導您至安全的第三方金流支付平台。
                     <a onclick="document.getElementById('disclaimer-modal').style.display='flex'">免責聲明</a>。
                 </div>
@@ -4379,10 +4387,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-// --- 歡迎對話框 輪播邏輯 ---
+        // --- 歡迎對話框 輪播邏輯 ---
         let currentCarouselIndex = 0;
         let carouselStartX = 0;
-        const totalCarouselSlides = 4;
+        const totalCarouselSlides = 6;
 
         function initWelcomeModal() {
             if (localStorage.getItem('hideWelcome_v25') !== 'true') {
@@ -4416,7 +4424,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         function goToCarouselSlide(index) {
             currentCarouselIndex = index;
-            document.getElementById('welcome-carousel-container').style.transform = `translateX(-${index * 25}%)`;
+            document.getElementById('welcome-carousel-container').style.transform = `translateX(-${index * 16.666}%)`;
             document.querySelectorAll('#welcome-carousel-dots .dot').forEach((d, i) => {
                 d.classList.toggle('active', i === index);
             });
