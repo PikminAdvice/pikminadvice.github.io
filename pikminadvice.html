@@ -2052,8 +2052,7 @@
 
 
 
-    <div class="main-swipe-viewport" 
-        ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
+    <div class="main-swipe-viewport" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
         onmousedown="mainSwipeStart(event)" onmouseup="mainSwipeEnd(event)" onmouseleave="mainSwipeEnd(event)">
         <div class="main-swipe-container" id="main-swipe-container">
             <div class="main-swipe-page">
@@ -2065,8 +2064,7 @@
         </div>
     </div>
 
-    <div class="dashboard" 
-        ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
+    <div class="dashboard" ontouchstart="mainSwipeStart(event)" ontouchend="mainSwipeEnd(event)"
         onmousedown="mainSwipeStart(event)" onmouseup="mainSwipeEnd(event)" onmouseleave="mainSwipeEnd(event)">
         <div class="card-horizontal">
             <div class="stats-left">
@@ -2243,9 +2241,9 @@
                 如何快速上手 》</h3>
 
 
-            <div class="carousel-wrapper" id="welcome-carousel-wrapper" 
-                ontouchstart="carouselStart(event)" ontouchend="carouselEnd(event)"
-                onmousedown="carouselStart(event)" onmouseup="carouselEnd(event)" onmouseleave="carouselEnd(event)">
+            <div class="carousel-wrapper" id="welcome-carousel-wrapper" ontouchstart="carouselStart(event)"
+                ontouchend="carouselEnd(event)" onmousedown="carouselStart(event)" onmouseup="carouselEnd(event)"
+                onmouseleave="carouselEnd(event)">
                 <div class="carousel-container" id="welcome-carousel-container">
                     <div class="carousel-slide">
                         <p>1. 將《Pikmin Bloom》中的皮克敏與花盆，<strong>登錄進本系統</strong>。</p>
@@ -2306,7 +2304,8 @@
             <button class="close-btn-float"
                 onclick="document.getElementById('pwa-modal').style.display='none'">×</button>
             <h2 style="margin-top:0; margin-bottom: 0px; color:var(--pikmin-green); text-align:center;">📲 加入主畫面</h2>
-            <div style="display:flex; justify-content:center;"><img src="https://pikminadvice.github.io/images/appicon.png"
+            <div style="display:flex; justify-content:center;"><img
+                    src="https://pikminadvice.github.io/images/appicon.png"
                     style="width:30%; height:auto;  object-fit:cover; margin-top:20px; border-radius:15px; display:block;">
             </div>
             <p style="font-size:16px; color:#666; line-height:1.5; text-align:center; margin-bottom:25px;">
@@ -3324,16 +3323,41 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         function clearLogs() { if (confirm("確定清除所有日誌嗎?")) { actionLogs = []; localStorage.removeItem('pikminLogs'); openLogModal(); } }
 
 
-        function exportData() {
-            localStorage.setItem('lastBackupTime', Date.now()); // 匯出時重置備份時間
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(myCollection));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "pikmin_data_backup.json");
-            document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
 
-            checkBackupWarning(); // 匯出後立即收起跑馬燈
+        // 匯出資料 (終極修正版：精確動態檔名 + 跑馬燈重置 + 穩定下載)
+        function exportData() {
+            // 1. 準備動態精確檔名
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const timestamp = `${year}.${month}.${day}_${hours}:${minutes}:${seconds}`;
+            const fileName = `皮克敏孵盆建議管理器_資料備份_${timestamp}.json`;
+
+            // 2. 準備原始圖鑑資料 (保持原生陣列格式，確保匯入時絕對相容)
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(myCollection));
+
+            // 3. 建立連結並觸發下載
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", fileName);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+
+            // 4. 【修復】重置 7 天備份時間，並立即收起跑馬燈
+            localStorage.setItem('lastBackupTime', Date.now());
+            checkBackupWarning();
+
+            // 5. 顯示成功提示
+            showToast("已下載資料備份！");
             if (document.getElementById('log-modal').style.display === 'flex') openLogModal();
         }
+
 
         // --- 跑馬燈備份提示邏輯 ---
         function checkBackupWarning() {
@@ -4422,7 +4446,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-// --- 歡迎對話框 輪播邏輯 (支援電腦版滑鼠 + 自動輪播) ---
+        // --- 歡迎對話框 輪播邏輯 (支援電腦版滑鼠 + 自動輪播) ---
         let currentCarouselIndex = 0;
         let carouselStartX = 0;
         let isCarouselDragging = false;
@@ -4471,7 +4495,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         function carouselEnd(e) {
             if (!isCarouselDragging) return;
             isCarouselDragging = false;
-            
+
             let endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
             let diffX = carouselStartX - endX;
 
@@ -4499,7 +4523,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-        
+
 
         // --- 主圖鑑左右滑動切換邏輯 (防誤觸、循環、置頂、同步手指方向、消除空白) ---
         let mainTouchStartX = 0;
