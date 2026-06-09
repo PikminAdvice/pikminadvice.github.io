@@ -1749,7 +1749,7 @@
         }
 
         .menu-item:hover {
-            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.04);
         }
 
         .menu-item:active {
@@ -2514,7 +2514,8 @@
                 style="overflow-y:auto; max-height:70vh; text-align:left; font-size:16px; line-height:1.6; color:#444;">
                 <p style="margin-top:30; text-align:left; font-weight:bold; color:#555;">To 親愛的皮克敏隊長：</p>
                 <p>感謝使用「<span
-                        style="color:#27d686; font-weight: bold;">皮克敏孵盆建議管理器</span>」！很高興這個小工具能陪伴大家一步步解鎖圖鑑，期間也收到許多來自大家的正面回饋，是我最大的成就感 🌱
+                        style="color:#27d686; font-weight: bold;">皮克敏孵盆建議管理器</span>」！很高興這個小工具能陪伴大家一步步解鎖圖鑑，期間也收到許多來自大家的正面回饋，是我最大的成就感
+                    🌱
                 </p>
                 <p>管理器是由作者閒暇時間，一點一滴搭建起來。為了維持網站順暢，透過網路託管與營運成本的付出，期待能幫助大家：</p>
 
@@ -3180,7 +3181,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-function initApp() {
+        function initApp() {
             let saved = localStorage.getItem('pikminData_v22');
             if (saved) {
                 myCollection = JSON.parse(saved);
@@ -3649,10 +3650,10 @@ function initApp() {
                         tags.appendChild(t);
                     });
 
-                    // 【修復 3】模態框初始渲染時的判斷
+                    // 【修復 1】模態框初始渲染時的判斷 (排除大花盆與金色大花盆)
                     const isSpecialCat = Object.values(specialCategories).flat().includes(category);
                     const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
-                    if (sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) {
+                    if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆') {
                         add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
                     } else {
                         add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
@@ -3693,12 +3694,12 @@ function initApp() {
                 tagsContainer.appendChild(t);
             });
 
-            // 【修復 3】判斷是否為特殊圖鑑，若是則按 + 號直接新增飾品
+            // 【修復 1】判斷是否為特殊圖鑑，若是則按 + 號直接新增飾品 (排除大花盆與金色大花盆)
             const isSpecialCat = Object.values(specialCategories).flat().includes(item.category);
             const sub = item.subcategory;
             const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
 
-            if (sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) {
+            if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆') {
                 add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
             } else {
                 add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
@@ -3964,7 +3965,7 @@ function initApp() {
                 `;
             } else {
                 menu.innerHTML = `
-                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【禮物】將皮克敏培育到 4 心，但必須等到積分任務開啟再領禮物\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">!</div>
+                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【禮物】已將皮克敏培育到 4 心，但等積分任務開啟後再領禮物\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">!</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" onclick="selectStatus('孵盆')">孵盆</div>
                     <div class="menu-item theme-待機" id="menu-target-center" onclick="selectStatus('待機')">待機</div>
@@ -4166,7 +4167,6 @@ function initApp() {
             });
 
 
-
 // ==========================================
             // 【邏輯 1】一般圖鑑判定機制 (依據顏色群組)
             // ==========================================
@@ -4178,6 +4178,10 @@ function initApp() {
             cats.forEach(cat => {
                 if (cat === '大花盆') return;
                 const hasHidden = hiddenCategories.includes(cat);
+
+                // 【修復 2】取得整個分類的隱藏解鎖狀態，只有全部解鎖，才允許丟棄
+                let catHiddenItems = myCollection.filter(i => i.category === cat && (i.subcategory.includes('稀有') || i.subcategory.includes('隱藏')));
+                let isCategoryHiddenUnlocked = hasHidden ? (catHiddenItems.length > 0 && catHiddenItems.every(i => i.isUnlocked)) : true;
 
                 colorOrder.forEach(color => {
                     let items = myCollection.filter(i => i.category === cat && i.colorName === color && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
@@ -4192,30 +4196,26 @@ function initApp() {
 
                     let totalStatus = instances.filter(x => x.ins.status !== '飾品').length;
                     let seeds = instances.filter(i => i.ins.status === '花盆');
-                    // 【更新】所有涉及待機的地方，都加入「禮物」
                     let nonSeeds = instances.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '孵盆' || i.ins.status === '培育');
                     let x = totalStatus > n ? totalStatus - n : 0;
 
-                    // --- 【修復 1】探索建議 (開圖)：依據「子分類」數量精準判斷 ---
+                    // --- 【探索建議 (開圖)：依據「子分類」數量精準判斷】 ---
                     let missingNormal = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && !i.isUnlocked);
                     
                     missingNormal.forEach(targetItem => {
                         if (targetItem.hideExploreRec) return;
                         
-                        // 【優化】動態設定純點推薦門檻：雨天、下雪、燈泡，只剩最後 1 個才推薦純點
                         let threshold = 2;
                         if (cat === '雨天' || cat === '下雪' || targetItem.subcategory === '燈泡') {
                             threshold = 1;
                         }
 
-                        // 計算「這個特定的子分類」還差幾個
                         let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === targetItem.subcategory && !i.isUnlocked).length;
 
                         if (subcatMissingCount <= threshold) {
                             if (!hasHidden) {
                                 let itemStatusList = targetItem.instances.filter(ins => !ins.hideRec && ins.status !== '飾品');
                                 if (itemStatusList.length === 0) {
-                                    // 【優化】金車票不建議純點
                                     if (!specialCatNames.includes(cat) && targetItem.subcategory !== '金車票') {
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
@@ -4228,7 +4228,6 @@ function initApp() {
                                 }
                             } else {
                                 if (totalStatus === 0) {
-                                    // 【優化】金車票不建議純點
                                     if (!specialCatNames.includes(cat) && targetItem.subcategory !== '金車票') {
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
@@ -4287,16 +4286,17 @@ function initApp() {
                     } else {
                         // 有隱藏圖鑑時，同一顏色視為共享池
                         if (isNormalUnlocked) {
-                            if (isHiddenUnlocked) {
+                            // 【修復 2】只有「整個分類」的隱藏圖鑑都滿了，才能放生
+                            if (isCategoryHiddenUnlocked) {
                                 instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
                             } else {
-                                if (seeds.length > 0) {
+                                if (!isHiddenUnlocked && seeds.length > 0) {
                                     let targetSubcat = seeds[0].item.subcategory;
                                     let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === targetSubcat && !i.isUnlocked).length;
                                     incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
                                 }
                             }
-                            if (isHiddenUnlocked) {
+                            if (isCategoryHiddenUnlocked) {
                                 items.forEach(item => {
                                     let decors = item.instances.filter(i => i.status === '飾品' && !i.hideRec);
                                     let toDiscardNum = keepOne ? decors.length - 1 : decors.length;
@@ -4315,14 +4315,10 @@ function initApp() {
                 });
             });
 
-
-
-
             incubateList = incubateList.sort((a, b) => a.score - b.score).slice(0, 10);
             discardList = discardList.slice(0, 15);
             exploreList = exploreList.sort((a, b) => a.left - b.left).slice(0, 10);
 
-            // 【修改 2】輔助函式：判斷是否為特殊圖鑑，若是則替換為灰色花花圖示
             const getCatIcon = (cat) => specialCatNames.includes(cat) ? specialIconUrl : categoryIcons[cat];
 
             // ==========================================
@@ -4355,7 +4351,7 @@ function initApp() {
             if (incubateList.length > 0) iList.innerHTML += `<div class="rec-swipe-hint">← 左滑可刪除建議</div>`;
 
 
-            // 渲染：放生建議
+            // 渲染：放生建議 (加入狀態文字)
             const dList = document.getElementById('recommend-discard-list');
             dList.innerHTML = discardList.length === 0 ? '<div class="empty-state">背包空間很乾淨</div>' : discardList.map(d => `
                 <li style="position:relative; margin-bottom:5px;">
@@ -4371,6 +4367,7 @@ function initApp() {
                                 <span class="rec-title">${d.item.category} / ${d.item.colorZh}</span>
                                 <div class="info-icon ${d.isWarning ? 'warning triangle' : 'question'}" onclick="alert('${d.isWarning ? '⚠️ 雖然圖鑑未解鎖，但持有數過多，建議放生以釋放空間。' : '💡 圖鑑已解鎖，建議放生以釋放空間。'}'); event.stopPropagation();">${d.isWarning ? '!' : '?'}</div>
                             </div>
+                            <div style="font-size:12px; color:#F57C00; font-weight:bold; margin-top:-3px;">🏷️ 狀態：${d.target.status}</div>
                         </div>
                         <div class="rec-actions">
                             <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認放生'); event.stopPropagation();">${d.isWarning ? '考慮放生' : '確認放生'}</button>
