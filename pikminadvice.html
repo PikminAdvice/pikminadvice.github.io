@@ -4367,7 +4367,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                 <span class="rec-title">${d.item.category} / ${d.item.colorZh}</span>
                                 <div class="info-icon ${d.isWarning ? 'warning triangle' : 'question'}" onclick="alert('${d.isWarning ? '⚠️ 雖然圖鑑未解鎖，但持有數過多，建議放生以釋放空間。' : '💡 圖鑑已解鎖，建議放生以釋放空間。'}'); event.stopPropagation();">${d.isWarning ? '!' : '?'}</div>
                             </div>
-                            <div style="font-size:12px; color:#F57C00; font-weight:bold; margin-top:-3px;">🏷️ 狀態：${d.target.status}</div>
+                            <div style="font-size:12px; color:#F57C00; font-weight:bold; margin-top:-3px;">🌼 狀態：${d.target.status}</div>
                         </div>
                         <div class="rec-actions">
                             <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認放生'); event.stopPropagation();">${d.isWarning ? '考慮放生' : '確認放生'}</button>
