@@ -1622,6 +1622,13 @@
             border: 1.5px solid #e5bebe;
         }
 
+        /* 【新增】亮藍色+黑字 */
+        .theme-禮物 {
+            background-color: #34e4ff;
+            color: #124569;
+            border: 1.5px solid #d5f9ff;
+        }
+
         .theme-飾品 {
             background-color: #16ec85;
             color: black;
@@ -2113,7 +2120,7 @@
 
 
     <div class="footer-info">
-        <span>版本：v1.0｜最後修改：2026.05.29｜by Berice</span>
+        <span>版本更新：2026.05.29｜by Berice C.</span>
     </div>
 
     <div class="bottom-panels" id="bottom-panels">
@@ -2127,7 +2134,7 @@
             <button class="tab-btn" onclick="switchTab('tab-discard')">
                 <div class="tab-inner">
                     <img src="https://pikminadvice.github.io/images/btnpikyellow.png" class="tab-pikmin">
-                    <span>丟棄建議</span>
+                    <span>放生建議</span>
                 </div>
             </button>
             <button class="tab-btn" onclick="switchTab('tab-explore')">
@@ -2145,7 +2152,7 @@
         <div id="tab-discard" class="tab-content">
             <div class="discard-settings">
                 <label><input type="checkbox" id="setting-keep-one" checked onchange="renderRecommendations()">
-                    每個圖鑑保留一隻飾品皮克敏不丟棄</label>
+                    每個圖鑑保留一隻飾品皮克敏不放生</label>
             </div>
             <ul class="rec-list" id="recommend-discard-list"></ul>
         </div>
@@ -2255,7 +2262,7 @@
 
                     </div>
                     <div class="carousel-slide">
-                        <p>3. 如有重複或多餘的皮克敏與花盆，也會提供丟棄名單，<strong>清出背包空間</strong>。</p>
+                        <p>3. 如有重複或多餘的皮克敏與花盆，也會提供放生名單，<strong>清出背包空間</strong>。</p>
                         <img src="https://pikminadvice.github.io/images/welcome3.gif">
 
                     </div>
@@ -2365,7 +2372,7 @@
                 <ul>
                     <li><strong>重構三大建議邏輯</strong>：全面對齊真實機率，能精準處理「花盆+皮克敏」的混合庫存，給予最有效率的孵化與清理建議。</li>
                     <li><strong>隱藏圖鑑積分保護</strong>：系統會自動辨識包含隱藏圖鑑的種類（如餐廳、路邊等），在隱藏版滿圖鑑前，積極建議孵化以農取積分！</li>
-                    <li><strong>極致防呆的丟棄順序</strong>：確立「花盆 > 待機 > 孵盆 > 培育」的丟棄順序，優先清理未投入資源的項目，絕不誤刪已餵食精華的心血。</li>
+                    <li><strong>極致防呆的放生順序</strong>：確立「花盆 > 待機 > 孵盆 > 培育」的放生順序，優先清理未投入資源的項目，絕不誤刪已餵食精華的心血。</li>
                     <li><strong>大花盆專屬捷徑</strong>：大花盆登記孵出後，將直接轉為「飾品」狀態並自動打勾解鎖。</li>
                 </ul>
 
@@ -2381,7 +2388,7 @@
                 <p><strong>v0.23 版本更新內容：</strong></p>
                 <ul>
                     <li>全新改版流暢左滑刪除機制（免對話框）。</li>
-                    <li>新增大分類功能，支援本類別排除丟棄。</li>
+                    <li>新增大分類功能，支援本類別排除放生。</li>
                     <li>新增大花盆專屬圖鑑分類與孵出設定。</li>
                     <li>調整排版，標題不與操作按鈕重疊。</li>
                 </ul>
@@ -2391,7 +2398,7 @@
         </div>
     </div>
 
-    <div id="disclaimer-modal" class="modal-overlay" style="z-index:4500;">
+    <div id="disclaimer-modal" class="modal-overlay" style="z-index:5500;">
         <div class="custom-modal-box" style="max-width: 450px; padding: 25px;">
             <button class="close-btn-float"
                 onclick="document.getElementById('disclaimer-modal').style.display='none'">×</button>
@@ -2406,8 +2413,8 @@
                     Bloom》遊戲名稱、角色圖像、圖示等相關素材，其智慧財產權與商標皆完全歸原權利人所有，本工具僅作輔助玩家管理圖鑑之合理使用。</p>
 
                 <h4 style="margin:15px 0 5px; color:var(--text-color);">建議結果僅供參考</h4>
-                <p style="margin-top:0;">本工具提供的「孵化建議」與「丟棄建議」是基於特定演算法所產生的參考資訊，可能無法 100%
-                    涵蓋所有玩家的個人遊玩習慣與特殊任務需求。請在遊戲內執行丟棄或孵化操作前，<strong>務必自行進行最後確認</strong>。若因參考本工具而導致遊戲內任何資產（包含但不限於皮克敏、花盆、道具）之損失，本站恕不負擔任何賠償或補償責任。
+                <p style="margin-top:0;">本工具提供的「孵化建議」與「放生建議」是基於特定演算法所產生的參考資訊，可能無法 100%
+                    涵蓋所有玩家的個人遊玩習慣與特殊任務需求。請在遊戲內執行放生或孵化操作前，<strong>務必自行進行最後確認</strong>。若因參考本工具而導致遊戲內任何資產（包含但不限於皮克敏、花盆、道具）之損失，本站恕不負擔任何賠償或補償責任。
                 </p>
 
                 <h4 style="margin:15px 0 5px; color:var(--text-color);">資料儲存與隱私</h4>
@@ -2507,15 +2514,15 @@
                 style="overflow-y:auto; max-height:70vh; text-align:left; font-size:16px; line-height:1.6; color:#444;">
                 <p style="margin-top:30; text-align:left; font-weight:bold; color:#555;">To 親愛的皮克敏隊長：</p>
                 <p>感謝使用「<span
-                        style="color:#27d686; font-weight: bold;">皮克敏孵盆建議管理器</span>」！很高興這個小工具能陪伴大家一步步解鎖圖鑑，期間也收到許多來自大家的正面回饋，是我最大的成就感🌱
+                        style="color:#27d686; font-weight: bold;">皮克敏孵盆建議管理器</span>」！很高興這個小工具能陪伴大家一步步解鎖圖鑑，期間也收到許多來自大家的正面回饋，是我最大的成就感 🌱
                 </p>
                 <p>管理器是由作者閒暇時間，一點一滴搭建起來。為了維持網站順暢，透過網路託管與營運成本的付出，期待能幫助大家：</p>
 
-                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0;">　✅ 輕鬆up！ 更直覺培養皮皮</p>
-                <p style="color: #F57C00; font-weight: 500;">　✅ 優化up！ 高效管理背包空間</p>
-                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0;">　✅ 效率up！ 加速解鎖圖鑑</p>
+                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0; letter-spacing: 1px;">　✅ 更直覺培養皮皮</p>
+                <p style="color: #F57C00; font-weight: 500; letter-spacing: 1px;">　✅ 優化背包空間</p>
+                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0; letter-spacing: 1px;">　✅ 更有效率解鎖圖鑑</p>
 
-                <p>你的每一份心意，都是支持管理器持續運轉、不斷更新的最佳動力。讓我們一起把愛皮皮的熱情延續下去吧！❤️</p>
+                <p>你們的支持，都是讓管理器持續運轉、不斷更新的最佳動力。期待和大家一起把愛皮皮的熱情延續下去 ❤️</p>
 
 
                 <button class="welcome-btn" style="margin: 10px 0 18px 0; font-size: 18px; padding: 12px;"
@@ -2564,7 +2571,7 @@
 
         const categoryIcons = { "餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Restaurant.png", "咖啡廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Cafe.png", "甜點店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Desert.png", "電影院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Theatre.png", "藥局": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Pharmacy.png", "動物園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Zoo.png", "森林": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Forest.png", "水邊": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Water.png", "郵局": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Posts.png", "美術館": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Museum.png", "機場": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/AirPort.png", "車站": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Station.png", "海灘": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Beach.png", "漢堡店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Hamburger.png", "便利店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ConvenienceStore.png", "超市": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Supermarket.png", "麵包店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Bakery.png", "美容院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Salon.png", "服飾店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ClosthingStore.png", "公園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Park.png", "圖書館": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Library.png", "路邊": "https://pikmin.wiki.gallery/images/2/25/Roadside_icon.png", "壽司餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/SushiRestaurant.png", "山丘": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Mountain.png", "體育場": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Stadium.png", "雨天": "https://pikmin.wiki.gallery/images/7/7f/Rainy_Day_icon.png", "下雪": "https://pikmin.wiki.gallery/images/c/ca/Snowy_Day_icon.png", "主題樂園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/AmusementPark.png", "公車站": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/BusStop.png", "義式餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ItalianRestaurant.png", "拉麵店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/RamenRestaurant.png", "橋梁": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Bridge.png", "飯店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Hotel.png", "化妝品商店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Cosme.png", "神社和寺廟": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Omikuji.png", "電器行": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Electronics.png", "咖哩餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Curry.png", "五金行": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/HardwareStore.png", "大學&學院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/University.png", "墨西哥餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/MexicanRestaurant.png", "自助洗衣店&乾洗店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Laundry.png", "韓國餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/KoreanRestaurant.png" };
         const translationMap = {
-            "Chef_Hat_%28Rare%29": "稀有廚師帽", "Chef_Hat": "廚師帽", "Coffee_Cup_%28Rare%29": "稀有咖啡杯", "Coffee_Cup": "咖啡杯", "Macaron": "馬卡龍", "Donut": "甜甜圈", "Popcorn_Snack": "爆米花", "Toothbrush": "牙刷", "Dandelion": "蒲公英", "Stag_Beetle": "鍬形蟲", "Acorn": "橡實", "Fishing_Lure_%28Rare%29": "稀有魚餌", "Fishing_Lure": "魚餌", "Stamp": "郵票", "Picture_Frame": "相框", "Toy_Airplane": "玩具飛機", "Paper_Train": "紙火車", "Ticket": "車票", "Gold_Ticket": "金車票", "Shell": "貝殼", "Burger": "漢堡", "Bottle_Cap": "瓶蓋", "Snack": "零食", "Banana_%28Rare%29": "稀有香蕉", "Mushroom": "蘑菇", "Banana": "香蕉", "Baguette_%28Rare%29": "稀有法國麵包", "Baguette": "法國麵包", "Scissors_%28Rare%29": "稀有剪刀", "Scissors": "剪刀", "Hair_Tie": "髮飾", "Clover_%28Rare%29": "稀有三葉草", "Four-Leaf_Clover_%28Rare%29": "稀有四葉草", "Clover": "三葉草", "Four-Leaf_Clover": "四葉草", "Tiny_Book": "迷你書", "Coin_%28Rare%29": "稀有硬幣", "Sticker_1": "橘色貼紙", "Sticker_2": "藍色貼紙", "Sticker_3": "黃色貼紙", "Coin": "硬幣", "Sushi": "壽司", "Mountain_Pin_Badge": "登山徽章", "Ball_Keychain": "球類鑰匙圈", "Leaf_Hat_1": "雨葉帽(橘)", "Leaf_Hat_2": "雨葉帽(藍)", "Leaf_Hat_3": "雨葉帽(黃)", "Snow": "雪", "Theme_Park_Ticket_1": "遊樂園門票1", "Theme_Park_Ticket_2": "遊樂園門票2", "Bus_Papercraft": "公車模型", "Pizza": "披薩", "Pasta": "義大利麵", "Ramen_Keychain": "拉麵鑰匙圈", "Bridge_Pin_Badge": "橋梁徽章", "Hotel_Amenities": "飯店備品", "Makeup": "化妝品", "Fortune_1": "籤(大吉)", "Fortune_2": "籤(吉)", "Fortune_3": "籤(中吉)", "Fortune_4": "籤(小吉)", "Fortune_5": "籤(末吉)", "Battery_1": "電池", "Battery_2": "電池", "Battery_3": "電池", "Battery_4": "電池", "Battery_5": "電池", "Battery_6": "電池", "Fairy_Lights_1": "燈泡", "Fairy_Lights_2": "燈泡", "Curry_Bowl": "咖哩飯", "Tool": "工具", "College_Crest_Patch": "大學徽章", "Taco": "塔可", "Laundry_Item": "洗衣用品", "Kimchi": "泡菜",
+            "Chef_Hat_%28Rare%29": "稀有廚師帽", "Chef_Hat": "廚師帽", "Coffee_Cup_%28Rare%29": "稀有咖啡杯", "Coffee_Cup": "咖啡杯", "Macaron": "馬卡龍", "Donut": "甜甜圈", "Popcorn_Snack": "爆米花", "Toothbrush": "牙刷", "Dandelion": "蒲公英", "Stag_Beetle": "鍬形蟲", "Acorn": "橡實", "Fishing_Lure_%28Rare%29": "稀有魚餌", "Fishing_Lure": "魚餌", "Stamp": "郵票", "Picture_Frame": "相框", "Toy_Airplane": "玩具飛機", "Paper_Train": "紙火車", "Ticket": "車票", "Gold_Ticket": "金車票", "Shell": "貝殼", "Burger": "漢堡", "Bottle_Cap": "瓶蓋", "Snack": "零食", "Banana_%28Rare%29": "稀有香蕉", "Mushroom": "蘑菇", "Banana": "香蕉", "Baguette_%28Rare%29": "稀有法國麵包", "Baguette": "法國麵包", "Scissors_%28Rare%29": "稀有剪刀", "Scissors": "剪刀", "Hair_Tie": "髮飾", "Clover_%28Rare%29": "稀有三葉草", "Four-Leaf_Clover_%28Rare%29": "稀有四葉草", "Clover": "三葉草", "Four-Leaf_Clover": "四葉草", "Tiny_Book": "迷你書", "Coin_%28Rare%29": "稀有硬幣", "Sticker_1": "橘色貼紙", "Sticker_2": "藍色貼紙", "Sticker_3": "黃色貼紙", "Coin": "硬幣", "Sushi": "壽司", "Mountain_Pin_Badge": "登山徽章", "Ball_Keychain": "球類鑰匙圈", "Leaf_Hat_1": "雨葉帽", "Leaf_Hat_2": "雨葉帽", "Leaf_Hat_3": "雨葉帽", "Snow": "雪", "Theme_Park_Ticket_1": "遊樂園門票1", "Theme_Park_Ticket_2": "遊樂園門票2", "Bus_Papercraft": "公車模型", "Pizza": "披薩", "Pasta": "義大利麵", "Ramen_Keychain": "拉麵鑰匙圈", "Bridge_Pin_Badge": "橋梁徽章", "Hotel_Amenities": "飯店備品", "Makeup": "化妝品", "Fortune_1": "籤(大吉)", "Fortune_2": "籤(吉)", "Fortune_3": "籤(中吉)", "Fortune_4": "籤(小吉)", "Fortune_5": "籤(末吉)", "Battery_1": "電池", "Battery_2": "電池", "Battery_3": "電池", "Battery_4": "電池", "Battery_5": "電池", "Battery_6": "電池", "Fairy_Lights_1": "燈泡", "Fairy_Lights_2": "燈泡", "Curry_Bowl": "咖哩飯", "Tool": "工具", "College_Crest_Patch": "大學徽章", "Taco": "塔可", "Laundry_Item": "洗衣用品", "Kimchi": "泡菜",
             /* 以下為新增的特殊圖鑑翻譯 */
             "Flower_Crown": "花冠", "Surfboard_Keychain": "衝浪板鑰匙圈", "Puzzle_2": "2022年夏日回憶", "Puzzle_4": "2023年夏日回憶", "Playing_Card_3": "梅花", "Playing_Card_4": "梅花", "Playing_Card_1": "方塊", "Playing_Card_2": "方塊", "Rosette": "玫瑰花結", "Game_Pak": "遊戲卡匣", "Nintendo_Consoles_1": "Nintendo遊戲機1980-1995", "Cheese": "起司店", "Easter_Egg": "復活節彩蛋", "Bunny_Egg": "兔寶寶彩蛋", "Klompen_Keychain": "荷蘭木鞋鑰匙圈", "Super_Mario_Keychain": "超級瑪利歐鑰匙圈", "Color_Powder": "彩色粉末", "Spring_Sticker": "春季貼紙", "Reverse_Valentine%27s_Day_Sticker": "反向情人節貼紙", "Afternoon_Tea": "下午茶", "2026_Chocolate": "2026巧克力", "Chocolate": "巧克力", "Lunar_New_Year_Ornament_2": "金色", "Lunar_New_Year_Ornament_1": "紅色", "Party_Popper_2025": "派對禮炮2025", "2024_Glasses": "2024年眼鏡", "2023_Glasses": "2023年眼鏡", "Osechi": "日式年菜", "2025_Ornament": "2025年裝飾品", "Photo_Button_Badge": "照片鈕扣徽章", "Ball_Ornament": "裝飾球", "Mitten": "連指手套", "Ice_Cream_1": "經典口味", "Ice_Cream_2": "2024年口味", "Pacifier": "奶嘴", "Golden_Toy_Airplane": "金色飛機玩具", "4th_Anniversary_Snack": "四週年紀念零食", "4th_Anniversary_Flower_Box": "四週年紀念花盒", "3rd_Anniversary_Cupcake": "三週年紀念紙杯蛋糕", "Puzzle_1": "2021年秋季回憶", "Pikmin_4_Toy": "Pikmin4 玩具", "Jack-o%27-Lantern": "南瓜燈", "Halloween_Treat": "萬聖節糖果", "Halloween_Light": "萬聖節燈籠", "Calavera": "骷髏頭", "Mooncake": "月餅", "Mahjong_Tile_1": "牌組1", "Mahjong_Tile_2": "牌組2", "Mahjong_Tile_3": "牌組3", "Mahjong_Tile_4": "牌組4", "Mahjong_Tile_5": "牌組4", "Summer_Sticker": "夏季貼紙", "Shaved_Ice": "刨冰", "Coral": "珊瑚", "Tiny_Instrument": "迷你樂器", "Rio_Carnival": "里約狂歡節", "Valentine_Sticker": "情人節貼紙", "Flower_Card_1": "第一卷", "Flower_Card_2": "第一卷", "Flower_Card_3": "第一卷", "Flower_Card_4": "第一卷", "Flower_Card_5": "第一卷", "Flower_Card_6": "第一卷", "Flower_Card_7": "第二卷", "Flower_Card_8": "第二卷", "Winter_Sticker": "冬季貼紙", "First_Anniversary_Snack": "一週年紀念零食", "Present_Sticker_%28Gold%29": "禮物貼紙(金色)", "Fall_Sticker": "秋季貼紙", "Puzzle_3": "2024年秋季回憶", "Paint": "繪畫", "Koppaite_Space_Suit": "Koppaite太空衣", "Pikmin_4_Spaceship": "Pikmin4 飛船", "Fingerboard": "手指滑板", "Sneaker_Keychain": "運動鞋鑰匙圈"
         };
@@ -3150,10 +3157,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         let currentDisplayedPercent = 0;
         let currentWarningId = null;
 
-        // 新增：儲存排除丟棄的類別清單
+        // 新增：儲存排除放生的類別清單
         let excludeDiscardList = JSON.parse(localStorage.getItem('pikminExcludeDiscard')) || [];
-        // 新增：狀態的優先級排序權重
-        const statusOrder = { "飾品": 1, "花盆": 2, "孵盆": 3, "待機": 4, "培育": 5 };
+        // 新增：狀態的優先級排序權重 (禮物權重與待機相同)
+        const statusOrder = { "飾品": 1, "花盆": 2, "孵盆": 3, "待機": 4, "禮物": 4, "培育": 5 };
 
         function toggleExcludeDiscard(category, isChecked) {
             if (isChecked) {
@@ -3173,10 +3180,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        function initApp() {
+function initApp() {
             let saved = localStorage.getItem('pikminData_v22');
             if (saved) {
                 myCollection = JSON.parse(saved);
+                // 【資料無縫升級】將舊版的三種雨葉帽，強制統一為「雨葉帽」
+                myCollection.forEach(item => {
+                    if (item.category === '雨天' && item.subcategory.includes('雨葉帽')) {
+                        item.subcategory = '雨葉帽';
+                    }
+                });
             } else {
                 // 【修正】移除容易導致誤判的空白轉換，直接使用標準換行分割
                 const lines = (rawUrlsData + "\n" + specialRawUrlsData).split('\n').map(l => l.trim()).filter(l => l !== '');
@@ -3560,16 +3573,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             list.innerHTML = '';
 
-            // 插入隱藏任務提示 & 排除丟棄選項
+            // 插入隱藏任務提示 & 排除放生選項
             const hiddenCategories = ["餐廳", "咖啡廳", "麵包店", "公園", "路邊", "水邊", "美容院", "超市"];
             if (hiddenCategories.includes(category)) {
-                list.innerHTML += `<div style="padding: 12px 15px; background: #fff8e1; color: #f57c00; font-size: 14px; font-weight: bold; border-bottom: 1px solid var(--border-color); line-height: 1.1;">
-                    📌 此種類有隱藏圖鑑，建議勾選"不要建議丟棄"，重複的皮克敏，未來解任務會用到。<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddenpic.png')">隱藏任務怎麼解?</a>
+                list.innerHTML += `<div style="padding: 12px 14px; background: #fff8e1; color: #f57c00; font-size: 14px; font-weight: bold; border-bottom: 1px solid var(--border-color); line-height: 1.4;">
+                    📌 此種類含隱藏圖鑑，系統會暫時關閉"放生建議"功能(直到隱藏圖鑑集滿)，因為重複的皮克敏可用於積分任務，詳情請看：<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block; line-height: 1.1;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddenpic.png')">隱藏圖鑑獲取方法?</a>
                 </div>`;
             }
             list.innerHTML += `<div style="padding: 12px 15px; background: var(--card-bg); font-size: 15px; font-weight: bold; border-bottom: 2px solid var(--pikmin-green); display: flex; align-items: center; gap: 8px;">
                 <input type="checkbox" id="exclude-discard-${category}" style="transform: scale(1.2); cursor: pointer;" onchange="toggleExcludeDiscard('${category}', this.checked)" ${excludeDiscardList.includes(category) ? 'checked' : ''}>
-                <label for="exclude-discard-${category}" style="cursor: pointer; margin: 0; color: var(--text-color);">本類別不要建議丟棄</label>
+                <label for="exclude-discard-${category}" style="cursor: pointer; margin: 0; color: var(--text-color);">不要把 [${category}] 列入放生</label>
             </div>`;
 
             let subcats = [...new Set(items.map(i => i.subcategory))];
@@ -3636,8 +3649,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         tags.appendChild(t);
                     });
 
+                    // 【修復 3】模態框初始渲染時的判斷
+                    const isSpecialCat = Object.values(specialCategories).flat().includes(category);
                     const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
-                    if (sub.includes("稀有") || sub.includes("隱藏")) {
+                    if (sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) {
                         add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
                     } else {
                         add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
@@ -3650,7 +3665,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             });
             if (isNewOpen) { modal.style.display = 'flex'; list.scrollTop = 0; }
         }
-
 
 
 
@@ -3679,9 +3693,12 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 tagsContainer.appendChild(t);
             });
 
+            // 【修復 3】判斷是否為特殊圖鑑，若是則按 + 號直接新增飾品
+            const isSpecialCat = Object.values(specialCategories).flat().includes(item.category);
             const sub = item.subcategory;
             const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
-            if (sub.includes("稀有") || sub.includes("隱藏")) {
+
+            if (sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) {
                 add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
             } else {
                 add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
@@ -3768,7 +3785,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             if (statusText === 'delete') {
                 if (editingStatusIndex > -1) {
-                    logMsg = `丟棄: [${item.category}] ${item.colorZh} 的 ${item.instances[editingStatusIndex].status}`;
+                    logMsg = `放生: [${item.category}] ${item.colorZh} 的 ${item.instances[editingStatusIndex].status}`;
                     item.instances.splice(editingStatusIndex, 1);
                     isDelete = true;
                 }
@@ -3927,6 +3944,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const item = myCollection.find(p => p.id === id);
             const menu = document.getElementById('custom-status-menu');
 
+            // 【修復 2】判斷是否為有隱藏圖鑑的 8 大種類
+            const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊"];
+            const hasHidden = hiddenCategories.includes(item.category);
+
             // 客製化選單內容
             if (item.subcategory === '大花盆' || item.subcategory === '金色大花盆') {
                 menu.innerHTML = `
@@ -3934,22 +3955,23 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" id="menu-target-center" onclick="selectStatus('孵盆')">孵盆</div>
                     ${index > -1 ? `<div class="menu-item theme-孵出" onclick="openHatchModal('${item.id}', ${index})">孵出</div>` : ''}
-                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌丟棄</div>
+                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
                 `;
             } else if (item.subcategory.includes('稀有') || item.subcategory.includes('隱藏')) {
                 menu.innerHTML = `
                     <div class="menu-item theme-飾品" id="menu-target-center" onclick="selectStatus('飾品')">飾品</div>
-                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌丟棄</div>
+                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
                 `;
             } else {
                 menu.innerHTML = `
-                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">!</div>
+                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【禮物】將皮克敏培育到 4 心，但必須等到積分任務開啟再領禮物\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">!</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" onclick="selectStatus('孵盆')">孵盆</div>
                     <div class="menu-item theme-待機" id="menu-target-center" onclick="selectStatus('待機')">待機</div>
                     <div class="menu-item theme-培育" onclick="selectStatus('培育')">培育</div>
+                    ${hasHidden ? `<div class="menu-item theme-禮物" onclick="selectStatus('禮物')">禮物</div>` : ''}
                     <div class="menu-item theme-飾品" onclick="selectStatus('飾品')">飾品</div>
-                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌丟棄</div>
+                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
                 `;
             }
             menu.style.display = 'flex';
@@ -4109,7 +4131,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const keepOne = document.getElementById('setting-keep-one').checked;
             const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊"];
 
-            // 輔助函式：安全地推入丟棄清單
+            // 輔助函式：安全地推入放生清單
             let discardUids = new Set();
             let pushDiscard = (item, target, isWarning) => {
                 if (excludeDiscardList.includes(item.category)) return;
@@ -4143,19 +4165,19 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 });
             });
 
-            // ==========================================
+
+
+// ==========================================
             // 【邏輯 1】一般圖鑑判定機制 (依據顏色群組)
             // ==========================================
             const cats = [...new Set(myCollection.map(i => i.category))];
             const colorOrder = ["Red", "Yellow", "Blue", "Purple", "White", "Winged", "Rock", "Ice", "Gold"];
-            const discardPrio = { "花盆": 1, "待機": 2, "孵盆": 3, "培育": 4, "飾品": 5 };
+            // 【更新】丟棄優先權加入「禮物」，權重與待機相同
+            const discardPrio = { "花盆": 1, "待機": 2, "禮物": 2, "孵盆": 3, "培育": 4, "飾品": 5 };
 
             cats.forEach(cat => {
                 if (cat === '大花盆') return;
                 const hasHidden = hiddenCategories.includes(cat);
-
-                let catNormalItems = myCollection.filter(i => i.category === cat && !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && i.subcategory !== '大花盆');
-                let catMissingCount = catNormalItems.filter(i => !i.isUnlocked).length;
 
                 colorOrder.forEach(color => {
                     let items = myCollection.filter(i => i.category === cat && i.colorName === color && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
@@ -4169,121 +4191,132 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     items.forEach(item => { item.instances.forEach(ins => { if (!ins.hideRec) instances.push({ item, ins }); }); });
 
                     let totalStatus = instances.filter(x => x.ins.status !== '飾品').length;
+                    let seeds = instances.filter(i => i.ins.status === '花盆');
+                    // 【更新】所有涉及待機的地方，都加入「禮物」
+                    let nonSeeds = instances.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '孵盆' || i.ins.status === '培育');
                     let x = totalStatus > n ? totalStatus - n : 0;
 
-                    let seeds = instances.filter(i => i.ins.status === '花盆');
-                    let nonSeeds = instances.filter(i => i.ins.status === '待機' || i.ins.status === '孵盆' || i.ins.status === '培育');
+                    // --- 【修復 1】探索建議 (開圖)：依據「子分類」數量精準判斷 ---
+                    let missingNormal = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && !i.isUnlocked);
+                    
+                    missingNormal.forEach(targetItem => {
+                        if (targetItem.hideExploreRec) return;
+                        
+                        // 【優化】動態設定純點推薦門檻：雨天、下雪、燈泡，只剩最後 1 個才推薦純點
+                        let threshold = 2;
+                        if (cat === '雨天' || cat === '下雪' || targetItem.subcategory === '燈泡') {
+                            threshold = 1;
+                        }
 
-                    // --- 圖鑑解鎖與否邏輯 ---
-                    if (isNormalUnlocked) {
-                        if (!hasHidden) {
-                            instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
-                        } else {
+                        // 計算「這個特定的子分類」還差幾個
+                        let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === targetItem.subcategory && !i.isUnlocked).length;
+
+                        if (subcatMissingCount <= threshold) {
+                            if (!hasHidden) {
+                                let itemStatusList = targetItem.instances.filter(ins => !ins.hideRec && ins.status !== '飾品');
+                                if (itemStatusList.length === 0) {
+                                    // 【優化】金車票不建議純點
+                                    if (!specialCatNames.includes(cat) && targetItem.subcategory !== '金車票') {
+                                        exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
+                                    }
+                                } else {
+                                    let cultivateCandidates = itemStatusList.filter(ins => ins.status === '待機' || ins.status === '禮物' || ins.status === '培育');
+                                    if (cultivateCandidates.length > 0) {
+                                        let targetIns = cultivateCandidates.find(i => i.status === '培育') || cultivateCandidates[0];
+                                        exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: targetIns.uid });
+                                    }
+                                }
+                            } else {
+                                if (totalStatus === 0) {
+                                    // 【優化】金車票不建議純點
+                                    if (!specialCatNames.includes(cat) && targetItem.subcategory !== '金車票') {
+                                        exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
+                                    }
+                                } else {
+                                    let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '培育');
+                                    if (cultivateCandidates.length > 0) {
+                                        let targetIns = cultivateCandidates.find(i => i.ins.status === '培育') || cultivateCandidates[0];
+                                        exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: targetIns.ins.uid });
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // --- 孵化與丟棄建議 ---
+                    if (!hasHidden) {
+                        // 無隱藏圖鑑時，各子分類完全獨立判斷
+                        items.forEach(item => {
+                            let itemInstances = [];
+                            item.instances.forEach(ins => { if (!ins.hideRec) itemInstances.push({ item, ins }); });
+                            let itemTotalStatus = itemInstances.filter(i => i.ins.status !== '飾品').length;
+                            let itemSeeds = itemInstances.filter(i => i.ins.status === '花盆');
+                            let itemNonSeeds = itemInstances.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '孵盆' || i.ins.status === '培育');
+                            
+                            if (item.isUnlocked) {
+                                itemInstances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(item, i.ins, false));
+                                let decors = itemInstances.filter(i => i.ins.status === '飾品');
+                                let toDiscardNum = keepOne ? decors.length - 1 : decors.length;
+                                for (let i = 0; i < toDiscardNum; i++) pushDiscard(item, decors[i].ins, false);
+                            } else {
+                                if (itemTotalStatus > 0) {
+                                    let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === item.subcategory && !i.isUnlocked).length;
+                                    if (itemSeeds.length > 0) {
+                                        if (itemNonSeeds.length === 0) {
+                                            if (itemTotalStatus <= 1) {
+                                                incubateList.push({ item: item, target: itemSeeds[0].ins, score: subcatMissingCount });
+                                            } else {
+                                                incubateList.push({ item: item, target: itemSeeds[0].ins, score: subcatMissingCount });
+                                                let sortedToDiscard = itemSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
+                                                for (let i = 1; i < sortedToDiscard.length; i++) pushDiscard(item, sortedToDiscard[i].ins, true);
+                                            }
+                                        } else {
+                                            itemSeeds.forEach(i => pushDiscard(item, i.ins, true));
+                                            let sortedToDiscard = itemNonSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
+                                            for (let i = 0; i < itemNonSeeds.length - 1; i++) pushDiscard(item, sortedToDiscard[i].ins, true);
+                                        }
+                                    } else {
+                                        if (itemTotalStatus > 1) {
+                                            let sortedToDiscard = itemNonSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
+                                            for (let i = 0; i < itemNonSeeds.length - 1; i++) pushDiscard(item, sortedToDiscard[i].ins, true);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        // 有隱藏圖鑑時，同一顏色視為共享池
+                        if (isNormalUnlocked) {
                             if (isHiddenUnlocked) {
                                 instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
                             } else {
                                 if (seeds.length > 0) {
                                     let targetSubcat = seeds[0].item.subcategory;
                                     let subcatMissingCount = myCollection.filter(i => i.category === cat && i.subcategory === targetSubcat && !i.isUnlocked).length;
-
-                                    if (seeds.length === totalStatus) {
-                                        if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                        else {
-                                            incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                            if (!hasHidden) {
-                                                let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                                for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                            }
-                                        }
-                                    } else {
-                                        if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                        else {
-                                            incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
-                                            if (!hasHidden) {
-                                                if (nonSeeds.length < n) {
-                                                    let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                                    let dropCount = Math.min(x, seeds.length);
-                                                    for (let i = 0; i < dropCount; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                                } else {
-                                                    let sortedToDiscard = [...seeds, ...nonSeeds].sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                                    for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: subcatMissingCount });
                                 }
                             }
-                        }
-
-                        if ((!hasHidden && isNormalUnlocked) || (hasHidden && isHiddenUnlocked)) {
-                            items.forEach(item => {
-                                let decors = item.instances.filter(i => i.status === '飾品' && !i.hideRec);
-                                let toDiscardNum = keepOne ? decors.length - 1 : decors.length;
-                                for (let i = 0; i < toDiscardNum; i++) pushDiscard(item, decors[i], false);
-                            });
-                        }
-
-                    } else {
-                        // 【No 未解鎖】
-                        let missingNormal = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && !i.isUnlocked);
-                        let threshold = (cat === '雨天' || cat === '下雪') ? 1 : 2;
-
-                        if (missingNormal.length > 0 && catMissingCount <= threshold) {
-                            let targetItem = missingNormal[0];
-                            if (!targetItem.hideExploreRec) {
-                                if (totalStatus === 0) {
-                                    // 【修改 1】身上沒有任何狀態 ➔ 探索建議 (特殊圖鑑不建議純點)
-                                    if (!specialCatNames.includes(cat)) {
-                                        exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: catMissingCount, item: targetItem });
-                                    }
-                                } else {
-                                    // 【修改 4】身上有狀態，只檢查「待機」，有才建議培育 (忽略培育中)
-                                    let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機');
-                                    if (cultivateCandidates.length > 0) {
-                                        let targetIns = cultivateCandidates[0];
-                                        exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: catMissingCount, item: targetItem, targetUid: targetIns.ins.uid });
-                                    }
-                                }
+                            if (isHiddenUnlocked) {
+                                items.forEach(item => {
+                                    let decors = item.instances.filter(i => i.status === '飾品' && !i.hideRec);
+                                    let toDiscardNum = keepOne ? decors.length - 1 : decors.length;
+                                    for (let i = 0; i < toDiscardNum; i++) pushDiscard(item, decors[i], false);
+                                });
                             }
-                        }
-
-                        if (totalStatus > 0) {
-                            if (seeds.length > 0) {
-                                if (seeds.length === totalStatus) {
-                                    if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
-                                    else {
-                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
-                                        if (!hasHidden) {
-                                            let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                            for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                        }
-                                    }
-                                } else {
-                                    if (totalStatus <= n) incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: n - totalStatus + 1 });
-                                    else {
-                                        incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: 0 });
-                                        if (!hasHidden) {
-                                            if (nonSeeds.length < n) {
-                                                let sortedToDiscard = seeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                                let dropCount = Math.min(x, seeds.length);
-                                                for (let i = 0; i < dropCount; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                            } else {
-                                                let sortedToDiscard = [...seeds, ...nonSeeds].sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                                for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (totalStatus > n && !hasHidden) {
-                                    let sortedToDiscard = nonSeeds.sort((a, b) => discardPrio[a.ins.status] - discardPrio[b.ins.status]);
-                                    for (let i = 0; i < x; i++) pushDiscard(sortedToDiscard[i].item, sortedToDiscard[i].ins, true);
+                        } else {
+                            if (totalStatus > 0) {
+                                if (seeds.length > 0) {
+                                    let score = totalStatus <= n ? n - totalStatus + 1 : 0;
+                                    incubateList.push({ item: seeds[0].item, target: seeds[0].ins, score: score });
                                 }
                             }
                         }
                     }
                 });
             });
+
+
+
 
             incubateList = incubateList.sort((a, b) => a.score - b.score).slice(0, 10);
             discardList = discardList.slice(0, 15);
@@ -4322,7 +4355,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (incubateList.length > 0) iList.innerHTML += `<div class="rec-swipe-hint">← 左滑可刪除建議</div>`;
 
 
-            // 渲染：丟棄建議
+            // 渲染：放生建議
             const dList = document.getElementById('recommend-discard-list');
             dList.innerHTML = discardList.length === 0 ? '<div class="empty-state">背包空間很乾淨</div>' : discardList.map(d => `
                 <li style="position:relative; margin-bottom:5px;">
@@ -4336,11 +4369,11 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         <div class="rec-info-wrapper" onclick="viewItemInModal('${d.item.category}', '${d.item.id}', '${d.target.uid}')">
                             <div class="rec-info-top">
                                 <span class="rec-title">${d.item.category} / ${d.item.colorZh}</span>
-                                <div class="info-icon ${d.isWarning ? 'warning triangle' : 'question'}" onclick="alert('${d.isWarning ? '⚠️ 雖然圖鑑未解鎖，但持有數過多，建議丟棄以釋放空間。' : '💡 圖鑑已解鎖，建議丟棄以釋放空間。'}'); event.stopPropagation();">${d.isWarning ? '!' : '?'}</div>
+                                <div class="info-icon ${d.isWarning ? 'warning triangle' : 'question'}" onclick="alert('${d.isWarning ? '⚠️ 雖然圖鑑未解鎖，但持有數過多，建議放生以釋放空間。' : '💡 圖鑑已解鎖，建議放生以釋放空間。'}'); event.stopPropagation();">${d.isWarning ? '!' : '?'}</div>
                             </div>
                         </div>
                         <div class="rec-actions">
-                            <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認丟棄'); event.stopPropagation();">${d.isWarning ? '考慮丟棄' : '確認丟棄'}</button>
+                            <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認放生'); event.stopPropagation();">${d.isWarning ? '考慮放生' : '確認放生'}</button>
                         </div>
                     </div>
                 </li>
