@@ -4167,7 +4167,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             });
 
 
-// ==========================================
+            // ==========================================
             // 【邏輯 1】一般圖鑑判定機制 (依據顏色群組)
             // ==========================================
             const cats = [...new Set(myCollection.map(i => i.category))];
@@ -4201,10 +4201,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
                     // --- 【探索建議 (開圖)：依據「子分類」數量精準判斷】 ---
                     let missingNormal = items.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏') && !i.isUnlocked);
-                    
+
                     missingNormal.forEach(targetItem => {
                         if (targetItem.hideExploreRec) return;
-                        
+
                         let threshold = 2;
                         if (cat === '雨天' || cat === '下雪' || targetItem.subcategory === '燈泡') {
                             threshold = 1;
@@ -4220,10 +4220,13 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
                                 } else {
-                                    let cultivateCandidates = itemStatusList.filter(ins => ins.status === '待機' || ins.status === '禮物' || ins.status === '培育');
-                                    if (cultivateCandidates.length > 0) {
-                                        let targetIns = cultivateCandidates.find(i => i.status === '培育') || cultivateCandidates[0];
-                                        exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: targetIns.uid });
+                                    // 【修復 2】檢查是否已經有在「培育」的項目，有的話就不再重複建議
+                                    let isAlreadyCultivating = itemStatusList.some(ins => ins.status === '培育');
+                                    if (!isAlreadyCultivating) {
+                                        let cultivateCandidates = itemStatusList.filter(ins => ins.status === '待機' || ins.status === '禮物');
+                                        if (cultivateCandidates.length > 0) {
+                                            exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: cultivateCandidates[0].uid });
+                                        }
                                     }
                                 }
                             } else {
@@ -4232,10 +4235,13 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
                                 } else {
-                                    let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '培育');
-                                    if (cultivateCandidates.length > 0) {
-                                        let targetIns = cultivateCandidates.find(i => i.ins.status === '培育') || cultivateCandidates[0];
-                                        exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: targetIns.ins.uid });
+                                    // 【修復 2】檢查是否已經有在「培育」的項目，有的話就不再重複建議
+                                    let isAlreadyCultivating = nonSeeds.some(i => i.ins.status === '培育');
+                                    if (!isAlreadyCultivating) {
+                                        let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機' || i.ins.status === '禮物');
+                                        if (cultivateCandidates.length > 0) {
+                                            exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: cultivateCandidates[0].ins.uid });
+                                        }
                                     }
                                 }
                             }
@@ -4251,7 +4257,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                             let itemTotalStatus = itemInstances.filter(i => i.ins.status !== '飾品').length;
                             let itemSeeds = itemInstances.filter(i => i.ins.status === '花盆');
                             let itemNonSeeds = itemInstances.filter(i => i.ins.status === '待機' || i.ins.status === '禮物' || i.ins.status === '孵盆' || i.ins.status === '培育');
-                            
+
                             if (item.isUnlocked) {
                                 itemInstances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(item, i.ins, false));
                                 let decors = itemInstances.filter(i => i.ins.status === '飾品');
@@ -4315,9 +4321,20 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 });
             });
 
-            incubateList = incubateList.sort((a, b) => a.score - b.score).slice(0, 10);
-            discardList = discardList.slice(0, 15);
-            exploreList = exploreList.sort((a, b) => a.left - b.left).slice(0, 10);
+            // 【最新排序邏輯】
+            // 1. 未解鎖優先於已解鎖 (補圖鑑 > 農積分)
+            // 2. 同狀態下，該子分類「未解鎖數量」越少的排越前面
+            incubateList = incubateList.sort((a, b) => {
+                // 第一層比對：圖鑑是否已解鎖 (false 優先於 true)
+                if (a.item.isUnlocked !== b.item.isUnlocked) {
+                    return a.item.isUnlocked ? 1 : -1; // 已解鎖(true)的往後排
+                }
+                // 第二層比對：缺少的圖鑑數量 (score 就是未解鎖的數量，越少越優先)
+                return a.score - b.score;
+            }).slice(0, 30);
+
+            discardList = discardList.slice(0, 30);
+            exploreList = exploreList.sort((a, b) => a.left - b.left).slice(0, 30);
 
             const getCatIcon = (cat) => specialCatNames.includes(cat) ? specialIconUrl : categoryIcons[cat];
 
@@ -4339,7 +4356,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         <div class="rec-info-wrapper" onclick="viewItemInModal('${obj.item.category}', '${obj.item.id}', '${obj.target.uid}')">
                             <div class="rec-info-top">
                                 <span class="rec-title">${obj.item.category} / ${obj.item.colorZh}</span>
-                                <div class="info-icon question" onclick="alert('尚未解鎖此一般圖鑑，且您目前持有該色花盆，建議優先孵化！'); event.stopPropagation();">?</div>
+                                <div class="info-icon question" onclick="alert('${obj.item.isUnlocked ? '雖然該圖鑑已經解鎖，但為了隱藏圖鑑的積分任務，因此建議繼續孵盆。' : '尚未解鎖此一般圖鑑，且您目前持有該色花盆，建議優先孵化！'}'); event.stopPropagation();">?</div>
                             </div>
                         </div>
                         <div class="rec-actions">
