@@ -22,7 +22,7 @@
             --card-bg: white;
             --border-color: #eee;
             --modal-bg: rgba(0, 0, 0, 0.6);
-            --panel-height: 35vh;
+            --panel-height: 40vh;
         }
 
         body.dark-mode {
@@ -101,6 +101,11 @@
                 max-width: 1000px;
                 /* 【修改】桌機版也同步改為動態高度 */
                 padding-bottom: calc(var(--panel-height) + 50px);
+            }
+
+            :root {
+                --panel-height: 40vh;
+                /* 【修改 3】桌機版維持原本較小高度，避免佔滿畫面 */
             }
 
             .top-header,
@@ -3160,8 +3165,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         // 新增：儲存排除放生的類別清單
         let excludeDiscardList = JSON.parse(localStorage.getItem('pikminExcludeDiscard')) || [];
-        // 新增：狀態的優先級排序權重 (禮物權重與待機相同)
-        const statusOrder = { "飾品": 1, "花盆": 2, "孵盆": 3, "待機": 4, "禮物": 4, "培育": 5 };
+        // 【修改 2】狀態的優先級排序權重 (飾品>花盆>孵盆>待機>培育>禮物)
+        const statusOrder = { "飾品": 1, "花盆": 2, "孵盆": 3, "待機": 4, "培育": 5, "禮物": 6 };
 
         function toggleExcludeDiscard(category, isChecked) {
             if (isChecked) {
@@ -4220,10 +4225,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
                                 } else {
-                                    // 【修復 2】檢查是否已經有在「培育」的項目，有的話就不再重複建議
                                     let isAlreadyCultivating = itemStatusList.some(ins => ins.status === '培育');
                                     if (!isAlreadyCultivating) {
-                                        let cultivateCandidates = itemStatusList.filter(ins => ins.status === '待機' || ins.status === '禮物');
+                                        // 【修改 1】移除了 '禮物'，只會抓取 '待機' 的項目建議培育
+                                        let cultivateCandidates = itemStatusList.filter(ins => ins.status === '待機');
                                         if (cultivateCandidates.length > 0) {
                                             exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: cultivateCandidates[0].uid });
                                         }
@@ -4235,10 +4240,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                         exploreList.push({ type: 'explore', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem });
                                     }
                                 } else {
-                                    // 【修復 2】檢查是否已經有在「培育」的項目，有的話就不再重複建議
                                     let isAlreadyCultivating = nonSeeds.some(i => i.ins.status === '培育');
                                     if (!isAlreadyCultivating) {
-                                        let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機' || i.ins.status === '禮物');
+                                        // 【修改 1】移除了 '禮物'，只會抓取 '待機' 的項目建議培育
+                                        let cultivateCandidates = nonSeeds.filter(i => i.ins.status === '待機');
                                         if (cultivateCandidates.length > 0) {
                                             exploreList.push({ type: 'cultivate', cat: cat, colorName: color, colorZh: targetItem.colorZh, left: subcatMissingCount, item: targetItem, targetUid: cultivateCandidates[0].ins.uid });
                                         }
@@ -4384,10 +4389,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                 <span class="rec-title">${d.item.category} / ${d.item.colorZh}</span>
                                 <div class="info-icon ${d.isWarning ? 'warning triangle' : 'question'}" onclick="alert('${d.isWarning ? '⚠️ 雖然圖鑑未解鎖，但持有數過多，建議放生以釋放空間。' : '💡 圖鑑已解鎖，建議放生以釋放空間。'}'); event.stopPropagation();">${d.isWarning ? '!' : '?'}</div>
                             </div>
-                            <div style="font-size:12px; color:#F57C00; font-weight:bold; margin-top:-3px;">🌼 狀態：${d.target.status}</div>
+                            <div style="font-size:12px; color:#cc8741; font-weight:bold; margin-top:-3px;">🌼 狀態：${d.target.status}</div>
                         </div>
                         <div class="rec-actions">
-                            <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認放生'); event.stopPropagation();">${d.isWarning ? '考慮放生' : '確認放生'}</button>
+                            <button class="action-btn btn-discard" onclick="triggerAutoActionAnimation('${d.item.id}', '${d.target.uid}', '${d.target.status}', 'delete', '確認放生'); event.stopPropagation();">${d.isWarning ? '確認放生' : '確認放生'}</button>
                         </div>
                     </div>
                 </li>
@@ -4413,7 +4418,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                                     <span class="rec-title">${e.cat} / ${e.colorZh}</span>
                                     <div class="info-icon question" onclick="alert('此分類只差 ${e.left} 個即可集滿圖鑑，目前無此顏色花盆，建議出發探索尋找！'); event.stopPropagation();">?</div>
                                 </div>
-                                <div style="font-size:12px; color:#1E88E5; font-weight:bold; margin-top:-3px;">🧭 探索建議</div>
+                                <div style="font-size:12px; color:#1E88E5; font-weight:bold; margin-top:-3px;">🧭 建議探索</div>
                             </div>
                             <div class="rec-actions">
                                 <button class="action-btn btn-explore" onclick="window.open('https://treelazy.com/pikmin'); event.stopPropagation();">純點地圖</button>
@@ -4433,9 +4438,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                             <div class="rec-info-wrapper" onclick="viewItemInModal('${e.cat}', '${e.item.id}', '${e.targetUid}')">
                                 <div class="rec-info-top">
                                     <span class="rec-title">${e.cat} / ${e.colorZh}</span>
-                                    <div class="info-icon question" onclick="alert('此分類只差 ${e.left} 個即可集滿圖鑑，建議優先餵食這隻皮克敏到4心，以獲得飾品，解鎖圖鑑！'); event.stopPropagation();" style="background:#D32F2F;">?</div>
+                                    <div class="info-icon question" onclick="alert('此分類只差 ${e.left} 個即可集滿圖鑑，建議優先餵食這隻皮克敏到4心，以獲得飾品，解鎖圖鑑！'); event.stopPropagation();" style="background:#999999;">?</div>
                                 </div>
-                                <div style="font-size:12px; color:#D32F2F; font-weight:bold; margin-top:-3px;">❤️ 培育建議</div>
+                                <div style="font-size:12px; color:#ff9780; font-weight:bold; margin-top:-3px;">❤️ 建議培育</div>
                             </div>
                             <div class="rec-actions">
                                 <button class="action-btn" style="background-color:#ff9780;" onclick="triggerAutoActionAnimation('${e.item.id}', '${e.targetUid}', '待機', '培育', '確認培育'); event.stopPropagation();">確認培育</button>
