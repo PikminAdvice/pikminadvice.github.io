@@ -3250,6 +3250,32 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 });
             }
 
+
+
+            // 【遊戲更新：2026.06 新增冰咖啡廳與稀有藥局】自動補齊缺失圖鑑
+            const newUpdateItems = [
+                { id: "Ice_咖啡廳_Coffee_Cup_%28Rare%29", category: "咖啡廳", subcategory: "稀有咖啡杯", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Ice_咖啡廳_Coffee_Cup", category: "咖啡廳", subcategory: "咖啡杯", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Red_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Yellow_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Blue_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Blue", colorZh: "藍色", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "White_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "White", colorZh: "白色", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Purple_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Purple", colorZh: "紫色", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Rock_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Rock", colorZh: "岩石", imageUrl: "https://pikminadvice.github.io/images/graypic.png" },
+                { id: "Winged_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://pikminadvice.github.io/images/graypic.png" }
+            ];
+            newUpdateItems.forEach(newItem => {
+                if (!myCollection.some(i => i.id === newItem.id)) {
+                    myCollection.push({
+                        id: newItem.id, category: newItem.category, subcategory: newItem.subcategory,
+                        colorName: newItem.colorName, colorZh: newItem.colorZh,
+                        instances: [], isUnlocked: false, hideWarning: false, imageUrl: newItem.imageUrl
+                    });
+                }
+            });
+
+
+
             myCollection.forEach(item => {
                 if (item.instances.length > 0 && typeof item.instances[0] === 'string') {
                     item.instances = item.instances.map(status => ({ uid: getUID(), status: status }));
@@ -3580,7 +3606,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             list.innerHTML = '';
 
             // 插入隱藏任務提示 & 排除放生選項
-            const hiddenCategories = ["餐廳", "咖啡廳", "麵包店", "公園", "路邊", "水邊", "美容院", "超市"];
+            const hiddenCategories = ["餐廳", "咖啡廳", "麵包店", "公園", "路邊", "水邊", "美容院", "超市", "藥局"];
             if (hiddenCategories.includes(category)) {
                 list.innerHTML += `<div style="padding: 12px 14px; background: #fff8e1; color: #f57c00; font-size: 14px; font-weight: bold; border-bottom: 1px solid var(--border-color); line-height: 1.4;">
                     📌 此種類含隱藏圖鑑，系統會暫時關閉"放生建議"功能(直到隱藏圖鑑集滿)，因為重複的皮克敏可用於積分任務，詳情請看：<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block; line-height: 1.1;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddenpic.png')">隱藏圖鑑獲取方法?</a>
@@ -3950,8 +3976,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const item = myCollection.find(p => p.id === id);
             const menu = document.getElementById('custom-status-menu');
 
-            // 【修復 2】判斷是否為有隱藏圖鑑的 8 大種類
-            const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊"];
+            // 【修復】判斷是否為有隱藏圖鑑的 9 大種類 (新增藥局)
+            const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊", "藥局"];
             const hasHidden = hiddenCategories.includes(item.category);
 
             // 客製化選單內容
@@ -3970,7 +3996,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 `;
             } else {
                 menu.innerHTML = `
-                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【禮物】已將皮克敏培育到 4 心，但等積分任務開啟後再領禮物\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">!</div>
+                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【待機】已孵出，但不急著培養\\n【培育】以 ❤️❤️❤️❤️ 為目標的重點餵養名單\\n【禮物】已將皮克敏培育到 4 心，但等積分任務開啟後再領禮物\\n【飾品】已取得專屬飾品，恭喜解鎖圖鑑！')">?</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" onclick="selectStatus('孵盆')">孵盆</div>
                     <div class="menu-item theme-待機" id="menu-target-center" onclick="selectStatus('待機')">待機</div>
@@ -4135,7 +4161,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             let exploreList = [];
 
             const keepOne = document.getElementById('setting-keep-one').checked;
-            const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊"];
+            const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊", "藥局"];
 
             // 輔助函式：安全地推入放生清單
             let discardUids = new Set();
