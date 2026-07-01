@@ -3198,6 +3198,12 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     if (item.category === '迷你樂器') {
                         item.category = '迷你樂器：銅管樂團';
                     }
+                    // 【更新】路邊貼紙名稱校正 (確保舊玩家的資料自動變更為新名稱，不產生重複)
+                    if (item.category === '路邊') {
+                        if (item.id.includes('Sticker_1')) item.subcategory = '綠色貼紙';
+                        if (item.id.includes('Sticker_2')) item.subcategory = '藍色貼紙';
+                        if (item.id.includes('Sticker_3')) item.subcategory = '橘色貼紙';
+                    }
                 });
             } else {
                 // 【修正】移除容易導致誤判的空白轉換，直接使用標準換行分割
