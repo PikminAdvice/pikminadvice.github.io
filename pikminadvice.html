@@ -3318,6 +3318,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 }
             });
 
+            // 【終極修復】確保舊存檔玩家的所有「特殊圖鑑」，都會自動生成對應的「金色大花盆」！
+            Object.values(specialCategories).flat().forEach(cat => {
+                if (!myCollection.some(i => i.category === cat && i.subcategory === '金色大花盆')) {
+                    myCollection.push({
+                        id: `Gold_${cat}`, category: cat, subcategory: '金色大花盆', colorName: 'Gold', colorZh: '金色大花盆',
+                        instances: [], isUnlocked: false, hideWarning: false, imageUrl: seedlingMap['Gold']
+                    });
+                }
+            });
+
 
 
             myCollection.forEach(item => {
