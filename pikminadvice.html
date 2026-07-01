@@ -911,6 +911,37 @@
             transition: background-color 0.3s;
         }
 
+
+        /* 【更新】瀏覽人數深綠色單行卡片 */
+        .card-page-view {
+            background: #477e65;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 內容置中 */
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            color: white;
+            font-size: 16px;
+            font-weight:400;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        
+        .card-page-view:hover {
+            transform: scale(1.02);
+        }
+
+        .card-page-view .text-huge {
+            font-size: 28px;
+            font-weight: 900;
+            color: rgb(255, 255, 125);
+            margin: 0 6px; /* 讓數字與前後文字保持一點間距 */
+        }
+
         .stats-left {
             text-align: left;
         }
@@ -2118,6 +2149,10 @@
                     <circle class="chart-progress" id="chart-progress-total" cx="50" cy="50" r="45"></circle>
                 </svg>
             </div>
+        </div>
+
+        <div class="card-page-view">
+            總共有 <span class="text-huge" id="page-view-count">194,713</span> 位隊長造訪
         </div>
     </div>
 
@@ -4565,6 +4600,48 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             updateChart(generalItems, 'general');
             updateChart(specialItems, 'special');
             updateChart(totalItems, 'total');
+
+            // 【新增】瀏覽人數自動增長邏輯 (每日 500~1000 隨機平滑增長)
+
+            // 改人數
+
+            // 1. 把初始數字改成你要的目標數字
+            const baseViews = 194274; 
+
+            // 2. 把基準日期改成你修改的「當天」
+            const startDate = new Date('2026-07-01T00:00:00+08:00').getTime(); 
+            const now = Date.now();
+
+            let currentViews = baseViews;
+
+            if (now > startDate) {
+                const msPerDay = 86400000;
+                const diffMs = now - startDate;
+                const fullDays = Math.floor(diffMs / msPerDay);
+                const remainderMs = diffMs % msPerDay;
+
+                // 製作「固定種子」的偽隨機產生器
+                // 保證同一天的隨機數字永遠一樣，網頁重整數字絕對不會倒退嚕
+                const seededRandom = (seed) => {
+                    let x = Math.sin(seed) * 10000;
+                    return x - Math.floor(x);
+                };
+
+                // 累加過去每一天的專屬隨機增加量 (500 ~ 1000 之間)
+                for (let i = 0; i < fullDays; i++) {
+                    let dailyIncrease = Math.floor(seededRandom(i + 1) * 501) + 500;
+                    currentViews += dailyIncrease;
+                }
+
+                // 計算今天(未滿一天)的按比例隨機增加量
+                let todayIncrease = Math.floor(seededRandom(fullDays + 1) * 501) + 500;
+                currentViews += Math.floor(todayIncrease * (remainderMs / msPerDay));
+            }
+
+            const viewElement = document.getElementById('page-view-count');
+            if (viewElement) {
+                viewElement.textContent = currentViews.toLocaleString('en-US');
+            }
         }
 
 
