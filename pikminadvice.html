@@ -213,7 +213,7 @@
         }
 
         .history-btn {
-            background: var(--border-color);
+            background: #FFF;
             border: none;
             font-size: 18px;
             padding: 5px 10px;
@@ -229,8 +229,8 @@
         }
 
         .history-btn:not(:disabled):hover {
-            background: #e0e0e0;
-            color: var(--pikmin-green);
+            background: #477e65;
+            color: #FFF;
         }
 
         .hamburger-container {
@@ -919,7 +919,8 @@
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             display: flex;
-            flex-direction: column; /* 改為垂直排列 */
+            flex-direction: column;
+            /* 改為垂直排列 */
             align-items: center;
             justify-content: center;
             width: 100%;
@@ -927,9 +928,10 @@
             box-sizing: border-box;
             color: white;
             transition: transform 0.2s;
-            gap: 10px; /* 兩行之間的間距 */
+            gap: 10px;
+            /* 兩行之間的間距 */
         }
-        
+
         .card-page-view:hover {
             transform: scale(1.02);
         }
@@ -937,7 +939,8 @@
         /* 第一行：總人數 (設定齊底對齊) */
         .view-row {
             display: flex;
-            align-items: baseline; /* 【關鍵】讓文字與大數字的底部完美對齊 */
+            align-items: baseline;
+            /* 【關鍵】讓文字與大數字的底部完美對齊 */
             justify-content: center;
             font-size: 15px;
             font-weight: 500;
@@ -945,7 +948,8 @@
         }
 
         .view-row .text-huge {
-            font-size: 15px; /* 數字稍微加大 */
+            font-size: 15px;
+            /* 數字稍微加大 */
             font-weight: 500;
             color: white;
             margin: 0 6px;
@@ -957,7 +961,8 @@
             color: rgba(255, 255, 255, 0.95);
             font-weight: 500;
             letter-spacing: 0.5px;
-            background: rgba(0, 0, 0, 0.2); /* 微透明黑底，增加層次感 */
+            background: rgba(0, 0, 0, 0.2);
+            /* 微透明黑底，增加層次感 */
             padding: 4px 14px;
             border-radius: 20px;
             display: flex;
@@ -1295,6 +1300,24 @@
             filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
             margin: auto;
             display: block;
+        }
+
+        /* 【新增】未解鎖圖片的深灰色剪影特效 */
+        .locked-silhouette {
+            filter: brightness(0.15) opacity(0.7);
+            transition: filter 0.3s ease;
+        }
+
+        /* 【新增】操作設定的分類標題樣式 */
+        .settings-section-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--pikmin-green);
+            background: rgba(39, 214, 134, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
         .rec-info-wrapper {
@@ -2093,8 +2116,7 @@
                     <div onclick="document.getElementById('coffee-modal').style.display='flex'"
                         style="font-weight: bold;">☕　小額贊助作者</div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
-                    <div onclick="clearAllData()" style="color: #D32F2F; font-weight: bold; text-align:left;">🗑️　清除所有資料
-                    </div>
+                    <div onclick="openSettingsModal()" style="font-weight: bold; text-align:left;">⚙️　操作設定</div>
                 </div>
 
 
@@ -2186,7 +2208,7 @@
                 <span>位隊長瀏覽</span>
             </div>
             <div class="online-row">
-                <span style="font-size: 8px;" >🟢</span><span> 在線：</span>
+                <span style="font-size: 8px;">🟢</span><span> 在線：</span>
                 <span id="online-count">37</span>
             </div>
         </div>
@@ -2226,11 +2248,12 @@
         </div>
 
         <div id="tab-discard" class="tab-content">
-            <div class="discard-settings">
-                <label><input type="checkbox" id="setting-keep-one" checked onchange="renderRecommendations()">
-                    每個圖鑑保留一隻飾品皮克敏不放生</label>
+            <div class="discard-settings" style="justify-content: flex-end; padding: 8px 15px; border-bottom: none;">
+                <button class="history-btn"
+                    style="font-size: 14px; font-weight: bold; padding: 6px 12px; display:flex; align-items:center; gap:5px;"
+                    onclick="openSettingsModal()">⚙️ 放生建議設定</button>
             </div>
-            <ul class="rec-list" id="recommend-discard-list"></ul>
+            <ul class="rec-list" id="recommend-discard-list" style="border-top: 1px solid var(--border-color);"></ul>
         </div>
 
         <div id="tab-explore" class="tab-content">
@@ -2447,7 +2470,7 @@
                 <p><strong>🧠 核心演算法升級：</strong></p>
                 <ul>
                     <li><strong>重構三大建議邏輯</strong>：全面對齊真實機率，能精準處理「花盆+皮克敏」的混合庫存，給予最有效率的孵化與清理建議。</li>
-                    <li><strong>隱藏圖鑑積分保護</strong>：系統會自動辨識包含隱藏圖鑑的種類（如餐廳、路邊等），在隱藏版滿圖鑑前，積極建議孵化以農取積分！</li>
+                    <li><strong>稀有圖鑑積分保護</strong>：系統會自動辨識包含稀有圖鑑的種類（如餐廳、路邊等），在隱藏版滿圖鑑前，積極建議孵化以農取積分！</li>
                     <li><strong>極致防呆的放生順序</strong>：確立「花盆 > 待機 > 孵盆 > 培育」的放生順序，優先清理未投入資源的項目，絕不誤刪已餵食精華的心血。</li>
                     <li><strong>大花盆專屬捷徑</strong>：大花盆登記孵出後，將直接轉為「飾品」狀態並自動打勾解鎖。</li>
                 </ul>
@@ -2620,6 +2643,73 @@
 
 
 
+    <div id="settings-modal" class="modal-overlay" style="z-index:4500;">
+        <div class="custom-modal-box" style="max-width: 420px; padding: 25px;">
+            <button class="close-btn-float" onclick="document.getElementById('settings-modal').style.display='none'">×</button>
+            <h2 style="margin-top:0; color:var(--text-color); text-align:center; font-size: 22px;">⚙️ 操作設定</h2>
+            <div class="welcome-divider" style="margin-bottom: 15px;"></div>
+            
+            <div style="overflow-y:auto; max-height:70vh; text-align:left; font-size:15px; color:#444; padding-right: 5px;">
+                
+                <div class="settings-section-title">『圖鑑顯示』</div>
+                <label id="label-hideLocked" style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer; padding: 5px; border-radius: 6px; transition: 0.3s;">
+                    <input type="checkbox" id="set-hideLocked" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('hideLocked', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">隱藏未解鎖的皮克敏圖片</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">皮克敏圖片會變成深灰色，保留驚喜感。</div>
+                    </div>
+                </label>
+                <div class="welcome-divider" style="margin-bottom: 15px;"></div>
+
+                <div class="settings-section-title">『放生建議設定』</div>
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
+                    <input type="checkbox" id="set-protectHidden" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('protectHidden', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">稀有圖鑑的皮克敏不列入放生</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">好不容易拿到的稀有皮克敏請不要建議我放生。</div>
+                    </div>
+                </label>
+
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
+                    <input type="checkbox" id="set-sortDiscard" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('sortDiscard', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">數量最多的排在最前面</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">讓我看看誰是背包裡的冗員。</div>
+                    </div>
+                </label>
+
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
+                    <input type="checkbox" id="set-protectEvent" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('protectEvent', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">當月活動皮皮不列入放生</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">因當月活動皮皮有打菇需求，因此都先保留。</div>
+                    </div>
+                </label>
+
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer;">
+                    <input type="checkbox" id="set-keepOne" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('keepOne', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">每個圖鑑保留一隻皮克敏不放生</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">不需要解鎖完就全部丟掉吧🥹</div>
+                    </div>
+                </label>
+                <div class="welcome-divider" style="margin-bottom: 15px;"></div>
+                
+                <div class="settings-section-title" style="color:#D32F2F; background: rgba(211, 47, 47, 0.1);">『恢復原廠設定』</div>
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; cursor:pointer;" onclick="handleClearDataClick(event)">
+                    <input type="checkbox" id="set-clearData" style="margin-top:4px; transform:scale(1.2);">
+                    <div>
+                        <div style="font-weight:bold; color:#D32F2F;">清除所有資料</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">想重新登錄時可使用，但務必先備份!!</div>
+                    </div>
+                </label>
+
+                </div>
+        </div>
+    </div>
+
+
+
 
 
     <script>
@@ -2645,6 +2735,18 @@
             "Rock": "https://pikmin.wiki.gallery/images/a/a8/P4_Rock_Pikmin.png",
             "Ice": "https://pikmin.wiki.gallery/images/8/84/P4_Leaf_Ice_Pikmin_Artwork.png"
         };
+
+
+
+        // 【新增】當月活動皮克敏種類名稱 (隊長可在此手動填寫)
+        const currentEventCategories = ["迷你樂器：管弦樂團", "迷你樂器：銅管樂團", "冰淇淋", "珊瑚"];
+
+        // 【修改】操作設定預設值 (升級為 v2 確保舊玩家更新後直接套用新預設)
+        let appSettings = JSON.parse(localStorage.getItem('pikminAppSettings_v2')) || {
+            hideLocked: true, protectHidden: true, sortDiscard: false, protectEvent: true, keepOne: true
+        };
+
+
 
         const categoryIcons = { "餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Restaurant.png", "咖啡廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Cafe.png", "甜點店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Desert.png", "電影院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Theatre.png", "藥局": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Pharmacy.png", "動物園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Zoo.png", "森林": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Forest.png", "水邊": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Water.png", "郵局": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Posts.png", "美術館": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Museum.png", "機場": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/AirPort.png", "車站": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Station.png", "海灘": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Beach.png", "漢堡店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Hamburger.png", "便利店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ConvenienceStore.png", "超市": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Supermarket.png", "麵包店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Bakery.png", "美容院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Salon.png", "服飾店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ClosthingStore.png", "公園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Park.png", "圖書館": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Library.png", "路邊": "https://pikmin.wiki.gallery/images/2/25/Roadside_icon.png", "壽司餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/SushiRestaurant.png", "山丘": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Mountain.png", "體育場": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Stadium.png", "雨天": "https://pikmin.wiki.gallery/images/7/7f/Rainy_Day_icon.png", "下雪": "https://pikmin.wiki.gallery/images/c/ca/Snowy_Day_icon.png", "主題樂園": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/AmusementPark.png", "公車站": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/BusStop.png", "義式餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/ItalianRestaurant.png", "拉麵店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/RamenRestaurant.png", "橋梁": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Bridge.png", "飯店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Hotel.png", "化妝品商店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Cosme.png", "神社和寺廟": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Omikuji.png", "電器行": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Electronics.png", "咖哩餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Curry.png", "五金行": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/HardwareStore.png", "大學&學院": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/University.png", "墨西哥餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/MexicanRestaurant.png", "自助洗衣店&乾洗店": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/Laundry.png", "韓國餐廳": "https://pikmin-map.pixelpirate.fr/assets/icons/picture-book/KoreanRestaurant.png", "文具": "https://pikminadvice.github.io/images/stationeryicon.png" };
         const translationMap = {
@@ -3332,7 +3434,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-// 【遊戲更新：2026.06 新增文具，並替換咖啡廳與藥局官方圖】自動補齊與更新
+            // 【遊戲更新：2026.06 新增文具，並替換咖啡廳與藥局官方圖】自動補齊與更新
             const updateImages = {
                 "Ice_咖啡廳_Coffee_Cup": "https://www.pikminwiki.com/images/3/30/Decor_Ice_Coffee_Cup.png?e2e08",
                 "Red_藥局_Toothbrush_%28Rare%29": "https://www.pikminwiki.com/images/3/32/Decor_Red_Toothbrush_%28Rare%29.png?3eea9",
@@ -3592,6 +3694,50 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             }
         }
 
+        function openSettingsModal() {
+            document.getElementById('set-hideLocked').checked = appSettings.hideLocked;
+            document.getElementById('set-protectHidden').checked = appSettings.protectHidden;
+            document.getElementById('set-sortDiscard').checked = appSettings.sortDiscard;
+            document.getElementById('set-protectEvent').checked = appSettings.protectEvent;
+            document.getElementById('set-keepOne').checked = appSettings.keepOne;
+            document.getElementById('settings-modal').style.display = 'flex';
+            document.getElementById('hamburger-menu').style.display = 'none';
+        }
+
+        // 【新增】點擊灰色圖片時，引導至設定面板解鎖
+        function promptUnlockSetting(e) {
+            if(e) e.stopPropagation();
+            openSettingsModal(); // 打開設定面板
+            
+            const targetLabel = document.getElementById('label-hideLocked');
+            if (targetLabel) {
+                // 平滑滾動到該選項
+                targetLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 使用現有的綠色呼吸光暈特效提醒玩家
+                targetLabel.classList.add('highlight-breathe');
+                // 特效播放完畢後自動移除
+                setTimeout(() => targetLabel.classList.remove('highlight-breathe'), 1600);
+            }
+        }
+
+        // 【更新】即時生效的設定切換邏輯 (存入 v2)
+        function toggleSetting(settingKey, isChecked) {
+            appSettings[settingKey] = isChecked;
+            localStorage.setItem('pikminAppSettings_v2', JSON.stringify(appSettings));
+            
+            // 立即重新計算演算法與渲染畫面，背景即時生效
+            updateUI(); 
+        }
+
+        function handleClearDataClick(event) {
+            // 阻擋原生勾選事件，讓它看起來是勾選框，但行為像按鈕
+            event.preventDefault(); 
+            // 每次點擊都強制讓勾選框保持空狀態
+            document.getElementById('set-clearData').checked = false; 
+            // 執行原有的清除資料警告視窗
+            clearAllData(); 
+        }
+
 
 
         // --- 動態替換圖片邏輯 ---
@@ -3740,7 +3886,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const hiddenCategories = ["餐廳", "咖啡廳", "麵包店", "公園", "路邊", "水邊", "美容院", "超市", "藥局"];
             if (hiddenCategories.includes(category)) {
                 list.innerHTML += `<div style="padding: 12px 14px; background: #fff8e1; color: #f57c00; font-size: 14px; font-weight: bold; border-bottom: 1px solid var(--border-color); line-height: 1.4;">
-                    📌 此種類含隱藏圖鑑，系統會暫時關閉"放生建議"功能(直到隱藏圖鑑集滿)，因為重複的皮克敏可用於積分任務，詳情請看：<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block; line-height: 1.1;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddenpic.png')">隱藏圖鑑獲取方法?</a>
+                    📌 此種類含稀有圖鑑，系統會暫時關閉"放生建議"功能(直到稀有圖鑑集滿)，因為重複的皮克敏可用於積分任務，詳情請看：<a style="color: #007de3; cursor: pointer; text-decoration: underline; margin-top: 5px; display: inline-block; line-height: 1.1;" onclick="openLightbox('https://pikminadvice.github.io/images/hiddenpic.png')">稀有圖鑑獲取方法?</a>
                 </div>`;
             }
             list.innerHTML += `<div style="padding: 12px 15px; background: var(--card-bg); font-size: 15px; font-weight: bold; border-bottom: 2px solid var(--pikmin-green); display: flex; align-items: center; gap: 8px;">
@@ -3800,7 +3946,14 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     } else if (item.subcategory === '大花盆') {
                         imgSrcHtml = `<img src="${seedlingMap['Huge']}" onclick="openLightbox('${seedlingMap['Huge']}')">`;
                     } else {
-                        imgSrcHtml = `<img src="${item.imageUrl}" onclick="openLightbox('${item.imageUrl}')">`;
+                        let lockedCls = (appSettings.hideLocked && !item.isUnlocked) ? 'locked-silhouette' : '';
+                        if (lockedCls) {
+                            // 若是鎖定灰色狀態，點擊後引導至設定面板
+                            imgSrcHtml = `<img src="${item.imageUrl}" class="${lockedCls}" onclick="promptUnlockSetting(event)">`;
+                        } else {
+                            // 若是一般彩色狀態，點擊正常放大預覽
+                            imgSrcHtml = `<img src="${item.imageUrl}" class="${lockedCls}" onclick="openLightbox('${item.imageUrl}')">`;
+                        }
                     }
 
                     img.innerHTML = `${imgSrcHtml}${badge}`;
@@ -4107,7 +4260,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const item = myCollection.find(p => p.id === id);
             const menu = document.getElementById('custom-status-menu');
 
-            // 【修復】判斷是否為有隱藏圖鑑的 9 大種類 (新增藥局)
+            // 【修復】判斷是否為有稀有圖鑑的 9 大種類 (新增藥局)
             const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊", "藥局"];
             const hasHidden = hiddenCategories.includes(item.category);
 
@@ -4291,7 +4444,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             let discardList = [];
             let exploreList = [];
 
-            const keepOne = document.getElementById('setting-keep-one').checked;
+            const keepOne = appSettings.keepOne;
             const hiddenCategories = ["餐廳", "咖啡廳", "水邊", "超市", "美容院", "麵包店", "公園", "路邊", "藥局"];
 
             // 輔助函式：安全地推入放生清單
@@ -4412,7 +4565,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
                     // --- 孵化與丟棄建議 ---
                     if (!hasHidden) {
-                        // 無隱藏圖鑑時，各子分類完全獨立判斷
+                        // 無稀有圖鑑時，各子分類完全獨立判斷
                         items.forEach(item => {
                             let itemInstances = [];
                             item.instances.forEach(ins => { if (!ins.hideRec) itemInstances.push({ item, ins }); });
@@ -4452,9 +4605,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                             }
                         });
                     } else {
-                        // 有隱藏圖鑑時，同一顏色視為共享池
+                        // 有稀有圖鑑時，同一顏色視為共享池
                         if (isNormalUnlocked) {
-                            // 【修復 2】只有「整個分類」的隱藏圖鑑都滿了，才能放生
+                            // 【修復 2】只有「整個分類」的稀有圖鑑都滿了，才能放生
                             if (isCategoryHiddenUnlocked) {
                                 instances.filter(i => i.ins.status !== '飾品').forEach(i => pushDiscard(i.item, i.ins, false));
                             } else {
@@ -4495,6 +4648,21 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 return a.score - b.score;
             }).slice(0, 30);
 
+            // 【新增】套用操作設定的放生過濾與排序
+            if (appSettings.protectHidden) {
+                // 【修正】只保護「稀有/隱藏」的皮克敏本身，該種類的「一般」皮克敏依然照常放生清空間
+                discardList = discardList.filter(d => !d.item.subcategory.includes('稀有') && !d.item.subcategory.includes('隱藏'));
+            }
+            if (appSettings.protectEvent) {
+                discardList = discardList.filter(d => !currentEventCategories.includes(d.item.category));
+            }
+            if (appSettings.sortDiscard) {
+                discardList.forEach(d => {
+                    d.subcatCount = myCollection.filter(i => i.category === d.item.category && i.subcategory === d.item.subcategory).reduce((acc, curr) => acc + curr.instances.length, 0);
+                });
+                discardList.sort((a, b) => b.subcatCount - a.subcatCount);
+            }
+
             discardList = discardList.slice(0, 30);
             exploreList = exploreList.sort((a, b) => a.left - b.left).slice(0, 30);
 
@@ -4518,7 +4686,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         <div class="rec-info-wrapper" onclick="viewItemInModal('${obj.item.category}', '${obj.item.id}', '${obj.target.uid}')">
                             <div class="rec-info-top">
                                 <span class="rec-title">${obj.item.category} / ${obj.item.colorZh}</span>
-                                <div class="info-icon question" onclick="alert('${obj.item.isUnlocked ? '雖然該圖鑑已經解鎖，但為了隱藏圖鑑的積分任務，因此建議繼續孵盆。' : '尚未解鎖此一般圖鑑，且您目前持有該色花盆，建議優先孵化！'}'); event.stopPropagation();">?</div>
+                                <div class="info-icon question" onclick="alert('${obj.item.isUnlocked ? '雖然該圖鑑已經解鎖，但為了稀有圖鑑的積分任務，因此建議繼續孵盆。' : '尚未解鎖此一般圖鑑，且您目前持有該色花盆，建議優先孵化！'}'); event.stopPropagation();">?</div>
                             </div>
                         </div>
                         <div class="rec-actions">
@@ -4645,8 +4813,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
             // 瀏覽人數
-            const baseViews = 194274; 
-            const startDate = new Date('2026-07-01T00:00:00+08:00').getTime(); 
+            const baseViews = 194274;
+            const startDate = new Date('2026-07-01T00:00:00+08:00').getTime();
             const now = Date.now();
 
             let currentViews = baseViews;
@@ -4672,7 +4840,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             }
 
             const timeWindow = Math.floor(now / (10 * 60 * 1000));
-            
+
             const onlineRandom = seededRandom(timeWindow + 9999);
             const onlineCount = Math.floor(onlineRandom * (150 - 20 + 1)) + 20;
 
