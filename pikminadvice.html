@@ -912,35 +912,63 @@
         }
 
 
-        /* 【更新】瀏覽人數深綠色單行卡片 */
+        /* 【更新】瀏覽人數深綠色卡片 (雙行版) */
         .card-page-view {
             background: #477e65;
             padding: 16px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             display: flex;
+            flex-direction: column; /* 改為垂直排列 */
             align-items: center;
-            justify-content: center; /* 內容置中 */
+            justify-content: center;
             width: 100%;
             max-width: 400px;
             box-sizing: border-box;
             color: white;
-            font-size: 16px;
-            font-weight:400;
-            letter-spacing: 1px;
             transition: transform 0.2s;
+            gap: 10px; /* 兩行之間的間距 */
         }
         
         .card-page-view:hover {
             transform: scale(1.02);
         }
 
-        .card-page-view .text-huge {
-            font-size: 28px;
-            font-weight: 900;
-            color: rgb(255, 255, 125);
-            margin: 0 6px; /* 讓數字與前後文字保持一點間距 */
+        /* 第一行：總人數 (設定齊底對齊) */
+        .view-row {
+            display: flex;
+            align-items: baseline; /* 【關鍵】讓文字與大數字的底部完美對齊 */
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
+
+        .view-row .text-huge {
+            font-size: 15px; /* 數字稍微加大 */
+            font-weight: 500;
+            color: white;
+            margin: 0 6px;
+        }
+
+        /* 第二行：在線人數 (標籤風格) */
+        .online-row {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(0, 0, 0, 0.2); /* 微透明黑底，增加層次感 */
+            padding: 4px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+
+
+
+
 
         .stats-left {
             text-align: left;
@@ -2152,7 +2180,15 @@
         </div>
 
         <div class="card-page-view">
-            總共有 <span class="text-huge" id="page-view-count">194,713</span> 位隊長造訪
+            <div class="view-row">
+                <span>目前有</span>
+                <span class="text-huge" id="page-view-count">194,713</span>
+                <span>位隊長瀏覽</span>
+            </div>
+            <div class="online-row">
+                <span>🟢 在線：</span>
+                <span id="online-count">37</span>
+            </div>
         </div>
     </div>
 
@@ -4601,14 +4637,15 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             updateChart(specialItems, 'special');
             updateChart(totalItems, 'total');
 
-            // 【新增】瀏覽人數自動增長邏輯 (每日 500~1000 隨機平滑增長)
 
-            // 改人數
+            const seededRandom = (seed) => {
+                let x = Math.sin(seed) * 10000;
+                return x - Math.floor(x);
+            };
 
-            // 1. 把初始數字改成你要的目標數字
+
+            // 瀏覽人數
             const baseViews = 194274; 
-
-            // 2. 把基準日期改成你修改的「當天」
             const startDate = new Date('2026-07-01T00:00:00+08:00').getTime(); 
             const now = Date.now();
 
@@ -4620,20 +4657,11 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 const fullDays = Math.floor(diffMs / msPerDay);
                 const remainderMs = diffMs % msPerDay;
 
-                // 製作「固定種子」的偽隨機產生器
-                // 保證同一天的隨機數字永遠一樣，網頁重整數字絕對不會倒退嚕
-                const seededRandom = (seed) => {
-                    let x = Math.sin(seed) * 10000;
-                    return x - Math.floor(x);
-                };
-
-                // 累加過去每一天的專屬隨機增加量 (500 ~ 1000 之間)
                 for (let i = 0; i < fullDays; i++) {
                     let dailyIncrease = Math.floor(seededRandom(i + 1) * 501) + 500;
                     currentViews += dailyIncrease;
                 }
 
-                // 計算今天(未滿一天)的按比例隨機增加量
                 let todayIncrease = Math.floor(seededRandom(fullDays + 1) * 501) + 500;
                 currentViews += Math.floor(todayIncrease * (remainderMs / msPerDay));
             }
@@ -4641,6 +4669,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const viewElement = document.getElementById('page-view-count');
             if (viewElement) {
                 viewElement.textContent = currentViews.toLocaleString('en-US');
+            }
+
+            const timeWindow = Math.floor(now / (10 * 60 * 1000));
+            
+            const onlineRandom = seededRandom(timeWindow + 9999);
+            const onlineCount = Math.floor(onlineRandom * (150 - 20 + 1)) + 20;
+
+            const onlineElement = document.getElementById('online-count');
+            if (onlineElement) {
+                onlineElement.textContent = onlineCount;
             }
         }
 
