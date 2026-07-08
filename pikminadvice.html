@@ -4,6 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+
     <title>皮克敏孵盆管理器</title>
     <link rel="icon" type="image/png" sizes="192x192" href="https://pikminadvice.github.io/images/appicon.png">
     <link rel="apple-touch-icon" href="https://pikminadvice.github.io/images/appicon.png">
@@ -2645,15 +2651,19 @@
 
     <div id="settings-modal" class="modal-overlay" style="z-index:4500;">
         <div class="custom-modal-box" style="max-width: 420px; padding: 25px;">
-            <button class="close-btn-float" onclick="document.getElementById('settings-modal').style.display='none'">×</button>
+            <button class="close-btn-float"
+                onclick="document.getElementById('settings-modal').style.display='none'">×</button>
             <h2 style="margin-top:0; color:var(--text-color); text-align:center; font-size: 22px;">⚙️ 操作設定</h2>
             <div class="welcome-divider" style="margin-bottom: 15px;"></div>
-            
-            <div style="overflow-y:auto; max-height:70vh; text-align:left; font-size:15px; color:#444; padding-right: 5px;">
-                
+
+            <div
+                style="overflow-y:auto; max-height:70vh; text-align:left; font-size:15px; color:#444; padding-right: 5px;">
+
                 <div class="settings-section-title">『圖鑑顯示』</div>
-                <label id="label-hideLocked" style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer; padding: 5px; border-radius: 6px; transition: 0.3s;">
-                    <input type="checkbox" id="set-hideLocked" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('hideLocked', this.checked)">
+                <label id="label-hideLocked"
+                    style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer; padding: 5px; border-radius: 6px; transition: 0.3s;">
+                    <input type="checkbox" id="set-hideLocked" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('hideLocked', this.checked)">
                     <div>
                         <div style="font-weight:bold; color:var(--text-color);">隱藏未解鎖的皮克敏圖片</div>
                         <div style="font-size:13px; color:#777; margin-top:2px;">皮克敏圖片會變成深灰色，保留驚喜感。</div>
@@ -2663,7 +2673,8 @@
 
                 <div class="settings-section-title">『放生建議設定』</div>
                 <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
-                    <input type="checkbox" id="set-protectHidden" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('protectHidden', this.checked)">
+                    <input type="checkbox" id="set-protectHidden" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('protectHidden', this.checked)">
                     <div>
                         <div style="font-weight:bold; color:var(--text-color);">稀有圖鑑的皮克敏不列入放生</div>
                         <div style="font-size:13px; color:#777; margin-top:2px;">好不容易拿到的稀有皮克敏請不要建議我放生。</div>
@@ -2671,7 +2682,8 @@
                 </label>
 
                 <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
-                    <input type="checkbox" id="set-sortDiscard" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('sortDiscard', this.checked)">
+                    <input type="checkbox" id="set-sortDiscard" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('sortDiscard', this.checked)">
                     <div>
                         <div style="font-weight:bold; color:var(--text-color);">數量最多的排在最前面</div>
                         <div style="font-size:13px; color:#777; margin-top:2px;">讓我看看誰是背包裡的冗員。</div>
@@ -2679,7 +2691,8 @@
                 </label>
 
                 <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
-                    <input type="checkbox" id="set-protectEvent" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('protectEvent', this.checked)">
+                    <input type="checkbox" id="set-protectEvent" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('protectEvent', this.checked)">
                     <div>
                         <div style="font-weight:bold; color:var(--text-color);">當月活動皮皮不列入放生</div>
                         <div style="font-size:13px; color:#777; margin-top:2px;">因當月活動皮皮有打菇需求，因此都先保留。</div>
@@ -2687,16 +2700,19 @@
                 </label>
 
                 <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer;">
-                    <input type="checkbox" id="set-keepOne" style="margin-top:4px; transform:scale(1.2);" onchange="toggleSetting('keepOne', this.checked)">
+                    <input type="checkbox" id="set-keepOne" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('keepOne', this.checked)">
                     <div>
                         <div style="font-weight:bold; color:var(--text-color);">每個圖鑑保留一隻皮克敏不放生</div>
                         <div style="font-size:13px; color:#777; margin-top:2px;">不需要解鎖完就全部丟掉吧🥹</div>
                     </div>
                 </label>
                 <div class="welcome-divider" style="margin-bottom: 15px;"></div>
-                
-                <div class="settings-section-title" style="color:#D32F2F; background: rgba(211, 47, 47, 0.1);">『恢復原廠設定』</div>
-                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; cursor:pointer;" onclick="handleClearDataClick(event)">
+
+                <div class="settings-section-title" style="color:#D32F2F; background: rgba(211, 47, 47, 0.1);">『恢復原廠設定』
+                </div>
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; cursor:pointer;"
+                    onclick="handleClearDataClick(event)">
                     <input type="checkbox" id="set-clearData" style="margin-top:4px; transform:scale(1.2);">
                     <div>
                         <div style="font-weight:bold; color:#D32F2F;">清除所有資料</div>
@@ -2704,7 +2720,7 @@
                     </div>
                 </label>
 
-                </div>
+            </div>
         </div>
     </div>
 
@@ -3706,9 +3722,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         // 【新增】點擊灰色圖片時，引導至設定面板解鎖
         function promptUnlockSetting(e) {
-            if(e) e.stopPropagation();
+            if (e) e.stopPropagation();
             openSettingsModal(); // 打開設定面板
-            
+
             const targetLabel = document.getElementById('label-hideLocked');
             if (targetLabel) {
                 // 平滑滾動到該選項
@@ -3724,18 +3740,18 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         function toggleSetting(settingKey, isChecked) {
             appSettings[settingKey] = isChecked;
             localStorage.setItem('pikminAppSettings_v2', JSON.stringify(appSettings));
-            
+
             // 立即重新計算演算法與渲染畫面，背景即時生效
-            updateUI(); 
+            updateUI();
         }
 
         function handleClearDataClick(event) {
             // 阻擋原生勾選事件，讓它看起來是勾選框，但行為像按鈕
-            event.preventDefault(); 
+            event.preventDefault();
             // 每次點擊都強制讓勾選框保持空狀態
-            document.getElementById('set-clearData').checked = false; 
+            document.getElementById('set-clearData').checked = false;
             // 執行原有的清除資料警告視窗
-            clearAllData(); 
+            clearAllData();
         }
 
 
