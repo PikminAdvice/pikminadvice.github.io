@@ -2224,7 +2224,7 @@
 
 
     <div class="footer-info">
-        <span>版本更新：2026.07.01｜by Berice C.</span>
+        <span>更新日期：2026.07.01｜by Berice C.</span>
     </div>
 
     <div class="bottom-panels" id="bottom-panels">
@@ -4672,11 +4672,16 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (appSettings.protectEvent) {
                 discardList = discardList.filter(d => !currentEventCategories.includes(d.item.category));
             }
+            // 【修正】改為以「單一圖鑑 (Instance Count)」判定數量
             if (appSettings.sortDiscard) {
-                discardList.forEach(d => {
-                    d.subcatCount = myCollection.filter(i => i.category === d.item.category && i.subcategory === d.item.subcategory).reduce((acc, curr) => acc + curr.instances.length, 0);
+                discardList.sort((a, b) => {
+                    // 取得各自的實體數量 (instances.length)
+                    const countA = a.target ? a.item.instances.filter(ins => !ins.hideRec).length : 0;
+                    const countB = b.target ? b.item.instances.filter(ins => !ins.hideRec).length : 0;
+                    
+                    // 由多到少排序
+                    return countB - countA;
                 });
-                discardList.sort((a, b) => b.subcatCount - a.subcatCount);
             }
 
             discardList = discardList.slice(0, 30);
