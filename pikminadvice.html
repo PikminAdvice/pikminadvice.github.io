@@ -13,6 +13,22 @@
     <title>皮克敏孵盆管理器</title>
     <link rel="icon" type="image/png" sizes="192x192" href="https://pikminadvice.github.io/images/appicon.png">
     <link rel="apple-touch-icon" href="https://pikminadvice.github.io/images/appicon.png">
+
+    <script>
+        // 【強制更新機制】每次有大更新，請手動更改這個版本號 (例如改為當天日期)
+        const APP_VERSION = "20260709.10";
+
+        const savedVersion = localStorage.getItem('appVersion');
+        if (savedVersion !== APP_VERSION) {
+            // 發現新版本！記錄新版本號，並強制附加參數重新載入網頁
+            localStorage.setItem('appVersion', APP_VERSION);
+            // 避免無限重新整理，先確認網址是否已經帶有新版本號
+            if (!window.location.search.includes(APP_VERSION)) {
+                window.location.replace(window.location.pathname + "?v=" + APP_VERSION);
+            }
+        }
+    </script>
+
     <style>
         /* === 官方色票與全域變數 === */
         html {
@@ -3940,7 +3956,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
                 // 如果在權重表中，就按順序排；不在權重表的，就按原本的稀有字串規則排
                 if (priority[a] && priority[b]) return priority[a] - priority[b];
-                
+
                 let aRare = (a.includes("稀有") || a.includes("隱藏")) ? 1 : 0;
                 let bRare = (b.includes("稀有") || b.includes("隱藏")) ? 1 : 0;
                 return aRare - bRare;
@@ -4706,7 +4722,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     // 取得各自的實體數量 (instances.length)
                     const countA = a.target ? a.item.instances.filter(ins => !ins.hideRec).length : 0;
                     const countB = b.target ? b.item.instances.filter(ins => !ins.hideRec).length : 0;
-                    
+
                     // 由多到少排序
                     return countB - countA;
                 });
