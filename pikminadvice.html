@@ -15,17 +15,42 @@
     <link rel="apple-touch-icon" href="https://pikminadvice.github.io/images/appicon.png">
 
     <script>
-        // 【強制更新機制】每次有大更新，請手動更改這個版本號 (例如改為當天日期)
-        const APP_VERSION = "20260709.10";
+        // ==========================================
+        // 【版本控制】每次有新更新，請修改這個版本號！
+        // ==========================================
+        const CURRENT_APP_VERSION = "260709v07";
 
-        const savedVersion = localStorage.getItem('appVersion');
-        if (savedVersion !== APP_VERSION) {
-            // 發現新版本！記錄新版本號，並強制附加參數重新載入網頁
-            localStorage.setItem('appVersion', APP_VERSION);
-            // 避免無限重新整理，先確認網址是否已經帶有新版本號
-            if (!window.location.search.includes(APP_VERSION)) {
-                window.location.replace(window.location.pathname + "?v=" + APP_VERSION);
+        // 檢查是否需要顯示更新日誌
+        function checkUpdateModal() {
+            const savedVersion = localStorage.getItem('pikminAppVersion');
+            // 如果手機裡存的版本號跟最新版本號不一樣，就顯示對話框
+            if (savedVersion !== CURRENT_APP_VERSION) {
+                document.getElementById('update-log-modal').style.display = 'flex';
             }
+        }
+
+        // 點擊 X 關閉對話框時的處理
+        function closeUpdateModal() {
+            if (document.getElementById('hide-update-modal-check').checked) {
+                // 如果勾選了隱藏，就把這個版本號記錄下來，下次就不會再跳出
+                localStorage.setItem('pikminAppVersion', CURRENT_APP_VERSION);
+            }
+            document.getElementById('update-log-modal').style.display = 'none';
+        }
+
+        // 點擊「立即更新」按鈕時的處理
+        function executeForceUpdate() {
+            // 為了避免無限重新整理迴圈，只要按了更新，就強制當作已閱
+            localStorage.setItem('pikminAppVersion', CURRENT_APP_VERSION);
+            document.getElementById('update-log-modal').style.display = 'none';
+
+            showToast("🚀 正在抓取最新版本...");
+
+            setTimeout(() => {
+                const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                const uniqueTimestamp = new Date().getTime();
+                window.location.href = cleanUrl + "?t=" + uniqueTimestamp; // 強制破除快取重整
+            }, 800);
         }
     </script>
 
@@ -2640,9 +2665,9 @@
                 </p>
                 <p>管理器是由作者閒暇時間，一點一滴搭建起來。為了維持網站順暢，透過網路託管與營運成本的付出，期待能幫助大家：</p>
 
-                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0; letter-spacing: 1px;">　✅ 更直覺培養皮皮</p>
-                <p style="color: #F57C00; font-weight: 500; letter-spacing: 1px;">　✅ 優化背包空間</p>
-                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0; letter-spacing: 1px;">　✅ 更有效率解鎖圖鑑</p>
+                <p style="color: #F57C00; font-weight: 500; margin: 0 0 -5px 0; letter-spacing: 0.5px;">　✅ 更直覺培養皮皮</p>
+                <p style="color: #F57C00; font-weight: 500; letter-spacing: 0.5px;">　✅ 優化背包空間</p>
+                <p style="color: #F57C00; font-weight: 500; margin: -5px 0 0 0; letter-spacing: 0.5px;">　✅ 更有效率解鎖圖鑑</p>
 
                 <p>你們的支持，都是讓管理器持續運轉、不斷更新的最佳動力。期待和大家一起把愛皮皮的熱情延續下去 ❤️</p>
 
@@ -2737,6 +2762,77 @@
                 </label>
 
             </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="update-log-modal" class="modal-overlay" style="z-index:4600;">
+        <div class="custom-modal-box" style="max-width: 400px; padding: 25px;">
+            <button class="close-btn-float" onclick="closeUpdateModal()">×</button>
+            <h2 style="margin-top:0; color:var(--pikmin-green); text-align:center; font-size: 22px;">🆕 更新日誌</h2>
+            <div class="welcome-divider" style="margin-bottom: 15px;"></div>
+
+            <div
+                style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
+
+                <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
+                    2026.07.09 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『車站』</span>稀有圖鑑</li>
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『體育館』</span>稀有圖鑑</li>
+                    <li>更新<span style="color: var(--pikmin-green); font-weight: bold;">『稀有圖鑑獲取方法』</span>圖表</li>
+                </ul>
+
+                <div
+                    style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px; margin-top: 15px;">
+                    🌱 [ 2026.07.01 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『迷你樂器：管弦樂團』</span>特殊圖鑑</li>
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『放生建議設定』</span>共 4 項功能</li>
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『未解鎖圖鑑反灰』</span>功能</li>
+                </ul>
+
+                <div
+                    style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px; margin-top: 15px;">
+                    🌱 [ 2026.06.26 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『文具』</span>種類</li>
+                </ul>
+
+                <div
+                    style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px; margin-top: 15px;">
+                    🌱 [ 2026.06.12 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『藥局』</span>稀有圖鑑</li>
+                </ul>
+
+                <div
+                    style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px; margin-top: 15px;">
+                    🌱 [ 2026.06.01 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『花冠』</span>特殊圖鑑</li>
+                </ul>
+
+            </div>
+
+            <div class="welcome-divider" style="margin: 15px 0;"></div>
+
+            <div style="text-align:center; font-size: 13px; color: #D32F2F; font-weight: bold; margin-bottom: 10px;">
+                ⚠️ 請點擊下方按鈕，以清除舊網頁快取
+            </div>
+
+            <button class="welcome-btn" style="margin: 0 0 15px 0; font-size: 18px; padding: 12px; border-radius: 25px;"
+                onclick="executeForceUpdate()">
+                立即更新
+            </button>
+
+            <label
+                style="display:flex; align-items:center; justify-content:center; gap:5px; cursor:pointer; font-size: 14px; color: #777;">
+                <input type="checkbox" id="hide-update-modal-check">
+                隱藏此視窗直至下次更新
+            </label>
         </div>
     </div>
 
@@ -4919,22 +5015,33 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         // --- 教學對話框邏輯 ---
         function initWelcomeModal() {
-            if (localStorage.getItem('hideWelcome_v23') !== 'true') {
+            if (localStorage.getItem('hideWelcome_v25') !== 'true') {
                 document.getElementById('welcome-modal').style.display = 'flex';
+                goToCarouselSlide(0); // 這裡面會呼叫 startCarouselAutoPlay 啟動輪播
+            } else {
+                // 如果歡迎畫面已經被隱藏，直接檢查是否要跳出更新視窗
+                checkUpdateModal();
             }
         }
+
         function closeWelcomeModal() {
             if (document.getElementById('welcome-checkbox').checked) {
-                localStorage.setItem('hideWelcome_v23', 'true');
+                localStorage.setItem('hideWelcome_v25', 'true');
             }
             document.getElementById('welcome-modal').style.display = 'none';
+            stopCarouselAutoPlay(); // 視窗關閉時，停止背景輪播以節省效能
+
+            // 歡迎畫面關閉後，接著檢查是否要跳出更新視窗
+            checkUpdateModal();
         }
-
-
 
         // --- 歡迎對話框 輪播邏輯 (支援電腦版滑鼠 + 自動輪播) ---
         let currentCarouselIndex = 0;
         let carouselStartX = 0;
+
+
+
+
         let isCarouselDragging = false;
         const totalCarouselSlides = 6;
         let carouselInterval; // 【新增】儲存自動輪播的計時器
@@ -4957,20 +5064,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             clearInterval(carouselInterval);
         }
 
-        function initWelcomeModal() {
-            if (localStorage.getItem('hideWelcome_v25') !== 'true') {
-                document.getElementById('welcome-modal').style.display = 'flex';
-                goToCarouselSlide(0); // 這裡面已經會呼叫 startCarouselAutoPlay 啟動輪播
-            }
-        }
-
-        function closeWelcomeModal() {
-            if (document.getElementById('welcome-checkbox').checked) {
-                localStorage.setItem('hideWelcome_v25', 'true');
-            }
-            document.getElementById('welcome-modal').style.display = 'none';
-            stopCarouselAutoPlay(); // 視窗關閉時，停止背景輪播以節省效能
-        }
 
         function carouselStart(e) {
             isCarouselDragging = true;
