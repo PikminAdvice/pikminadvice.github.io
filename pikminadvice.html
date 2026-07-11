@@ -18,7 +18,7 @@
         // ==========================================
         // 【版本控制】每次有新更新，請修改這個版本號！
         // ==========================================
-        const CURRENT_APP_VERSION = "260709v07";
+        const CURRENT_APP_VERSION = "260711v01";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -2157,13 +2157,13 @@
                     <div onclick="exportData()">💾　匯出資料 <b>(備份)</b></div>
                     <div onclick="importData()">📂　匯入資料 <b>(還原)</b></div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
+                    <div onclick="document.getElementById('update-log-modal').style.display='flex'">📅　更新日誌</div>
                     <div onclick="window.open('mailto:berice927@gmail.com?subject=《皮克敏孵盆建議管理器》意見與問題回報')">🐛　意見與回報</div>
-                    <!-- <div onclick="document.getElementById('changelog-modal').style.display='flex'">📅　更新日誌</div> -->
                     <div onclick="document.getElementById('disclaimer-modal').style.display='flex'">📃　免責聲明</div>
                     <div onclick="document.getElementById('coffee-modal').style.display='flex'"
-                        style="font-weight: bold;">☕　小額贊助作者</div>
+                        style="display: flex; align-items: center; color: #F57C00; font-weight: 900;">☕　小額贊助作者</div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
-                    <div onclick="openSettingsModal()">⚙️　操作設定</div>
+                    <div onclick="openSettingsModal()">⚙️　設定與重置</div>
                 </div>
 
 
@@ -2265,7 +2265,7 @@
 
 
     <div class="footer-info">
-        <span>更新日期：2026.07.08｜by Berice C.</span>
+        <span>Designed and developed by <b>Berice C.</b></span>
     </div>
 
     <div class="bottom-panels" id="bottom-panels">
@@ -2502,47 +2502,7 @@
     </div>
 
 
-    <div id="changelog-modal" class="modal-overlay" style="z-index:4500;">
-        <div class="custom-modal-box" style="max-width: 380px;">
-            <button class="close-btn-float"
-                onclick="document.getElementById('changelog-modal').style.display='none'">×</button>
-            <h2 style="margin-top:0; color:var(--pikmin-green); text-align:center;">📜 更新日誌</h2>
-            <div style="overflow-y:auto; text-align:left; font-size:14px; line-height:1.6;">
 
-
-                <p style="color:var(--pikmin-green); font-weight:bold; font-size:16px; margin-bottom:5px;">v0.24 演算法大改版
-                </p>
-                <p style="margin-top:0; color:#555;">本次更新帶來更聰明、更懂玩家的建議邏輯，並強化了資料保護機制！</p>
-
-                <p><strong>🧠 核心演算法升級：</strong></p>
-                <ul>
-                    <li><strong>重構三大建議邏輯</strong>：全面對齊真實機率，能精準處理「花盆+皮克敏」的混合庫存，給予最有效率的孵化與清理建議。</li>
-                    <li><strong>稀有圖鑑積分保護</strong>：系統會自動辨識包含稀有圖鑑的種類（如餐廳、路邊等），在隱藏版滿圖鑑前，積極建議孵化以農取積分！</li>
-                    <li><strong>極致防呆的放生順序</strong>：確立「花盆 > 待機 > 孵盆 > 培育」的放生順序，優先清理未投入資源的項目，絕不誤刪已餵食精華的心血。</li>
-                    <li><strong>大花盆專屬捷徑</strong>：大花盆登記孵出後，將直接轉為「飾品」狀態並自動打勾解鎖。</li>
-                </ul>
-
-                <p><strong>✨ 介面與體驗優化：</strong></p>
-                <ul>
-                    <li><strong>自動備份跑馬燈</strong>：若超過 7 天未匯出資料，畫面上方將滑出溫馨提醒。</li>
-                    <li><strong>直覺化顏色排序</strong>：全站顏色排序更新為更符合遊戲直覺的「紅、黃、藍、紫、白、粉、黑、冰」。</li>
-                    <li><strong>防滾動鎖定</strong>：修復了開啟彈出視窗時，底層背景會跟著誤滑的惱人問題。</li>
-                    <li><strong>修復探索建議</strong>：修正了圖鑑全空時，探索清單會錯誤洗版的問題。</li>
-                </ul>
-
-
-                <p><strong>v0.23 版本更新內容：</strong></p>
-                <ul>
-                    <li>全新改版流暢左滑刪除機制（免對話框）。</li>
-                    <li>新增大分類功能，支援本類別排除放生。</li>
-                    <li>新增大花盆專屬圖鑑分類與孵出設定。</li>
-                    <li>調整排版，標題不與操作按鈕重疊。</li>
-                </ul>
-
-
-            </div>
-        </div>
-    </div>
 
     <div id="disclaimer-modal" class="modal-overlay" style="z-index:5500;">
         <div class="custom-modal-box" style="max-width: 450px; padding: 25px;">
@@ -2694,7 +2654,7 @@
         <div class="custom-modal-box" style="max-width: 420px; padding: 25px;">
             <button class="close-btn-float"
                 onclick="document.getElementById('settings-modal').style.display='none'">×</button>
-            <h2 style="margin-top:0; color:var(--text-color); text-align:center; font-size: 22px;">⚙️ 操作設定</h2>
+            <h2 style="margin-top:0; color:var(--text-color); text-align:center; font-size: 22px;">⚙️ 設定與重置</h2>
             <div class="welcome-divider" style="margin-bottom: 15px;"></div>
 
             <div
@@ -2771,11 +2731,17 @@
     <div id="update-log-modal" class="modal-overlay" style="z-index:4600;">
         <div class="custom-modal-box" style="max-width: 400px; padding: 25px;">
             <button class="close-btn-float" onclick="closeUpdateModal()">×</button>
-            <h2 style="margin-top:0; color:var(--pikmin-green); text-align:center; font-size: 22px;">🆕 更新日誌</h2>
+            <h2 style="margin-top:0; color:var(--pikmin-green); text-align:center; font-size: 22px;">📅 更新日誌</h2>
             <div class="welcome-divider" style="margin-bottom: 15px;"></div>
 
             <div
                 style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
+
+                <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
+                    2026.07.10 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>於『麵包』種類新增<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span>一般圖鑑</li>
+                </ul>
 
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
                     2026.07.09 ]</div>
@@ -3595,6 +3561,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 { id: "Purple_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Purple", colorZh: "紫色", imageUrl: "https://www.pikminwiki.com/images/a/af/Decor_Purple_Toothbrush_%28Rare%29.png?317a4" },
                 { id: "Rock_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Rock", colorZh: "岩石", imageUrl: "https://www.pikminwiki.com/images/2/21/Decor_Rock_Toothbrush_%28Rare%29.png?c7a51" },
                 { id: "Winged_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/7/77/Decor_Winged_Toothbrush_%28Rare%29.png?c2888" },
+
                 // 文具
                 { id: "Red_文具_Stationery", category: "文具", subcategory: "文具", colorName: "Red", colorZh: "紅色", imageUrl: "https://www.pikminwiki.com/images/b/b7/Decor_Red_Stationery.png?0e51e" },
                 { id: "Yellow_文具_Stationery", category: "文具", subcategory: "文具", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://www.pikminwiki.com/images/e/ea/Decor_Yellow_Stationery.png?1b9a7" },
@@ -3604,6 +3571,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 { id: "Rock_文具_Stationery", category: "文具", subcategory: "文具", colorName: "Rock", colorZh: "岩石", imageUrl: "https://www.pikminwiki.com/images/d/d7/Decor_Rock_Stationery.png?3890d" },
                 { id: "Winged_文具_Stationery", category: "文具", subcategory: "文具", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/7/73/Decor_Winged_Stationery.png?d8fe8" },
                 { id: "Ice_文具_Stationery", category: "文具", subcategory: "文具", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://www.pikminwiki.com/images/0/0d/Decor_Ice_Stationery.png?7c7df" },
+
                 // 全新：迷你樂器：管弦樂團
                 { id: "Red_迷你樂器：管弦樂團_Orchestra", category: "迷你樂器：管弦樂團", subcategory: "迷你樂器：管弦樂團", colorName: "Red", colorZh: "紅色", imageUrl: "https://www.pikminwiki.com/images/9/9f/Decor_Red_Tiny_Instrument_Orchestra.png?=260709" },
                 { id: "Yellow_迷你樂器：管弦樂團_Orchestra", category: "迷你樂器：管弦樂團", subcategory: "迷你樂器：管弦樂團", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://www.pikminwiki.com/images/8/8f/Decor_Yellow_Tiny_Instrument_Orchestra.png?=260709" },
@@ -3613,21 +3581,25 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 { id: "Rock_迷你樂器：管弦樂團_Orchestra", category: "迷你樂器：管弦樂團", subcategory: "迷你樂器：管弦樂團", colorName: "Rock", colorZh: "岩石", imageUrl: "https://www.pikminwiki.com/images/2/20/Decor_Rock_Tiny_Instrument_Orchestra.png?=260709" },
                 { id: "Winged_迷你樂器：管弦樂團_Orchestra", category: "迷你樂器：管弦樂團", subcategory: "迷你樂器：管弦樂團", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/1/13/Decor_Winged_Tiny_Instrument_Orchestra.png?=260709" },
                 { id: "Ice_迷你樂器：管弦樂團_Orchestra", category: "迷你樂器：管弦樂團", subcategory: "迷你樂器：管弦樂團", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://www.pikminwiki.com/images/c/cf/Decor_Ice_Tiny_Instrument_Orchestra.png?=260709" },
+
                 // 全新：體育場與車站的稀有圖鑑 (使用 Wiki 的正式圖片)
-                { id: "Red_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Yellow_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Blue_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Blue", colorZh: "藍色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "White_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "White", colorZh: "白色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Purple_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Purple", colorZh: "紫色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Rock_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Rock", colorZh: "岩石", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Winged_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Red_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Yellow_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Blue_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Blue", colorZh: "藍色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "White_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "White", colorZh: "白色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Purple_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Purple", colorZh: "紫色", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Rock_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Rock", colorZh: "岩石", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" },
-                { id: "Winged_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://pikminadvice.github.io/images/graypic2.png" }
+                { id: "Red_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Red", colorZh: "紅色", imageUrl: "https://www.pikminwiki.com/images/0/0d/Decor_Red_Ball_Keychain_%28Rare%29.png?6c576" },
+                { id: "Yellow_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://www.pikminwiki.com/images/f/f9/Decor_Yellow_Ball_Keychain_%28Rare%29.png?ca896" },
+                { id: "Blue_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Blue", colorZh: "藍色", imageUrl: "https://www.pikminwiki.com/images/8/89/Decor_Blue_Ball_Keychain_%28Rare%29.png?19a6c" },
+                { id: "White_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "White", colorZh: "白色", imageUrl: "https://www.pikminwiki.com/images/6/61/Decor_White_Ball_Keychain_%28Rare%29.png?a9f0e" },
+                { id: "Purple_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Purple", colorZh: "紫色", imageUrl: "https://www.pikminwiki.com/images/f/fa/Decor_Purple_Ball_Keychain_%28Rare%29.png?20c16" },
+                { id: "Rock_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Rock", colorZh: "岩石", imageUrl: "https://www.pikminwiki.com/images/b/b1/Decor_Rock_Ball_Keychain_%28Rare%29.png?c85e1" },
+                { id: "Winged_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/f/f4/Decor_Winged_Ball_Keychain_%28Rare%29.png?e1d19" },
+                { id: "Red_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikmin.wiki.gallery/images/8/83/Decor_Red_Ticket_%28Rare%29.png" },
+                { id: "Yellow_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikmin.wiki.gallery/images/4/4b/Decor_Yellow_Ticket_%28Rare%29.png" },
+                { id: "Blue_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Blue", colorZh: "藍色", imageUrl: "https://www.pikminwiki.com/images/e/e2/Decor_Blue_Ticket_%28Rare%29.png?fec68" },
+                { id: "White_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "White", colorZh: "白色", imageUrl: "https://www.pikminwiki.com/images/3/33/Decor_White_Ticket_%28Rare%29.png?f8838" },
+                { id: "Purple_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Purple", colorZh: "紫色", imageUrl: "https://www.pikminwiki.com/images/9/96/Decor_Purple_Ticket_%28Rare%29.png?79340" },
+                { id: "Rock_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Rock", colorZh: "岩石", imageUrl: "https://www.pikminwiki.com/images/d/d4/Decor_Rock_Ticket_%28Rare%29.png?dd9ea" },
+                { id: "Winged_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/9/99/Decor_Winged_Ticket_%28Rare%29.png?39f4a" },
+
+                // 【新增】2026.07 麵包店 一般圖鑑 (冰皮克敏)
+                { id: "Ice_麵包店_Baguette", category: "麵包店", subcategory: "法國麵包", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikmin.wiki.gallery/images/d/d2/Decor_Ice_Baguette.png" }
             ];
 
             newUpdateItems.forEach(newItem => {
