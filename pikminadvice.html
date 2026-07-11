@@ -16,8 +16,16 @@
 
     <script>
         // ==========================================
-        // 【版本控制】每次有新更新，請修改這個版本號！
+        // 🛠️ 開發者專屬備忘錄：皮克敏更新標準作業流程 (SOP)
+        // 每次官方推出新皮克敏或新類別時，請務必檢核以下 6 個項目：
+        // 1. 【更新日誌】：在 HTML 的 update-log-modal 內新增本次更新內容。
+        // 2. 【版本號更新】：修改下方 CURRENT_APP_VERSION 的日期/版號，以觸發玩家強制更新。
+        // 3. 【當月活動】：若有當月活動，修改 currentEventCategories 陣列內的種類名稱。
+        // 4. 【熱更新資料】：在 initApp() 的 newUpdateItems 陣列中新增皮克敏圖鑑資料。
+        // 5. 【翻譯字典】：若有全新飾品或類別名稱，加入 translationMap 中英文對照。
+        // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
+
         const CURRENT_APP_VERSION = "260711v01";
 
         // 檢查是否需要顯示更新日誌
@@ -2160,7 +2168,7 @@
                     <div onclick="document.getElementById('update-log-modal').style.display='flex'">📅　更新日誌</div>
                     <div onclick="window.open('mailto:berice927@gmail.com?subject=《皮克敏孵盆建議管理器》意見與問題回報')">🐛　意見與回報</div>
                     <div onclick="document.getElementById('disclaimer-modal').style.display='flex'">📃　免責聲明</div>
-                    <div onclick="document.getElementById('coffee-modal').style.display='flex'"
+                    <div onclick="window.open('https://portaly.cc/pikminadvice/support', '_blank'); document.getElementById('hamburger-menu').style.display='none';"
                         style="display: flex; align-items: center; color: #F57C00; font-weight: 900;">☕　小額贊助作者</div>
                     <hr style="border:0; border-top:1px solid var(--border-color); margin:2px 0;">
                     <div onclick="openSettingsModal()">⚙️　設定與重置</div>
