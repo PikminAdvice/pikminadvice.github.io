@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260711v01";
+        const CURRENT_APP_VERSION = "260711v02";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -1692,6 +1692,8 @@
 
         .img-container {
             width: 70px;
+            /* 【新增】告訴系統：這個區塊絕對不准被擠壓縮小 */
+            flex-shrink: 0; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -2119,6 +2121,43 @@
             margin-right: 25px;
             pointer-events: none;
         }
+
+        /* 放大鏡按鈕樣式 */
+        .search-icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        /* 返回頂部按鈕 */
+        .back-to-top {
+            position: fixed;
+            /* 【修改】距離底部 = 面板高度 (var(--panel-height)) + 20px 安全間距 */
+            bottom: calc(var(--panel-height) + 20px);
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            /* 【修改】改為半透明黑色，既明顯又不會完全遮死圖鑑 */
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transition: opacity 0.3s;
+        }
+
+        /* 搜尋結果列表 */
+        .search-results {
+            padding: 0 10px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -2188,12 +2227,35 @@
         <div class="backup-close" onclick="dismissBackupWarning()">✕ 關閉提醒</div>
     </div>
 
-    <div class="main-tabs-wrapper">
-        <div class="main-tabs">
+    <!-- 【修改】搜尋列容器 -->
+    <div class="main-tabs-wrapper" id="main-tabs-wrapper">
+        <!-- 模式 A：一般顯示 -->
+        <div class="main-tabs" id="tabs-mode">
             <button class="main-tab-btn active" onclick="switchMainTab(0)">一般圖鑑</button>
             <button class="main-tab-btn" onclick="switchMainTab(1)">特殊圖鑑</button>
+            <!-- 【調整】加入你的專屬放大鏡圖示，並加上淺灰色濾鏡 -->
+            <div class="search-icon-btn" onclick="toggleSearchMode(true)">
+                <img src="https://pikminadvice.github.io/images/search-icon.png"
+                    style="width: 20px; filter: brightness(0) invert(70%);">
+            </div>
+        </div>
+
+        <!-- 模式 B：搜尋輸入框 (預設隱藏) -->
+        <div class="main-tabs" id="search-mode"
+            style="display: none; background: #e0e0e0; border: 2px solid var(--pikmin-green);">
+            <input type="text" id="search-input" placeholder="請輸入關鍵字搜尋..."
+                style="width: 100%; border: none; background: transparent; padding: 5px 15px; font-size: 16px; outline: none;"
+                oninput="performSearch(this.value)">
+            <div class="hamburger-x1" style="color: #777; font-size: 24px; padding-top: 2px;"
+                onclick="toggleSearchMode(false)">✕</div>
         </div>
     </div>
+
+    <!-- 【新增】返回頂部按鈕 -->
+    <div id="back-to-top" class="back-to-top" onclick="scrollToTop()">▲</div>
+
+    <!-- 【新增】搜尋結果容器 -->
+    <div id="search-results" class="search-results"></div>
 
 
 
@@ -2746,9 +2808,10 @@
                 style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
 
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
-                    2026.07.10 ]</div>
+                    2026.07.11 ]</div>
                 <ul style="margin-top: 0; padding-left: 20px; color: #555;">
-                    <li>於『麵包』種類新增<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span>一般圖鑑</li>
+                    <li>於『麵包』種類新增<br>一般圖鑑的<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span></li>
+                    <li>新增全域種類<br><span style="color: var(--pikmin-green); font-weight: bold;"> 搜尋功能 </span>與<span style="color: var(--pikmin-green); font-weight: bold;"> 返回頂部TOP </span>按鈕</li>
                 </ul>
 
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
@@ -3683,6 +3746,155 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             }
         }
 
+
+
+        // ==========================================
+        // 🔍 搜尋與返回頂部功能邏輯
+        // ==========================================
+        let isSearchActive = false; // 記錄目前是否在搜尋狀態
+
+        // 1. 切換搜尋模式
+        function toggleSearchMode(show) {
+            isSearchActive = show;
+            const tabsMode = document.getElementById('tabs-mode');
+            const searchMode = document.getElementById('search-mode');
+            const searchInput = document.getElementById('search-input');
+            const mainContainer = document.getElementById('main-swipe-container');
+            const searchResults = document.getElementById('search-results');
+
+            if (show) {
+                tabsMode.style.display = 'none';
+                searchMode.style.display = 'flex';
+                mainContainer.style.display = 'none'; // 隱藏原本的主畫面圖鑑
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+                setTimeout(() => searchInput.focus(), 100); // 自動對焦輸入框
+            } else {
+                tabsMode.style.display = 'flex';
+                searchMode.style.display = 'none';
+                mainContainer.style.display = 'flex'; // 恢復主畫面
+                searchResults.innerHTML = '';
+            }
+        }
+
+        // 2. 執行即時搜尋
+        function performSearch(keyword) {
+            const resultsContainer = document.getElementById('search-results');
+            keyword = keyword.trim().toLowerCase();
+            
+            if (!keyword) {
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            const specialCatNames = Object.values(specialCategories).flat();
+            
+            // 找出名稱包含關鍵字的分類
+            const allCats = [...new Set(myCollection.map(i => i.category))];
+            const matchedCats = allCats.filter(cat => cat.toLowerCase().includes(keyword));
+
+            // 將結果分為一般與特殊圖鑑
+            const generalMatches = matchedCats.filter(cat => !specialCatNames.includes(cat) && cat !== '大花盆');
+            const specialMatches = matchedCats.filter(cat => specialCatNames.includes(cat));
+
+            let html = '';
+
+            // 渲染：一般圖鑑結果 (圓形 ICON)
+            if (generalMatches.length > 0) {
+                html += '<div style="font-weight:900; color:#477e65; margin:15px 5px 5px; font-size:16px;">一般圖鑑</div>';
+                html += '<div class="category-nav" style="margin-bottom:15px; padding:0;">';
+                
+                generalMatches.forEach(cat => {
+                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆');
+                    const comp = items.filter(i => i.isUnlocked).length;
+                    const hasWarning = items.some(i => i.instances.some(ins => ins.status === '飾品') && !i.isUnlocked && !i.hideWarning);
+                    
+                    let innerHtml = '';
+                    if (categoryIcons[cat]) {
+                        let cls = categoryIcons[cat].includes('_icon.png') ? 'class="img-golden"' : '';
+                        innerHtml += `<img src="${categoryIcons[cat]}" alt="${cat}" ${cls}>`;
+                    }
+                    if (hasWarning) { innerHtml += `<div class="badge-base badge-warning nav-badge">!</div>`; }
+                    else if (comp === items.length && items.length > 0) { innerHtml += `<div class="badge-base badge-check nav-badge">✓</div>`; }
+                    
+                    html += `
+                        <div class="nav-item-wrapper">
+                            <button class="icon-btn" title="${cat}" onclick="openModalCore('${cat}', true)">
+                                ${innerHtml}
+                            </button>
+                            <div class="nav-stats-label">(${comp}/${items.length})</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            // 渲染：特殊圖鑑結果 (長條膠囊)
+            if (specialMatches.length > 0) {
+                html += '<div style="font-weight:900; color:#477e65; margin:15px 5px 5px; font-size:16px;">特殊圖鑑</div>';
+                html += '<div class="special-grid" style="padding-bottom:10px;">';
+                
+                specialMatches.forEach(cat => {
+                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
+                    const comp = items.filter(i => i.isUnlocked).length;
+                    const total = items.length;
+                    
+                    let badgeHtml = '';
+                    if (comp === total && total > 0) { badgeHtml = `<div class="special-check-badge">✓</div>`; }
+                    
+                    html += `
+                        <div class="special-capsule" onclick="openModalCore('${cat}', true)">
+                            <div class="special-capsule-inner">
+                                <img src="${specialIconUrl}" class="special-icon">
+                                <span class="special-title">${cat}</span>
+                            </div>
+                            <div class="special-stats">(${comp}/${total === 0 ? '?' : total})</div>
+                            ${badgeHtml}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            if (html === '') {
+                html = '<div class="empty-state" style="margin-top:40px;">找不到符合的圖鑑種類 🥀</div>';
+            }
+
+            resultsContainer.innerHTML = html;
+        }
+
+        // 3. 智慧型滾動偵測與返回頂部
+        function attachScrollListener() {
+            const scrollableElement = document.scrollingElement || document.documentElement || document.body;
+            
+            window.addEventListener('scroll', () => {
+                const backToTopBtn = document.getElementById('back-to-top');
+                // 【修改】將滾動觸發距離從 300 大幅縮短至 100
+                if (scrollableElement.scrollTop > 100) {
+                    backToTopBtn.style.display = 'flex';
+                    setTimeout(() => backToTopBtn.style.opacity = '1', 10);
+                } else {
+                    backToTopBtn.style.opacity = '0';
+                    setTimeout(() => backToTopBtn.style.display = 'none', 300);
+                }
+            }, true); 
+        }
+        
+        // 啟動監聽器
+        attachScrollListener();
+
+        // 點擊返回頂部時的動作
+        function scrollToTop() {
+            const scrollableElement = document.scrollingElement || document.documentElement || document.body;
+            // 由於有些手機瀏覽器對 behavior: 'smooth' 支援不佳，這裡提供相容寫法
+            try {
+                scrollableElement.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                scrollableElement.scrollTop = 0; // 舊版瀏覽器的備用方案
+            }
+        }
+
+
         function updateUI(skipModal = false) {
             document.getElementById('btn-undo').disabled = historyIndex <= 0;
             document.getElementById('btn-redo').disabled = historyIndex >= historyStack.length - 1;
@@ -4454,7 +4666,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-        // 點擊事件監聽器 (包含背景點擊關閉對話框)
+        // 點擊事件監聽器 (包含背景點擊關閉對話框與搜尋)
         window.onclick = function (e) {
             // 【修復】如果直接點擊到對話框四周圍暗色的半透明黑底 (modal-overlay)，就將其關閉
             if (e.target.classList.contains('modal-overlay')) {
@@ -4464,6 +4676,11 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (!e.target.closest('#custom-status-menu') && !e.target.closest('.tag') && !e.target.closest('.add-btn')) closeContextMenu();
             if (!e.target.closest('#batch-menu') && !e.target.closest('.hamburger-x1') && !e.target.closest('.hamburger-x2')) document.getElementById('batch-menu').style.display = 'none';
             if (!e.target.closest('#hamburger-container')) document.getElementById('hamburger-menu').style.display = 'none';
+            
+            // 【新增】如果正在搜尋狀態，且點擊的地方不是搜尋列、不是搜尋結果、也不是彈出對話框，就自動關閉搜尋
+            if (isSearchActive && !e.target.closest('#main-tabs-wrapper') && !e.target.closest('#search-results') && !e.target.closest('.modal-overlay')) {
+                toggleSearchMode(false);
+            }
         }
 
         // 【雙重保險】確保手機版與桌機版都能精準判定「點擊黑底外部」即時關閉對話框
