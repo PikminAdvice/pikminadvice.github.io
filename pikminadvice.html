@@ -1597,8 +1597,16 @@
         }
 
         .hamburger-x1 {
-            margin-right: -3px;
-            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 5px;
+            /* 【新增以下屬性來進行微調】 */
+            display: flex;
+            align-items: center;    /* 強制內容垂直居中 */
+            justify-content: center; /* 強制內容水平居中 */
+            height: 100%;           /* 確保高度填滿父容器 */
+            margin-right: 10px;      /* 增加一點右邊距，避免太貼邊 */
+            margin-top: -3px;
         }
 
         .hamburger-x2 {
