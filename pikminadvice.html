@@ -818,9 +818,10 @@
             /* 膠囊之間的距離 */
             overflow: hidden;
             transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
-            padding: 5px 0px;
-            /* 【修改這裡】左右邊距從 5px 改為 8px，讓膠囊更貼近螢幕邊緣 */
-            padding-bottom: 40px;
+            
+            /* 【修復裁切問題】原本為 padding: 5px 0px; 
+               現在將左右增加 8px 的安全空間，寫法為：上 右 下 左 */
+            padding: 5px 8px 40px 8px;
         }
 
         @media (min-width: 700px) {
