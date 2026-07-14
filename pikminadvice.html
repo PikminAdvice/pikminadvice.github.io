@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260714v02";
+        const CURRENT_APP_VERSION = "260714v03";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -713,7 +713,7 @@
             color: #333;
         }
 
-        /* 徽章 */
+        /* 基礎徽章樣式 (一般圖鑑與狀態欄共用) */
         .badge-base {
             position: absolute;
             border-radius: 50%;
@@ -724,9 +724,10 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             border: 2px solid white;
             z-index: 10;
-            /* 降低打勾的層級 */
             cursor: pointer;
             pointer-events: auto;
+            /* 【修正】強制統一字體，確保打勾符號筆畫粗細一致 */
+            font-family: Arial, sans-serif;
         }
 
         .badge-check {
@@ -914,24 +915,26 @@
             z-index: 2;
         }
 
-        /* 2. 讓特殊圖鑑膠囊的綠勾完全套用一般圖鑑的樣式 */
+        /* 特殊圖鑑膠囊的綠勾 */
         .special-check-badge {
             position: absolute;
             top: -5px;
-            right: -2px; /* 保持上次修復裁切的位置 */
+            right: -2px; 
             background-color: var(--pikmin-green);
             color: white;
-            width: 22px;       /* 從 20px 放大為 22px */
-            height: 22px;      /* 從 20px 放大為 22px */
+            width: 22px;       
+            height: 22px;      
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 14px;   /* 字體從 12px 放大為 14px */
+            font-size: 14px;   
             font-weight: bold;
             border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* 統一陰影深度 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
             z-index: 3;
+            /* 【修正】強制統一字體，確保打勾符號筆畫粗細一致 */
+            font-family: Arial, sans-serif;
         }
 
 
