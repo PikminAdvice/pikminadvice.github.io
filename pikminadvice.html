@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260714v01";
+        const CURRENT_APP_VERSION = "260714v02";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -749,12 +749,13 @@
             pointer-events: none;
         }
 
+        /* 1. 統一狀態欄圖片徽章的大小 (對齊一般圖鑑的 22px) */
         .img-badge {
             top: -5px;
             right: 2px;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            width: 22px;       /* 從 20px 放大為 22px */
+            height: 22px;      /* 從 20px 放大為 22px */
+            font-size: 14px;   /* 字體從 12px 放大為 14px */
             transition: 0.2s;
         }
 
@@ -913,22 +914,23 @@
             z-index: 2;
         }
 
+        /* 2. 讓特殊圖鑑膠囊的綠勾完全套用一般圖鑑的樣式 */
         .special-check-badge {
             position: absolute;
             top: -5px;
-            right: -2px;
+            right: -2px; /* 保持上次修復裁切的位置 */
             background-color: var(--pikmin-green);
             color: white;
-            width: 20px;
-            height: 20px;
+            width: 22px;       /* 從 20px 放大為 22px */
+            height: 22px;      /* 從 20px 放大為 22px */
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 12px;
+            font-size: 14px;   /* 字體從 12px 放大為 14px */
             font-weight: bold;
             border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* 統一陰影深度 */
             z-index: 3;
         }
 
