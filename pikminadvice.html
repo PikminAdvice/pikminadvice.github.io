@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260714v03";
+        const CURRENT_APP_VERSION = "260714v04";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -726,8 +726,8 @@
             z-index: 10;
             cursor: pointer;
             pointer-events: auto;
-            /* 【修正】強制統一字體，確保打勾符號筆畫粗細一致 */
-            font-family: Arial, sans-serif;
+            /* 【修正】移除 Arial，改用原生系統字體，呼喚出完美的粗體打勾 */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .badge-check {
@@ -933,8 +933,8 @@
             border: 2px solid white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
             z-index: 3;
-            /* 【修正】強制統一字體，確保打勾符號筆畫粗細一致 */
-            font-family: Arial, sans-serif;
+            /* 【修正】移除 Arial，改用原生系統字體，呼喚出完美的粗體打勾 */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
 
