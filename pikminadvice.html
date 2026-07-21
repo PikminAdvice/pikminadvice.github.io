@@ -2336,7 +2336,7 @@
             <div class="view-row">
                 <span>總共有</span>
                 <span class="text-huge" id="page-view-count">194,713</span>
-                <span>位隊長瀏覽</span>
+                <span>次隊長造訪</span>
             </div>
             <div class="online-row">
                 <span style="font-size: 8px;">🟢</span><span> 在線：</span>
@@ -3951,7 +3951,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
 
 
-        // 匯出資料 (終極修正版：精確動態檔名 + 跑馬燈重置 + 穩定下載)
+       
+
+// 匯出資料 (終極修正版：精確動態檔名 + 跑馬燈重置 + 支援 iOS 穩定下載)
         function exportData() {
             // 1. 準備動態精確檔名
             const now = new Date();
@@ -3965,25 +3967,39 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const timestamp = `${year}.${month}.${day}_${hours}:${minutes}:${seconds}`;
             const fileName = `皮克敏孵盆建議管理器_資料備份_${timestamp}.json`;
 
-            // 2. 準備原始圖鑑資料 (保持原生陣列格式，確保匯入時絕對相容)
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(myCollection));
+            // 2. 準備原始圖鑑資料 (轉換為 JSON 字串)
+            const jsonString = JSON.stringify(myCollection);
+
+            // 【關鍵修復】使用 Blob 物件取代原本的 data URI，這對 iOS 系統更友善
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = window.URL.createObjectURL(blob);
 
             // 3. 建立連結並觸發下載
             const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", fileName);
+            downloadAnchorNode.style.display = 'none';
+            downloadAnchorNode.href = url;
+            downloadAnchorNode.download = fileName;
+            
+            // 必須將按鈕加入畫面中，iOS 才能順利觸發點擊
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
-            downloadAnchorNode.remove();
 
-            // 4. 【修復】重置 7 天備份時間，並立即收起跑馬燈
+            // 4. 【修復】延遲移除以確保 iOS 能夠順利捕捉到下載事件並跳出視窗
+            setTimeout(() => {
+                document.body.removeChild(downloadAnchorNode);
+                window.URL.revokeObjectURL(url); // 釋放記憶體
+            }, 200);
+
+            // 5. 重置 7 天備份時間，並立即收起跑馬燈
             localStorage.setItem('lastBackupTime', Date.now());
             checkBackupWarning();
 
-            // 5. 顯示成功提示
+            // 6. 顯示成功提示
             showToast("已下載資料備份！");
             if (document.getElementById('log-modal').style.display === 'flex') openLogModal();
         }
+
+
 
 
         // --- 跑馬燈備份提示邏輯 ---
