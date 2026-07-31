@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260721v01";
+        const CURRENT_APP_VERSION = "260731v01";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -2822,6 +2822,14 @@
                 style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
 
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
+                    2026.07.31 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>新增<span style="color: var(--pikmin-green); font-weight: bold;">『峇里島雕刻』</span>特殊圖鑑</li>
+                    <li>復刻<span style="color: var(--pikmin-green); font-weight: bold;">『刨冰』</span>與<span style="color: var(--pikmin-green); font-weight: bold;">『冰淇淋：2024年口味』</span>特殊圖鑑</li>
+                    <li>於『刨冰』種類新增<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span></li>
+                </ul>
+
+                <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
                     2026.07.11 ]</div>
                 <ul style="margin-top: 0; padding-left: 20px; color: #555;">
                     <li>於『麵包』種類新增<br>一般圖鑑的<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span></li>
@@ -2918,7 +2926,7 @@
 
 
         // 【新增】當月活動皮克敏種類名稱 (隊長可在此手動填寫)
-        const currentEventCategories = ["迷你樂器：管弦樂團", "迷你樂器：銅管樂團", "冰淇淋", "珊瑚"];
+        const currentEventCategories = ["峇里島雕刻", "刨冰", "冰淇淋"];
 
         // 【修改】操作設定預設值 (升級為 v2 確保舊玩家更新後直接套用新預設)
         let appSettings = JSON.parse(localStorage.getItem('pikminAppSettings_v2')) || {
@@ -2931,12 +2939,12 @@
         const translationMap = {
             "Chef_Hat_%28Rare%29": "稀有廚師帽", "Chef_Hat": "廚師帽", "Coffee_Cup_%28Rare%29": "稀有咖啡杯", "Coffee_Cup": "咖啡杯", "Macaron": "馬卡龍", "Donut": "甜甜圈", "Popcorn_Snack": "爆米花", "Toothbrush": "牙刷", "Dandelion": "蒲公英", "Stag_Beetle": "鍬形蟲", "Acorn": "橡實", "Fishing_Lure_%28Rare%29": "稀有魚餌", "Fishing_Lure": "魚餌", "Stamp": "郵票", "Picture_Frame": "畫框", "Toy_Airplane": "飛機玩具", "Paper_Train": "紙電車模型", "Ticket": "票券", "Ticket_%28Rare%29": "稀有票券", "Gold_Ticket": "金色票券", "Shell": "貝殼", "Burger": "漢堡", "Bottle_Cap": "瓶蓋", "Snack": "零食", "Banana_%28Rare%29": "稀有香蕉", "Mushroom": "蘑菇", "Banana": "香蕉", "Baguette_%28Rare%29": "稀有法國麵包", "Baguette": "法國麵包", "Scissors_%28Rare%29": "稀有剪刀", "Scissors": "剪刀", "Hair_Tie": "髮飾", "Clover_%28Rare%29": "稀有三葉草", "Four-Leaf_Clover_%28Rare%29": "稀有四葉草", "Clover": "三葉草", "Four-Leaf_Clover": "四葉草", "Tiny_Book": "迷你書", "Coin_%28Rare%29": "稀有硬幣", "Sticker_1": "綠色貼紙", "Sticker_2": "藍色貼紙", "Sticker_3": "橘色貼紙", "Coin": "硬幣", "Sushi": "壽司", "Mountain_Pin_Badge": "登山徽章", "Ball_Keychain": "球類鑰匙圈", "Ball_Keychain_%28Rare%29": "稀有球類鑰匙圈", "Leaf_Hat_1": "雨葉帽", "Leaf_Hat_2": "雨葉帽", "Leaf_Hat_3": "雨葉帽", "Snow": "雪", "Theme_Park_Ticket_1": "遊樂園門票1", "Theme_Park_Ticket_2": "遊樂園門票2", "Bus_Papercraft": "公車模型", "Pizza": "披薩", "Pasta": "義大利麵", "Ramen_Keychain": "拉麵鑰匙圈", "Bridge_Pin_Badge": "橋梁徽章", "Hotel_Amenities": "飯店備品", "Makeup": "化妝品", "Fortune_1": "籤(大吉)", "Fortune_2": "籤(吉)", "Fortune_3": "籤(中吉)", "Fortune_4": "籤(小吉)", "Fortune_5": "籤(末吉)", "Battery_1": "電池", "Battery_2": "電池", "Battery_3": "電池", "Battery_4": "電池", "Battery_5": "電池", "Battery_6": "電池", "Fairy_Lights_1": "燈泡", "Fairy_Lights_2": "燈泡", "Curry_Bowl": "咖哩飯", "Tool": "工具", "College_Crest_Patch": "大學徽章", "Taco": "塔可", "Laundry_Item": "洗衣用品", "Kimchi": "泡菜", "Stationery": "文具",
             /* 以下為新增的特殊圖鑑翻譯 */
-            "Flower_Crown": "花冠", "Surfboard_Keychain": "衝浪板鑰匙圈", "Puzzle_2": "2022年夏日回憶", "Puzzle_4": "2023年夏日回憶", "Playing_Card_3": "梅花", "Playing_Card_4": "梅花", "Playing_Card_1": "方塊", "Playing_Card_2": "方塊", "Rosette": "玫瑰花結", "Game_Pak": "遊戲卡匣", "Nintendo_Consoles_1": "Nintendo遊戲機1980-1995", "Cheese": "起司店", "Easter_Egg": "復活節彩蛋", "Bunny_Egg": "兔寶寶彩蛋", "Klompen_Keychain": "荷蘭木鞋鑰匙圈", "Super_Mario_Keychain": "超級瑪利歐鑰匙圈", "Color_Powder": "彩色粉末", "Spring_Sticker": "春季貼紙", "Reverse_Valentine%27s_Day_Sticker": "反向情人節貼紙", "Afternoon_Tea": "下午茶", "2026_Chocolate": "2026巧克力", "Chocolate": "巧克力", "Lunar_New_Year_Ornament_2": "金色", "Lunar_New_Year_Ornament_1": "紅色", "Party_Popper_2025": "派對禮炮2025", "2024_Glasses": "2024年眼鏡", "2023_Glasses": "2023年眼鏡", "Osechi": "日式年菜", "2025_Ornament": "2025年裝飾品", "Photo_Button_Badge": "照片鈕扣徽章", "Ball_Ornament": "裝飾球", "Mitten": "連指手套", "Ice_Cream_1": "經典口味", "Ice_Cream_2": "2024年口味", "Pacifier": "奶嘴", "Golden_Toy_Airplane": "金色飛機玩具", "4th_Anniversary_Snack": "四週年紀念零食", "4th_Anniversary_Flower_Box": "四週年紀念花盒", "3rd_Anniversary_Cupcake": "三週年紀念紙杯蛋糕", "Puzzle_1": "2021年秋季回憶", "Pikmin_4_Toy": "Pikmin4 玩具", "Jack-o%27-Lantern": "南瓜燈", "Halloween_Treat": "萬聖節糖果", "Halloween_Light": "萬聖節燈籠", "Calavera": "骷髏頭", "Mooncake": "月餅", "Mahjong_Tile_1": "牌組1", "Mahjong_Tile_2": "牌組2", "Mahjong_Tile_3": "牌組3", "Mahjong_Tile_4": "牌組4", "Mahjong_Tile_5": "牌組4", "Summer_Sticker": "夏季貼紙", "Shaved_Ice": "刨冰", "Coral": "珊瑚", "Tiny_Instrument": "迷你樂器：銅管樂團", "Rio_Carnival": "里約狂歡節", "Valentine_Sticker": "情人節貼紙", "Flower_Card_1": "第一卷", "Flower_Card_2": "第一卷", "Flower_Card_3": "第一卷", "Flower_Card_4": "第一卷", "Flower_Card_5": "第一卷", "Flower_Card_6": "第一卷", "Flower_Card_7": "第二卷", "Flower_Card_8": "第二卷", "Winter_Sticker": "冬季貼紙", "First_Anniversary_Snack": "一週年紀念零食", "Present_Sticker_%28Gold%29": "禮物貼紙(金色)", "Fall_Sticker": "秋季貼紙", "Puzzle_3": "2024年秋季回憶", "Paint": "繪畫", "Koppaite_Space_Suit": "Koppaite太空衣", "Pikmin_4_Spaceship": "Pikmin4 飛船", "Fingerboard": "手指滑板", "Sneaker_Keychain": "運動鞋鑰匙圈"
+            "Bali_Carving": "峇里島雕刻", "Tiny_Instrument_Orchestra": "迷你樂器：管弦樂團", "Flower_Crown": "花冠", "Surfboard_Keychain": "衝浪板鑰匙圈", "Puzzle_2": "2022年夏日回憶", "Puzzle_4": "2023年夏日回憶", "Playing_Card_3": "梅花", "Playing_Card_4": "梅花", "Playing_Card_1": "方塊", "Playing_Card_2": "方塊", "Rosette": "玫瑰花結", "Game_Pak": "遊戲卡匣", "Nintendo_Consoles_1": "Nintendo遊戲機1980-1995", "Cheese": "起司店", "Easter_Egg": "復活節彩蛋", "Bunny_Egg": "兔寶寶彩蛋", "Klompen_Keychain": "荷蘭木鞋鑰匙圈", "Super_Mario_Keychain": "超級瑪利歐鑰匙圈", "Color_Powder": "彩色粉末", "Spring_Sticker": "春季貼紙", "Reverse_Valentine%27s_Day_Sticker": "反向情人節貼紙", "Afternoon_Tea": "下午茶", "2026_Chocolate": "2026巧克力", "Chocolate": "巧克力", "Lunar_New_Year_Ornament_2": "金色", "Lunar_New_Year_Ornament_1": "紅色", "Party_Popper_2025": "派對禮炮2025", "2024_Glasses": "2024年眼鏡", "2023_Glasses": "2023年眼鏡", "Osechi": "日式年菜", "2025_Ornament": "2025年裝飾品", "Photo_Button_Badge": "照片鈕扣徽章", "Ball_Ornament": "裝飾球", "Mitten": "連指手套", "Ice_Cream_1": "經典口味", "Ice_Cream_2": "2024年口味", "Pacifier": "奶嘴", "Golden_Toy_Airplane": "金色飛機玩具", "4th_Anniversary_Snack": "四週年紀念零食", "4th_Anniversary_Flower_Box": "四週年紀念花盒", "3rd_Anniversary_Cupcake": "三週年紀念紙杯蛋糕", "Puzzle_1": "2021年秋季回憶", "Pikmin_4_Toy": "Pikmin4 玩具", "Jack-o%27-Lantern": "南瓜燈", "Halloween_Treat": "萬聖節糖果", "Halloween_Light": "萬聖節燈籠", "Calavera": "骷髏頭", "Mooncake": "月餅", "Mahjong_Tile_1": "牌組1", "Mahjong_Tile_2": "牌組2", "Mahjong_Tile_3": "牌組3", "Mahjong_Tile_4": "牌組4", "Mahjong_Tile_5": "牌組4", "Summer_Sticker": "夏季貼紙", "Shaved_Ice": "刨冰", "Coral": "珊瑚", "Tiny_Instrument_Brass_Band": "迷你樂器：銅管樂團", "Rio_Carnival": "里約狂歡節", "Valentine_Sticker": "情人節貼紙", "Flower_Card_1": "第一卷", "Flower_Card_2": "第一卷", "Flower_Card_3": "第一卷", "Flower_Card_4": "第一卷", "Flower_Card_5": "第一卷", "Flower_Card_6": "第一卷", "Flower_Card_7": "第二卷", "Flower_Card_8": "第二卷", "Winter_Sticker": "冬季貼紙", "First_Anniversary_Snack": "一週年紀念零食", "Present_Sticker_%28Gold%29": "禮物貼紙(金色)", "Fall_Sticker": "秋季貼紙", "Puzzle_3": "2024年秋季回憶", "Paint": "繪畫", "Koppaite_Space_Suit": "Koppaite太空衣", "Pikmin_4_Spaceship": "Pikmin4 飛船", "Fingerboard": "手指滑板", "Sneaker_Keychain": "運動鞋鑰匙圈"
         };
         // --- 新增：特殊圖鑑的年份分類與名稱 ---
         const specialCategories = {
-            "2026": ["迷你樂器：管弦樂團", "迷你樂器：銅管樂團", "冰淇淋", "珊瑚", "花冠", "衝浪板鑰匙圈", "拼圖：2022年夏日回憶", "拼圖：2023年夏日回憶", "遊戲卡牌", "玫瑰花結", "遊戲卡匣", "Nintendo遊戲機1980-1995", "起司店", "復活節彩蛋", "兔寶寶彩蛋", "荷蘭木鞋鑰匙圈", "超級瑪利歐鑰匙圈", "彩色粉末", "春季貼紙", "反向情人節貼紙", "下午茶", "2026巧克力", "巧克力", "農曆新年飾品", "派對禮炮2025", "2024年眼鏡", "2023年眼鏡", "日式年菜"],
-            "2025": ["2025年裝飾品", "照片鈕扣徽章", "裝飾球", "連指手套", "奶嘴", "金色飛機玩具", "四週年紀念零食", "四週年紀念花盒", "三週年紀念紙杯蛋糕", "拼圖：2021年秋季回憶", "Pikmin4 玩具", "西洋棋", "南瓜燈", "萬聖節糖果", "萬聖節燈籠", "骷髏頭", "月餅", "麻將", "夏季貼紙", "刨冰", "里約狂歡節", "情人節貼紙", "花札"],
+            "2026": ["峇里島雕刻", "刨冰", "冰淇淋", "迷你樂器：管弦樂團", "迷你樂器：銅管樂團", "珊瑚", "花冠", "衝浪板鑰匙圈", "拼圖：2022年夏日回憶", "拼圖：2023年夏日回憶", "遊戲卡牌", "玫瑰花結", "遊戲卡匣", "Nintendo遊戲機1980-1995", "起司店", "復活節彩蛋", "兔寶寶彩蛋", "荷蘭木鞋鑰匙圈", "超級瑪利歐鑰匙圈", "彩色粉末", "春季貼紙", "反向情人節貼紙", "下午茶", "2026巧克力", "巧克力", "農曆新年飾品", "派對禮炮2025", "2024年眼鏡", "2023年眼鏡", "日式年菜"],
+            "2025": ["2025年裝飾品", "照片鈕扣徽章", "裝飾球", "連指手套", "奶嘴", "金色飛機玩具", "四週年紀念零食", "四週年紀念花盒", "三週年紀念紙杯蛋糕", "拼圖：2021年秋季回憶", "Pikmin4 玩具", "西洋棋", "南瓜燈", "萬聖節糖果", "萬聖節燈籠", "骷髏頭", "月餅", "麻將", "夏季貼紙", "里約狂歡節", "情人節貼紙", "花札"],
             "2024": ["冬季貼紙", "一週年紀念零食", "禮物貼紙(金色)", "秋季貼紙", "拼圖：2024年秋季回憶", "繪畫", "Koppaite太空衣", "Pikmin4 飛船"],
             "2023": ["手指滑板", "運動鞋鑰匙圈"]
         };
@@ -3684,7 +3692,20 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 { id: "Winged_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://www.pikminwiki.com/images/9/99/Decor_Winged_Ticket_%28Rare%29.png?39f4a" },
 
                 // 【新增】2026.07 麵包店 一般圖鑑 (冰皮克敏)
-                { id: "Ice_麵包店_Baguette", category: "麵包店", subcategory: "法國麵包", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikmin.wiki.gallery/images/d/d2/Decor_Ice_Baguette.png" }
+                { id: "Ice_麵包店_Baguette", category: "麵包店", subcategory: "法國麵包", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikmin.wiki.gallery/images/d/d2/Decor_Ice_Baguette.png" },
+            
+                // 【新增】2026.07 特殊圖鑑：刨冰 (冰皮克敏)
+                { id: "Ice_刨冰_Shaved_Ice", category: "刨冰", subcategory: "刨冰", colorName: "Ice", colorZh: "冰凍", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                
+                // 【新增】2026.07 特殊圖鑑：峇里島雕刻 (預設 8 色)
+                { id: "Red_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Red", colorZh: "紅色", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Yellow_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Yellow", colorZh: "黃色", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Blue_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Blue", colorZh: "藍色", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "White_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "White", colorZh: "白色", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Purple_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Purple", colorZh: "紫色", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Rock_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Rock", colorZh: "岩石", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Winged_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Winged", colorZh: "羽翅", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
+                { id: "Ice_峇里島雕刻_Bali_Carving", category: "峇里島雕刻", subcategory: "峇里島雕刻", colorName: "Ice", colorZh: "冰凍", imageUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" },
             ];
 
             newUpdateItems.forEach(newItem => {
@@ -4261,8 +4282,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             let subcats = [...new Set(items.map(i => i.subcategory))];
             subcats.sort((a, b) => {
-                // 1. 大花盆永遠排在最前面
+                // 1. 大花盆與金色大花盆永遠排在最前面
                 if (a === '大花盆') return -1; if (b === '大花盆') return 1;
+                if (a === '金色大花盆') return -1; if (b === '金色大花盆') return 1;
 
                 // 2. 自定義排序權重
                 const priority = {
