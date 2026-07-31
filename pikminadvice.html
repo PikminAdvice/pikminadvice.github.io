@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260731v01";
+        const CURRENT_APP_VERSION = "260731v02";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -4291,7 +4291,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     "紙電車": 1,
                     "票券": 2,
                     "稀有票券": 3,
-                    "金色票券": 4
+                    "金色票券": 4,
+                    "2024年口味": 5, // 【新增】賦予較小的數字，讓它排在上面
+                    "經典口味": 6    // 【新增】賦予較大的數字，讓它排在下面
                 };
 
                 // 如果在權重表中，就按順序排；不在權重表的，就按原本的稀有字串規則排
