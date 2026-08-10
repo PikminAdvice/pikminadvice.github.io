@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260807v01";
+        const CURRENT_APP_VERSION = "260810v01";
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -1832,8 +1832,33 @@
             }
         }
 
+        /* --- 專為設定選單長條區塊設計的寬版呼吸特效 (內陰影防裁切 - 細緻版) --- */
+        @keyframes green-breathe-wide {
+            0% {
+                box-shadow: inset 0 0 0px 0px var(--pikmin-green);
+                background-color: transparent;
+            }
+            50% {
+                /* 【關鍵微調】將模糊從 15px 降為 10px，擴散從 4px 降為 1px */
+                box-shadow: inset 0 0 10px 1px var(--pikmin-green);
+                /* 背景色稍微調淡一點點，讓整體視覺更輕盈 */
+                background-color: rgba(255, 255, 255, 0.1); 
+            }
+            100% {
+                box-shadow: inset 0 0 0px 0px var(--pikmin-green);
+                background-color: transparent;
+            }
+        }
+
+        .highlight-breathe-wide {
+            animation: green-breathe-wide 1.0s 2 forwards;
+            border-radius: 8px; 
+            position: relative;
+            z-index: 5;
+        }
+
         .highlight-breathe {
-            animation: green-breathe 0.8s 2 forwards;
+            animation: green-breathe 1.0s 2 forwards;
             border: 1px solid white !important;
             z-index: 5;
             position: relative;
@@ -2172,6 +2197,23 @@
             padding: 0 10px;
             margin-top: 10px;
         }
+
+        /* 未知飾品暫存區：狀態選擇按鈕專用 */
+        .staging-status-btn {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            flex: 1;
+            border: 3px solid transparent;
+        }
+        .staging-status-btn.selected {
+            transform: scale(1.05);
+            border-color: #333; /* 加上深色外框強調選中 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 
@@ -2375,13 +2417,20 @@
         </div>
 
         <div id="tab-incubate" class="tab-content active">
-            <ul class="rec-list" id="recommend-incubate-list"></ul>
+            <!-- 【新增】孵盆建議設定快捷鈕 (縮減高度版) -->
+            <div class="discard-settings" style="justify-content: flex-end; padding: 4px 15px; border-bottom: none;">
+                <button class="history-btn"
+                    style="font-size: 13px; font-weight: bold; padding: 4px 10px; display:flex; align-items:center; gap:5px;"
+                    onclick="openSettingsModal()">⚙️ 孵盆建議設定</button>
+            </div>
+            <ul class="rec-list" id="recommend-incubate-list" style="border-top: 1px solid var(--border-color);"></ul>
         </div>
 
         <div id="tab-discard" class="tab-content">
-            <div class="discard-settings" style="justify-content: flex-end; padding: 8px 15px; border-bottom: none;">
+            <!-- 【優化】放生建議設定快捷鈕 (縮減高度版) -->
+            <div class="discard-settings" style="justify-content: flex-end; padding: 4px 15px; border-bottom: none;">
                 <button class="history-btn"
-                    style="font-size: 16px; font-weight: bold; padding: 6px 12px; display:flex; align-items:center; gap:5px;"
+                    style="font-size: 13px; font-weight: bold; padding: 4px 10px; display:flex; align-items:center; gap:5px;"
                     onclick="openSettingsModal()">⚙️ 放生建議設定</button>
             </div>
             <ul class="rec-list" id="recommend-discard-list" style="border-top: 1px solid var(--border-color);"></ul>
@@ -2458,6 +2507,32 @@
             </div>
         </div>
     </div>
+
+
+    <!-- 【新增】未知飾品確認對話框 -->
+    <div id="staging-modal" class="modal-overlay" style="z-index: 2600;">
+        <div class="hatch-modal" style="max-width: 320px;">
+            <h3 style="margin:0; font-size: 20px; text-align:center; color: var(--pikmin-green);">未知飾品確認</h3>
+            <p style="margin:0; font-size:14px; text-align:center; color:#555;">請選擇正確的子分類與當前狀態</p>
+            
+            <div style="font-weight: bold; margin-top: 10px; color: var(--text-color);">1. 選擇子分類：</div>
+            <div class="hatch-subcats" id="staging-subcats-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
+            
+            <div style="font-weight: bold; margin-top: 10px; color: var(--text-color);">2. 選擇當前狀態：</div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <!-- 套用主題色系與全新按鈕 class -->
+                <button class="staging-status-btn theme-待機" id="staging-status-待機" onclick="selectStagingStatus('待機', this)">待機</button>
+                <button class="staging-status-btn theme-培育" id="staging-status-培育" onclick="selectStagingStatus('培育', this)">培育</button>
+            </div>
+            
+            <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+                <button style="padding:10px 20px; font-size: 16px; border-radius:6px; border:none; background:var(--border-color); cursor:pointer;" onclick="document.getElementById('staging-modal').style.display='none'">取消</button>
+                <button style="padding:10px 20px; font-size: 16px; border-radius:6px; border:none; background:var(--pikmin-green); color:white; font-weight:bold; cursor:pointer;" onclick="confirmStaging()">確認</button>
+            </div>
+        </div>
+    </div>
+
+
 
     <div id="image-lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" src="" alt=""></div>
 
@@ -2744,7 +2819,7 @@
             <div
                 style="overflow-y:auto; max-height:70vh; text-align:left; font-size:15px; color:#444; padding-right: 5px;">
 
-                <div class="settings-section-title">『圖鑑顯示』</div>
+                <div class="settings-section-title">『圖鑑顯示設定』</div>
                 <label id="label-hideLocked"
                     style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer; padding: 5px; border-radius: 6px; transition: 0.3s;">
                     <input type="checkbox" id="set-hideLocked" style="margin-top:4px; transform:scale(1.2);"
@@ -2754,7 +2829,16 @@
                         <div style="font-size:13px; color:#777; margin-top:2px;">皮克敏圖片會變成深灰色，保留驚喜感。</div>
                     </div>
                 </label>
-                <div class="welcome-divider" style="margin-bottom: 15px;"></div>
+
+                <div class="settings-section-title">『孵盆建議設定』</div>
+                <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px; cursor:pointer;">
+                    <input type="checkbox" id="set-unpinHuge" style="margin-top:4px; transform:scale(1.2);"
+                        onchange="toggleSetting('unpinHuge', this.checked)">
+                    <div>
+                        <div style="font-weight:bold; color:var(--text-color);">大花盆不要置頂</div>
+                        <div style="font-size:13px; color:#777; margin-top:2px;">勾選後，大花盆與金色大花盆將依據未解鎖數量，與一般花盆混合排列。</div>
+                    </div>
+                </label>
 
                 <div class="settings-section-title">『放生建議設定』</div>
                 <label style="display:flex; align-items:flex-start; gap:8px; margin-bottom:15px; cursor:pointer;">
@@ -2792,7 +2876,6 @@
                         <div style="font-size:13px; color:#777; margin-top:2px;">不需要解鎖完就全部丟掉吧🥹</div>
                     </div>
                 </label>
-                <div class="welcome-divider" style="margin-bottom: 15px;"></div>
 
                 <div class="settings-section-title" style="color:#D32F2F; background: rgba(211, 47, 47, 0.1);">『恢復原廠設定』
                 </div>
@@ -2820,6 +2903,12 @@
 
             <div
                 style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
+
+                <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
+                    2026.08.10 ]</div>
+                <ul style="margin-top: 0; padding-left: 20px; color: #555;">
+                    <li>於一般圖鑑<span style="color: var(--pikmin-green); font-weight: bold;">『藥局』、『體育場』、『車站-票券』</span>新增<span style="color: var(--pikmin-green); font-weight: bold;">『冰凍皮克敏』</span>圖鑑（含一般與稀有）</li>
+                </ul>
 
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
                     2026.08.07 ]</div>
@@ -2934,9 +3023,9 @@
         // 【新增】當月活動皮克敏種類名稱 (隊長可在此手動填寫)
         const currentEventCategories = ["峇里島雕刻", "刨冰", "冰淇淋"];
 
-        // 【修改】操作設定預設值 (升級為 v2 確保舊玩家更新後直接套用新預設)
+        // 【修改】操作設定預設值 (加入 unpinHuge)
         let appSettings = JSON.parse(localStorage.getItem('pikminAppSettings_v2')) || {
-            hideLocked: true, protectHidden: true, sortDiscard: false, protectEvent: true, keepOne: true
+            hideLocked: true, protectHidden: true, sortDiscard: false, protectEvent: true, keepOne: true, unpinHuge: false
         };
 
 
@@ -3720,7 +3809,39 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 { id: "White_機場_Luggage_Tag", category: "機場", subcategory: "機場行李吊牌", colorName: "White", colorZh: "白色", imageUrl: "" },
                 { id: "Purple_機場_Luggage_Tag", category: "機場", subcategory: "機場行李吊牌", colorName: "Purple", colorZh: "紫色", imageUrl: "" },
                 { id: "Rock_機場_Luggage_Tag", category: "機場", subcategory: "機場行李吊牌", colorName: "Rock", colorZh: "岩石", imageUrl: "" },
-                { id: "Winged_機場_Luggage_Tag", category: "機場", subcategory: "機場行李吊牌", colorName: "Winged", colorZh: "羽翅", imageUrl: "" }
+                { id: "Winged_機場_Luggage_Tag", category: "機場", subcategory: "機場行李吊牌", colorName: "Winged", colorZh: "羽翅", imageUrl: "" },
+
+                // 【新增】2026.08 一般圖鑑補齊：藥局 (含一般與稀有冰皮克敏)
+                { id: "Ice_藥局_Toothbrush", category: "藥局", subcategory: "牙刷", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+                { id: "Ice_藥局_Toothbrush_%28Rare%29", category: "藥局", subcategory: "稀有牙刷", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+                
+                // 【新增】2026.08 一般圖鑑補齊：體育場 (含一般與稀有冰皮克敏)
+                { id: "Ice_體育場_Ball_Keychain", category: "體育場", subcategory: "球類鑰匙圈", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+                { id: "Ice_體育場_Ball_Keychain_%28Rare%29", category: "體育場", subcategory: "稀有球類鑰匙圈", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+                
+                // 【新增】2026.08 一般圖鑑補齊：車站-票券 (含一般與稀有冰皮克敏)
+                { id: "Ice_車站_Ticket", category: "車站", subcategory: "票券", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+                { id: "Ice_車站_Ticket_%28Rare%29", category: "車站", subcategory: "稀有票券", colorName: "Ice", colorZh: "冰凍", imageUrl: "" },
+
+                // 【新增】未知飾品暫存區 (路邊)
+                { id: "Red_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikmin.wiki.gallery/images/2/27/Red_Seedling_icon.png" },
+                { id: "Yellow_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikmin.wiki.gallery/images/2/28/Yellow_Seedling_icon.png" },
+                { id: "Blue_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Blue", colorZh: "藍色", imageUrl: "https://pikmin.wiki.gallery/images/7/7b/Blue_Seedling_icon.png" },
+                { id: "White_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "White", colorZh: "白色", imageUrl: "https://pikmin.wiki.gallery/images/4/4b/White_Seedling_icon.png" },
+                { id: "Purple_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Purple", colorZh: "紫色", imageUrl: "https://pikmin.wiki.gallery/images/6/62/Purple_Seedling_icon.png" },
+                { id: "Rock_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Rock", colorZh: "岩石", imageUrl: "https://pikmin.wiki.gallery/images/3/30/Gray_Seedling_icon.png" },
+                { id: "Winged_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://pikmin.wiki.gallery/images/c/cd/Pink_Seedling_icon.png" },
+                { id: "Ice_路邊_Staging", category: "路邊", subcategory: "未知飾品暫存區", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikmin.wiki.gallery/images/c/cc/Ice_Blue_Seedling_icon.png" },
+                
+                // 【新增】未知飾品暫存區 (公園)
+                { id: "Red_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Red", colorZh: "紅色", imageUrl: "https://pikmin.wiki.gallery/images/2/27/Red_Seedling_icon.png" },
+                { id: "Yellow_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Yellow", colorZh: "黃色", imageUrl: "https://pikmin.wiki.gallery/images/2/28/Yellow_Seedling_icon.png" },
+                { id: "Blue_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Blue", colorZh: "藍色", imageUrl: "https://pikmin.wiki.gallery/images/7/7b/Blue_Seedling_icon.png" },
+                { id: "White_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "White", colorZh: "白色", imageUrl: "https://pikmin.wiki.gallery/images/4/4b/White_Seedling_icon.png" },
+                { id: "Purple_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Purple", colorZh: "紫色", imageUrl: "https://pikmin.wiki.gallery/images/6/62/Purple_Seedling_icon.png" },
+                { id: "Rock_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Rock", colorZh: "岩石", imageUrl: "https://pikmin.wiki.gallery/images/3/30/Gray_Seedling_icon.png" },
+                { id: "Winged_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Winged", colorZh: "羽翅", imageUrl: "https://pikmin.wiki.gallery/images/c/cd/Pink_Seedling_icon.png" },
+                { id: "Ice_公園_Staging", category: "公園", subcategory: "未知飾品暫存區", colorName: "Ice", colorZh: "冰凍", imageUrl: "https://pikmin.wiki.gallery/images/c/cc/Ice_Blue_Seedling_icon.png" }
 
             ];
 
@@ -4098,6 +4219,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
         function openSettingsModal() {
             document.getElementById('set-hideLocked').checked = appSettings.hideLocked;
+            document.getElementById('set-unpinHuge').checked = appSettings.unpinHuge || false; // 【新增】讀取大花盆設定
             document.getElementById('set-protectHidden').checked = appSettings.protectHidden;
             document.getElementById('set-sortDiscard').checked = appSettings.sortDiscard;
             document.getElementById('set-protectEvent').checked = appSettings.protectEvent;
@@ -4115,10 +4237,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             if (targetLabel) {
                 // 平滑滾動到該選項
                 targetLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // 使用現有的綠色呼吸光暈特效提醒玩家
-                targetLabel.classList.add('highlight-breathe');
+                // 【修正】使用不改變實體大小的專屬寬版光暈特效，避免左右被捲軸裁切
+                targetLabel.classList.add('highlight-breathe-wide');
                 // 特效播放完畢後自動移除
-                setTimeout(() => targetLabel.classList.remove('highlight-breathe'), 1600);
+                setTimeout(() => targetLabel.classList.remove('highlight-breathe-wide'), 2000);
             }
         }
 
@@ -4301,6 +4423,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 // 1. 大花盆與金色大花盆永遠排在最前面
                 if (a === '大花盆') return -1; if (b === '大花盆') return 1;
                 if (a === '金色大花盆') return -1; if (b === '金色大花盆') return 1;
+                if (a === '未知飾品暫存區') return -1; if (b === '未知飾品暫存區') return 1;
 
                 // 2. 自定義排序權重
                 const priority = {
@@ -4386,7 +4509,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     // 【修復 1】模態框初始渲染時的判斷 (排除大花盆與金色大花盆)
                     const isSpecialCat = Object.values(specialCategories).flat().includes(category);
                     const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
-                    if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆') {
+                    // 在 openModalCore 和 animateAndRenderTags 都要替換這行：
+                    if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆' && sub !== '未知飾品暫存區') {
                         add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
                     } else {
                         add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
@@ -4432,11 +4556,12 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const sub = item.subcategory;
             const add = document.createElement('div'); add.className = 'add-btn'; add.textContent = '+';
 
-            if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆') {
-                add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
-            } else {
-                add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
-            }
+            // 在 openModalCore 和 animateAndRenderTags 都要替換這行：
+                    if ((sub.includes("稀有") || sub.includes("隱藏") || isSpecialCat) && sub !== '大花盆' && sub !== '金色大花盆' && sub !== '未知飾品暫存區') {
+                        add.onclick = function (e) { e.stopPropagation(); selectStatusDirect(item.id, '飾品'); };
+                    } else {
+                        add.onclick = function (e) { openContextMenu(e, this, item.id, -1); };
+                    }
             tagsContainer.appendChild(add);
 
             // 播放移動動畫 (FLIP)
@@ -4615,6 +4740,90 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             }
         }
 
+        // ==========================================
+        // 【新增】未知飾品暫存與轉移系統
+        // ==========================================
+        let currentStagingItem = null;
+        let currentStagingIndex = -1;
+        let stagingSelectedSubcat = null;
+        let stagingSelectedStatus = null;
+
+        function openStagingModal(itemId, idx) {
+            currentStagingItem = myCollection.find(i => i.id === itemId);
+            currentStagingIndex = idx; // -1 代表從 '+' 按下，大於 -1 代表點擊已有標籤
+            stagingSelectedSubcat = null;
+            stagingSelectedStatus = null;
+
+            // 動態抓取該種類底下的所有正確子分類，並排除稀有與隱藏圖鑑
+            const subcats = [...new Set(myCollection.filter(i => 
+                i.category === currentStagingItem.category && 
+                i.subcategory !== '大花盆' && 
+                i.subcategory !== '金色大花盆' && 
+                i.subcategory !== '未知飾品暫存區' &&
+                !i.subcategory.includes('稀有') && 
+                !i.subcategory.includes('隱藏')
+            ).map(i => i.subcategory))];
+
+            const subContainer = document.getElementById('staging-subcats-container');
+            subContainer.innerHTML = subcats.map(sub => `
+                <button class="hatch-subcat-btn" onclick="selectStagingSubcat('${sub}', this)">${sub}</button>
+            `).join('');
+
+            // 重置所有按鈕的選中狀態
+            document.querySelectorAll('#staging-subcats-container .hatch-subcat-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.staging-status-btn').forEach(b => b.classList.remove('selected'));
+            
+            document.getElementById('custom-status-menu').style.display = 'none';
+            document.getElementById('staging-modal').style.display = 'flex';
+        }
+
+        function selectStagingSubcat(sub, elem) {
+            stagingSelectedSubcat = sub;
+            document.querySelectorAll('#staging-subcats-container .hatch-subcat-btn').forEach(btn => btn.classList.remove('selected'));
+            elem.classList.add('selected');
+        }
+
+        function selectStagingStatus(status, elem) {
+            stagingSelectedStatus = status;
+            document.querySelectorAll('.staging-status-btn').forEach(btn => btn.classList.remove('selected'));
+            elem.classList.add('selected');
+        }
+
+        function confirmStaging() {
+            if (!stagingSelectedSubcat || !stagingSelectedStatus) return alert('請選擇子分類與狀態！');
+            
+            const targetPikmin = myCollection.find(i => 
+                i.category === currentStagingItem.category && 
+                i.subcategory === stagingSelectedSubcat && 
+                i.colorName === currentStagingItem.colorName
+            );
+
+            if (targetPikmin) {
+                // 如果是從既有的暫存標籤點擊孵出，則將其從暫存區刪除
+                if (currentStagingIndex > -1) {
+                    currentStagingItem.instances.splice(currentStagingIndex, 1);
+                }
+
+                // 在目標子分類新增皮克敏
+                const newUid = getUID();
+                targetPikmin.instances.push({ uid: newUid, status: stagingSelectedStatus });
+                
+                document.getElementById('staging-modal').style.display = 'none';
+                commitAction(`從暫存區轉移/孵出: 【${targetPikmin.category}】${targetPikmin.subcategory} ${targetPikmin.colorZh} (${stagingSelectedStatus})`);
+                
+                // 重新渲染畫面並發光提示
+                openModalCore(targetPikmin.category, false);
+                setTimeout(() => {
+                    const targetTag = document.getElementById('tag-' + newUid);
+                    if (targetTag) {
+                        targetTag.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        targetTag.classList.add('anim-convert');
+                        setTimeout(() => targetTag.classList.remove('anim-convert'), 500);
+                    }
+                }, 300);
+            }
+        }
+
         function showWarningModal(e, id) { e.stopPropagation(); currentWarningId = id; document.getElementById('warning-modal').style.display = 'flex'; }
         function resolveWarning(action) {
             const item = myCollection.find(i => i.id === currentWarningId);
@@ -4684,14 +4893,18 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             // 客製化選單內容
             if (item.subcategory === '大花盆' || item.subcategory === '金色大花盆') {
+
+            } else if (item.subcategory === '未知飾品暫存區') {
+                // 【新增】未知飾品專屬選單
                 menu.innerHTML = `
-                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【孵出】請選擇孵出的顏色與子分類')">!</div>
+                    <div class="status-info-icon" onclick="alert('💡 暫存區說明：\\n當你拿到路邊或公園的花盆，還不知道具體飾品分類時，可以先暫存在這裡。\\n點擊【孵出】即可選擇正確的子分類並轉移！')">!</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" id="menu-target-center" onclick="selectStatus('孵盆')">孵盆</div>
-                    ${index > -1 ? `<div class="menu-item theme-孵出" onclick="openHatchModal('${item.id}', ${index})">孵出</div>` : ''}
+                    <div class="menu-item theme-孵出" onclick="openStagingModal('${item.id}', ${index})">孵出</div>
                     <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
                 `;
             } else if (item.subcategory.includes('稀有') || item.subcategory.includes('隱藏')) {
+
                 menu.innerHTML = `
                     <div class="menu-item theme-飾品" id="menu-target-center" onclick="selectStatus('飾品')">飾品</div>
                     <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
@@ -4893,13 +5106,17 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 let isAllNormalUnlocked = catItems.filter(i => !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏')).every(i => i.isUnlocked);
                 let isAllHiddenUnlocked = hasHidden ? catItems.filter(i => i.subcategory.includes('稀有') || i.subcategory.includes('隱藏')).every(i => i.isUnlocked) : true;
 
+                // 【新增】動態計算分數。若勾選不置頂，則以該種類「未解鎖數量」作為分數，藉此與一般花盆混合排序
+                let missingCount = catItems.filter(i => !i.isUnlocked).length;
+                let hugeScore = appSettings.unpinHuge ? missingCount : -999;
+
                 availableHuge.forEach(seed => {
                     if (!hasHidden) {
                         if (isAllNormalUnlocked) pushDiscard(hugeItem, seed, false);
-                        else incubateList.push({ item: hugeItem, target: seed, score: -999 });
+                        else incubateList.push({ item: hugeItem, target: seed, score: hugeScore });
                     } else {
                         if (isAllHiddenUnlocked) pushDiscard(hugeItem, seed, false);
-                        else incubateList.push({ item: hugeItem, target: seed, score: -999 });
+                        else incubateList.push({ item: hugeItem, target: seed, score: hugeScore });
                     }
                 });
             });
@@ -4922,7 +5139,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 let isCategoryHiddenUnlocked = hasHidden ? (catHiddenItems.length > 0 && catHiddenItems.every(i => i.isUnlocked)) : true;
 
                 colorOrder.forEach(color => {
-                    let items = myCollection.filter(i => i.category === cat && i.colorName === color && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
+                    let items = myCollection.filter(i => i.category === cat && i.colorName === color && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆' && i.subcategory !== '未知飾品暫存區');
                     if (items.length === 0) return;
 
                     let n = items.length;
@@ -5215,9 +5432,9 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
         function renderDashboard() {
             const specialCatNames = Object.values(specialCategories).flat();
 
-            const generalItems = myCollection.filter(i => !specialCatNames.includes(i.category) && i.subcategory !== '大花盆');
-            const specialItems = myCollection.filter(i => specialCatNames.includes(i.category) && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
-            const totalItems = myCollection.filter(i => i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
+            const generalItems = myCollection.filter(i => !specialCatNames.includes(i.category) && i.subcategory !== '大花盆' && i.subcategory !== '未知飾品暫存區');
+            const specialItems = myCollection.filter(i => specialCatNames.includes(i.category) && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆' && i.subcategory !== '未知飾品暫存區');
+            const totalItems = myCollection.filter(i => i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆' && i.subcategory !== '未知飾品暫存區');
 
             const updateChart = (items, prefix) => {
                 let t = items.length;
