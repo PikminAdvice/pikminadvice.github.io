@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>短線波段實戰儀表板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 隱藏滾動條但保持可滾動 */
+        ::-webkit-scrollbar { display: none; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- 頂部多用戶切換與備份列 -->
+    <header class="bg-white shadow-sm px-4 py-3 flex justify-between items-center z-10">
+        <select id="userSelect" class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 block p-2 font-bold" onchange="switchUser(this.value)">
+            <!-- 動態產生 -->
+        </select>
+        <div class="flex space-x-2">
+            <button onclick="exportData()" class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">匯出備份</button>
+            <span id="marketToggle" onclick="toggleMarket()" class="text-2xl cursor-pointer select-none">🇹🇼</span>
+        </div>
+    </header>
+
+    <!-- 7天未備份警示 -->
+    <div id="backupAlert" class="hidden bg-yellow-100 text-yellow-800 text-xs text-center py-2 font-semibold shadow-inner">
+        ⚠️ 您的資料已超過 7 天未備份，請盡速匯出。
+    </div>
+
+    <!-- 主要內容區 (可滾動) -->
+    <main class="flex-1 overflow-y-auto p-4 pb-24">
+        
+        <!-- 頁籤 1: 總覽 (Dashboard) -->
+        <div id="view-dashboard" class="tab-content active">
+            <h2 class="text-xl font-bold mb-4">資產水位</h2>
+            <div class="bg-white rounded-2xl p-5 shadow-sm mb-6">
+                <p class="text-sm text-gray-500">總資產 (TWD)</p>
+                <p id="totalAssets" class="text-3xl font-black text-gray-900 mb-4">$0</p>
+                <div class="flex justify-between items-end border-t pt-4">
+                    <div>
+                        <p class="text-xs text-gray-500">閒置現金</p>
+                        <p id="cashAssets" class="text-lg font-bold text-green-600">$0</p>
+                    </div>
+                    <button onclick="editAssets()" class="text-xs text-gray-400 underline">修改本金</button>
+                </div>
+            </div>
+
+            <!-- 圓餅圖 -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm mb-6">
+                <h3 class="text-sm font-bold text-gray-700 mb-3">資產配置比重</h3>
+                <canvas id="assetChart" height="200"></canvas>
+            </div>
+
+            <h2 class="text-xl font-bold mb-4">歷史交易紀錄</h2>
+            <div id="historyList" class="space-y-3">
+                <!-- 動態產生歷史卡片 -->
+            </div>
+        </div>
+
+        <!-- 頁籤 2: 雷達 (Radar) -->
+        <div id="view-radar" class="tab-content">
+            <h2 class="text-xl font-bold mb-4">甜甜價動能推薦 <span id="radarMarketTitle" class="text-sm text-gray-500"></span></h2>
+            <div id="radarList" class="space-y-4">
+                <!-- 動態產生推薦卡片 -->
+                <p class="text-center text-gray-400 text-sm mt-10">載入中或無符合星級標的...</p>
+            </div>
+        </div>
+
+        <!-- 頁籤 3: 持股 (Portfolio) -->
+        <div id="view-portfolio" class="tab-content">
+            <h2 class="text-xl font-bold mb-4">我的持股庫 <span id="portfolioMarketTitle" class="text-sm text-gray-500"></span></h2>
+            <div id="portfolioList" class="space-y-4">
+                <!-- 動態產生持股卡片 -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 底部導覽列 -->
+    <nav class="bg-white border-t border-gray-200 fixed bottom-0 w-full pb-safe flex justify-around items-center px-2 py-2 z-20">
+        <button onclick="switchTab('dashboard')" class="nav-btn flex flex-col items-center p-2 text-blue-600 w-1/3" data-target="dashboard">
+            <span class="text-xl mb-1">📊</span><span class="text-[10px] font-bold">總覽</span>
+        </button>
+        <button onclick="switchTab('radar')" class="nav-btn flex flex-col items-center p-2 text-gray-400 w-1/3" data-target="radar">
+            <span class="text-xl mb-1">🎯</span><span class="text-[10px] font-bold">雷達</span>
+        </button>
+        <button onclick="switchTab('portfolio')" class="nav-btn flex flex-col items-center p-2 text-gray-400 w-1/3" data-target="portfolio">
+            <span class="text-xl mb-1">💼</span><span class="text-[10px] font-bold">持股</span>
+        </button>
+    </nav>
+
+    <!-- 下單提示 / 買入 Modal (簡化版) -->
+    <div id="actionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+            <h3 id="modalTitle" class="text-lg font-bold mb-2">執行買入</h3>
+            
+            <!-- 智慧下單小抄 -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-4 rounded">
+                <p class="text-xs text-blue-800 font-semibold mb-1">💡 券商下單小抄：</p>
+                <ul class="text-[11px] text-blue-700 space-y-1">
+                    <li>1. 買入建倉 ➔ 使用 <b class="text-red-500">限價單 (Limit)</b> 防滑價</li>
+                    <li>2. 目標獲利 ➔ 使用 <b class="text-red-500">限價單 (Limit)</b> 預先掛單</li>
+                    <li>3. 保命止損 ➔ 使用 <b class="text-red-500">停損單 (Stop)</b> 確保觸發逃生</li>
+                </ul>
+            </div>
+
+            <div id="modalContent" class="space-y-3 text-sm">
+                <!-- 動態注入確認資訊 -->
+            </div>
+            
+            <div class="mt-6 flex space-x-3">
+                <button onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-xl font-bold">取消</button>
+                <button onclick="confirmAction()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl font-bold">確認已成交</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 全局狀態與初始化 ---
+        let currentMarket = 'TW'; // TW or US
+        let radarData = {};
+        let assetChartInstance = null;
+
+        // 預設資料結構 (多租戶)
+        const defaultData = {
+            currentUser: 'Berice',
+            users: {
+                'Berice': { totalAssets: 0, cash: 0, positions: [], history: [], lastBackup: '2026-08-13' },
+                'Wendy': { totalAssets: 0, cash: 0, positions: [], history: [], lastBackup: '2026-08-13' },
+                'Jerry': { totalAssets: 0, cash: 0, positions: [], history: [], lastBackup: '2026-08-13' }
+            }
+        };
+
+        // 讀取本地資料
+        let appData = JSON.parse(localStorage.getItem('radarData')) || defaultData;
+
+        // 初始化
+        window.onload = () => {
+            fetchRadarData();
+            initUserDropdown();
+            renderDashboard();
+            checkBackupAlert();
+        };
+
+        // --- 核心邏輯 ---
+        function fetchRadarData() {
+            fetch('data.json')
+                .then(res => res.json())
+                .then(data => {
+                    radarData = data;
+                    renderRadar();
+                })
+                .catch(e => console.log("無法讀取 data.json，請確認 Python 腳本已執行"));
+        }
+
+        function switchUser(userName) {
+            appData.currentUser = userName;
+            saveData();
+            renderDashboard();
+            renderPortfolio();
+            checkBackupAlert();
+        }
+
+        function toggleMarket() {
+            currentMarket = currentMarket === 'TW' ? 'US' : 'TW';
+            document.getElementById('marketToggle').textContent = currentMarket === 'TW' ? '🇹🇼' : '🇺🇸';
+            document.getElementById('radarMarketTitle').textContent = `(${currentMarket})`;
+            document.getElementById('portfolioMarketTitle').textContent = `(${currentMarket})`;
+            renderRadar();
+            renderPortfolio();
+            renderDashboard(); // 重繪圓餅圖
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${tabId}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === tabId) {
+                    btn.classList.replace('text-gray-400', 'text-blue-600');
+                } else {
+                    btn.classList.replace('text-blue-600', 'text-gray-400');
+                }
+            });
+        }
+
+        // --- 渲染畫面 ---
+        function renderRadar() {
+            const list = document.getElementById('radarList');
+            const data = radarData[currentMarket] || {};
+            list.innerHTML = '';
+            
+            const userData = appData.users[appData.currentUser];
+            const riskAmount = userData.totalAssets * 0.02; // 單筆最高風險 2%
+
+            Object.entries(data).forEach(([ticker, info]) => {
+                if (info.stars < 3) return; // 只顯示 3 星以上
+
+                // 計算建議買入金額與股數
+                const riskPerShare = info.current_price - info.stop_loss;
+                const suggestShares = Math.floor(riskAmount / riskPerShare);
+                const suggestInvest = suggestShares * info.current_price;
+
+                const starStr = '⭐'.repeat(info.stars);
+                const isUs = currentMarket === 'US';
+                const currency = isUs ? 'USD' : 'TWD';
+
+                list.innerHTML += `
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border-l-4 border-blue-500">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">${ticker}</h3>
+                                <p class="text-xs text-gray-500">${starStr}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500">現價</p>
+                                <p class="font-black text-lg">${info.current_price}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs mb-3 bg-gray-50 p-2 rounded-xl">
+                            <div>
+                                <p class="text-gray-400">停損</p>
+                                <p class="font-bold text-red-500">${info.stop_loss}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">壓力目標</p>
+                                <p class="font-bold text-green-600">${info.resistance}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">預計天數</p>
+                                <p class="font-bold text-gray-700">${info.est_days_min}~${info.est_days_max}天</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center mt-3">
+                            <p class="text-[10px] text-gray-500">建議配置: ${suggestInvest.toLocaleString()} ${currency}<br>(佔總資產2%風險)</p>
+                            <button onclick="openModal('buy', '${ticker}', ${info.current_price})" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-xl font-bold shadow-md hover:bg-blue-700">
+                                ⚡ 執行買入
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderDashboard() {
+            const userData = appData.users[appData.currentUser];
+            document.getElementById('totalAssets').textContent = `$${userData.totalAssets.toLocaleString()}`;
+            document.getElementById('cashAssets').textContent = `$${userData.cash.toLocaleString()}`;
+
+            // 圓餅圖數據統計 (過濾出 TW 和 US 的投資總額)
+            let twInvested = 0, usInvested = 0;
+            userData.positions.forEach(p => {
+                if(p.market === 'TW') twInvested += p.invested;
+                if(p.market === 'US') usInvested += p.invested; // 為了簡化，此處未做匯率轉換，實戰需乘 32
+            });
+
+            const ctx = document.getElementById('assetChart').getContext('2d');
+            if(assetChartInstance) assetChartInstance.destroy();
+            
+            assetChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['閒置現金', '台股部位', '美股部位'],
+                    datasets: [{
+                        data: [userData.cash, twInvested, usInvested],
+                        backgroundColor: ['#22c55e', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        // --- 資料保全與工具函式 ---
+        function saveData() {
+            localStorage.setItem('radarData', JSON.stringify(appData));
+        }
+
+        function exportData() {
+            const userData = appData.users[appData.currentUser];
+            userData.lastBackup = new Date().toISOString().split('T')[0];
+            saveData();
+            
+            // 獨立匯出當前用戶
+            const exportObj = { [appData.currentUser]: userData };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `${appData.currentUser}_backup_${userData.lastBackup}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            checkBackupAlert();
+        }
+
+        function checkBackupAlert() {
+            const userData = appData.users[appData.currentUser];
+            const lastDate = new Date(userData.lastBackup);
+            const diffDays = Math.floor((new Date() - lastDate) / (1000 * 60 * 60 * 24));
+            document.getElementById('backupAlert').style.display = diffDays > 7 ? 'block' : 'none';
+        }
+
+        function initUserDropdown() {
+            const select = document.getElementById('userSelect');
+            select.innerHTML = Object.keys(appData.users).map(name => 
+                `<option value="${name}" ${name === appData.currentUser ? 'selected' : ''}>👤 ${name}</option>`
+            ).join('');
+        }
+
+        // Modal 與實際扣款邏輯 (簡化示意)
+        function openModal(action, ticker, price) {
+            document.getElementById('actionModal').classList.remove('hidden');
+            // ... (此處可加入填寫股數與扣款邏輯並呼叫 saveData())
+        }
+        function closeModal() { document.getElementById('actionModal').classList.add('hidden'); }
+        function confirmAction() { closeModal(); /* 執行實際邏輯 */ }
+        function renderPortfolio() { /* 渲染持股進度條邏輯 */ }
+        function editAssets() { /* 修改本金邏輯 */ }
+
+    </script>
+</body>
+</html>
