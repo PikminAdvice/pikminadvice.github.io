@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "260811v03"
+        const CURRENT_APP_VERSION = "260812v03"
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -2509,21 +2509,14 @@
     </div>
 
 
-    <!-- 【新增】未知飾品確認對話框 -->
+    <!-- 【修改】未知飾品確認對話框 (純轉移飾品) -->
     <div id="staging-modal" class="modal-overlay" style="z-index: 2600;">
         <div class="hatch-modal" style="max-width: 320px;">
             <h3 style="margin:0; font-size: 20px; text-align:center; color: var(--pikmin-green);">未知飾品確認</h3>
-            <p style="margin:0; font-size:14px; text-align:center; color:#555;">請選擇正確的子分類與當前狀態</p>
+            <p style="margin:0; font-size:14px; text-align:center; color:#555;">請選擇該飾品正確的子分類</p>
             
             <div style="font-weight: bold; margin-top: 10px; color: var(--text-color);">1. 選擇子分類：</div>
             <div class="hatch-subcats" id="staging-subcats-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div>
-            
-            <div style="font-weight: bold; margin-top: 10px; color: var(--text-color);">2. 選擇當前狀態：</div>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <!-- 套用主題色系與全新按鈕 class -->
-                <button class="staging-status-btn theme-待機" id="staging-status-待機" onclick="selectStagingStatus('待機', this)">待機</button>
-                <button class="staging-status-btn theme-培育" id="staging-status-培育" onclick="selectStagingStatus('培育', this)">培育</button>
-            </div>
             
             <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
                 <button style="padding:10px 20px; font-size: 16px; border-radius:6px; border:none; background:var(--border-color); cursor:pointer;" onclick="document.getElementById('staging-modal').style.display='none'">取消</button>
@@ -4460,22 +4453,56 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 return aRare - bRare;
             });
 
+            // 【新增】讀取子分類的折疊記憶
+            let collapsedSubcats = JSON.parse(localStorage.getItem('pikminCollapsedSubcats')) || [];
+            
             // 【修復】加入 Gold 進入顏色排序陣列
             const colorOrder = ["Red", "Yellow", "Blue", "Purple", "White", "Winged", "Rock", "Ice", "Gold"];
             subcats.forEach((sub, subIdx) => {
                 const subItems = items.filter(i => i.subcategory === sub);
                 const subHeader = document.createElement('div');
                 subHeader.className = 'subcategory-header';
-                subHeader.onclick = () => { const c = document.getElementById(`subcat-${subIdx}`); c.style.display = c.style.display === 'none' ? 'block' : 'none'; };
+                
+                // 產生獨一無二的記憶鍵值 (例如：路邊_未知飾品暫存區)
+                let uniqueSubKey = category + '_' + sub;
+                let isCollapsed = collapsedSubcats.includes(uniqueSubKey);
+                let arrow = isCollapsed ? '▶' : '▼';
 
                 if (sub === '大花盆' || sub === '金色大花盆') {
-                    subHeader.innerHTML = `<span>🌺 ${sub} ▼</span>`;
+                    subHeader.innerHTML = `<span>🌺 ${sub} <span class="sub-arrow">${arrow}</span></span>`;
                 } else {
-                    subHeader.innerHTML = `<span>${sub} (${subItems.filter(i => i.isUnlocked).length}/${subItems.length}) ▼</span><div class="hamburger-x2" onclick="openBatchMenu(event, '${category}', '${sub}')">☰</div>`;
+                    subHeader.innerHTML = `<span>${sub} (${subItems.filter(i => i.isUnlocked).length}/${subItems.length}) <span class="sub-arrow">${arrow}</span></span><div class="hamburger-x2" onclick="openBatchMenu(event, '${category}', '${sub}')">☰</div>`;
                 }
                 list.appendChild(subHeader);
 
-                const container = document.createElement('div'); container.id = `subcat-${subIdx}`; container.className = 'subcat-items-container';
+                const container = document.createElement('div'); 
+                container.id = `subcat-${subIdx}`; 
+                container.className = 'subcat-items-container';
+                // 套用記憶的折疊狀態
+                container.style.display = isCollapsed ? 'none' : 'block';
+
+                // 修改點擊事件：切換顯示狀態並記憶
+                subHeader.onclick = (e) => { 
+                    // 避免點到漢堡選單時誤觸發折疊
+                    if (e.target.classList.contains('hamburger-x2')) return;
+                    
+                    const c = document.getElementById(`subcat-${subIdx}`); 
+                    const isNowCollapsed = c.style.display !== 'none'; // 若原本顯示中，代表現在要收起來
+                    c.style.display = isNowCollapsed ? 'none' : 'block'; 
+                    
+                    // 切換箭頭方向
+                    const arrowSpan = subHeader.querySelector('.sub-arrow');
+                    if(arrowSpan) arrowSpan.textContent = isNowCollapsed ? '▶' : '▼';
+
+                    // 更新記憶並儲存進 localStorage
+                    let savedCols = JSON.parse(localStorage.getItem('pikminCollapsedSubcats')) || [];
+                    if (isNowCollapsed) {
+                        if (!savedCols.includes(uniqueSubKey)) savedCols.push(uniqueSubKey);
+                    } else {
+                        savedCols = savedCols.filter(k => k !== uniqueSubKey);
+                    }
+                    localStorage.setItem('pikminCollapsedSubcats', JSON.stringify(savedCols));
+                };
 
                 subItems.sort((a, b) => colorOrder.indexOf(a.colorName) - colorOrder.indexOf(b.colorName));
                 subItems.forEach(item => {
@@ -4699,7 +4726,15 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             hatchSelectedColor = null; hatchSelectedSubcat = null;
 
             // 【修復】排除金色大花盆，避免跑出錯誤的選項
-            const subcats = [...new Set(myCollection.filter(i => i.category === currentHatchItem.category && i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆' && !i.subcategory.includes('稀有') && !i.subcategory.includes('隱藏')).map(i => i.subcategory))];
+            // 【修復 2】排除金色大花盆與未知飾品暫存區，確保大花盆選擇器只顯示正確的子分類
+            const subcats = [...new Set(myCollection.filter(i => 
+                i.category === currentHatchItem.category && 
+                i.subcategory !== '大花盆' && 
+                i.subcategory !== '金色大花盆' && 
+                i.subcategory !== '未知飾品暫存區' && 
+                !i.subcategory.includes('稀有') && 
+                !i.subcategory.includes('隱藏')
+            ).map(i => i.subcategory))];
 
             const subContainer = document.getElementById('hatch-subcats-container');
             subContainer.innerHTML = subcats.map(sub => `
@@ -4759,19 +4794,17 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             }
         }
 
-        // ==========================================
-        // 【新增】未知飾品暫存與轉移系統
+       // ==========================================
+        // 【修改】未知飾品暫存與轉移系統 (純轉移飾品版)
         // ==========================================
         let currentStagingItem = null;
         let currentStagingIndex = -1;
         let stagingSelectedSubcat = null;
-        let stagingSelectedStatus = null;
 
         function openStagingModal(itemId, idx) {
             currentStagingItem = myCollection.find(i => i.id === itemId);
             currentStagingIndex = idx; // -1 代表從 '+' 按下，大於 -1 代表點擊已有標籤
             stagingSelectedSubcat = null;
-            stagingSelectedStatus = null;
 
             // 動態抓取該種類底下的所有正確子分類，並排除稀有與隱藏圖鑑
             const subcats = [...new Set(myCollection.filter(i => 
@@ -4790,7 +4823,6 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             // 重置所有按鈕的選中狀態
             document.querySelectorAll('#staging-subcats-container .hatch-subcat-btn').forEach(b => b.classList.remove('selected'));
-            document.querySelectorAll('.staging-status-btn').forEach(b => b.classList.remove('selected'));
             
             document.getElementById('custom-status-menu').style.display = 'none';
             document.getElementById('staging-modal').style.display = 'flex';
@@ -4802,14 +4834,10 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             elem.classList.add('selected');
         }
 
-        function selectStagingStatus(status, elem) {
-            stagingSelectedStatus = status;
-            document.querySelectorAll('.staging-status-btn').forEach(btn => btn.classList.remove('selected'));
-            elem.classList.add('selected');
-        }
+        // 移除 selectStagingStatus 函式，因為不再需要選擇狀態
 
         function confirmStaging() {
-            if (!stagingSelectedSubcat || !stagingSelectedStatus) return alert('請選擇子分類與狀態！');
+            if (!stagingSelectedSubcat) return alert('請選擇子分類！');
             
             const targetPikmin = myCollection.find(i => 
                 i.category === currentStagingItem.category && 
@@ -4818,17 +4846,18 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             );
 
             if (targetPikmin) {
-                // 如果是從既有的暫存標籤點擊孵出，則將其從暫存區刪除
+                // 如果是從既有的暫存標籤點擊飾品，則將其從暫存區刪除
                 if (currentStagingIndex > -1) {
                     currentStagingItem.instances.splice(currentStagingIndex, 1);
                 }
 
-                // 在目標子分類新增皮克敏
+                // 在目標子分類新增飾品狀態，並直接解鎖圖鑑
                 const newUid = getUID();
-                targetPikmin.instances.push({ uid: newUid, status: stagingSelectedStatus });
+                targetPikmin.instances.push({ uid: newUid, status: '飾品' });
+                targetPikmin.isUnlocked = true; // 【關鍵】標記該圖鑑為已解鎖
                 
                 document.getElementById('staging-modal').style.display = 'none';
-                commitAction(`從暫存區轉移/孵出: 【${targetPikmin.category}】${targetPikmin.subcategory} ${targetPikmin.colorZh} (${stagingSelectedStatus})`);
+                commitAction(`從暫存區轉移並解鎖: 【${targetPikmin.category}】${targetPikmin.subcategory} ${targetPikmin.colorZh} (飾品)`);
                 
                 // 重新渲染畫面並發光提示
                 openModalCore(targetPikmin.category, false);
@@ -4912,14 +4941,24 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
 
             // 客製化選單內容
             if (item.subcategory === '大花盆' || item.subcategory === '金色大花盆') {
-
-            } else if (item.subcategory === '未知飾品暫存區') {
-                // 【新增】未知飾品專屬選單
+                // 【修復 1 & 2】補回大花盆專屬選單內容，解決粗黑線與選擇器記憶異常問題
                 menu.innerHTML = `
-                    <div class="status-info-icon" onclick="alert('💡 暫存區說明：\\n當你拿到路邊或公園的花盆，還不知道具體飾品分類時，可以先暫存在這裡。\\n點擊【孵出】即可選擇正確的子分類並轉移！')">!</div>
+                    <div class="status-info-icon" onclick="alert('💡 狀態說明：\\n\\n【花盆】撿來後，還沒開始孵化的狀態\\n【孵盆】放在背包孵化中，請持續走路\\n【孵出】請選擇孵出的顏色與子分類')">!</div>
                     <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
                     <div class="menu-item theme-孵盆" id="menu-target-center" onclick="selectStatus('孵盆')">孵盆</div>
-                    <div class="menu-item theme-孵出" onclick="openStagingModal('${item.id}', ${index})">孵出</div>
+                    ${index > -1 ? `<div class="menu-item theme-孵出" onclick="openHatchModal('${item.id}', ${index})">孵出</div>` : ''}
+                    <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
+                `;
+            } else if (item.subcategory === '未知飾品暫存區') {
+                // 【修改】將轉移按鈕改回直覺的「飾品」按鈕
+                menu.innerHTML = `
+                    <div class="status-info-icon" onclick="alert('💡 暫存區說明：\\n當你拿到路邊或公園的花盆，還不知道具體飾品分類時，可以先暫存在這裡。\\n點擊【飾品】即可選擇正確的子分類並完成圖鑑解鎖！')">!</div>
+                    <div class="menu-item theme-花盆" onclick="selectStatus('花盆')">花盆</div>
+                    <div class="menu-item theme-孵盆" onclick="selectStatus('孵盆')">孵盆</div>
+                    <div class="menu-item theme-待機" id="menu-target-center" onclick="selectStatus('待機')">待機</div>
+                    <div class="menu-item theme-培育" onclick="selectStatus('培育')">培育</div>
+                    ${hasHidden ? `<div class="menu-item theme-禮物" onclick="selectStatus('禮物')">禮物</div>` : ''}
+                    <div class="menu-item theme-飾品" onclick="openStagingModal('${item.id}', ${index})">飾品</div>
                     <div class="menu-delete" onclick="selectStatus('delete')" ${index === -1 ? 'style="display:none;"' : ''}>❌ 放生</div>
                 `;
             } else if (item.subcategory.includes('稀有') || item.subcategory.includes('隱藏')) {
