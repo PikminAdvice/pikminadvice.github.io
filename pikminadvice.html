@@ -4062,7 +4062,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 html += '<div class="category-nav" style="margin-bottom:15px; padding:0;">';
                 
                 generalMatches.forEach(cat => {
-                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆');
+                    // 【修正】確保搜尋結果的綠勾判定排除暫存區
+                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆' && i.subcategory !== '未知飾品暫存區');
                     const comp = items.filter(i => i.isUnlocked).length;
                     const hasWarning = items.some(i => i.instances.some(ins => ins.status === '飾品') && !i.isUnlocked && !i.hideWarning);
                     
@@ -4372,7 +4373,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                     if (Object.values(specialCategories).flat().includes(cat)) return;
                     if (cat === '大花盆') return;
 
-                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆');
+                    // 【修正】確保主畫面圖示的綠勾判定排除暫存區
+                    const items = myCollection.filter(i => i.category === cat && i.subcategory !== '大花盆' && i.subcategory !== '未知飾品暫存區');
                     const wrapper = document.createElement('div'); wrapper.className = 'nav-item-wrapper';
                     const btn = document.createElement('button'); btn.className = 'icon-btn'; btn.title = cat;
 
@@ -4480,7 +4482,8 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
             const modal = document.getElementById('status-modal');
             const list = document.getElementById('modal-status-list');
             const items = myCollection.filter(i => i.category === category);
-            const normalItems = items.filter(i => i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆');
+            // 【修正】在計算分母時，一併排除『未知飾品暫存區』，讓全解鎖進度恢復正常
+            const normalItems = items.filter(i => i.subcategory !== '大花盆' && i.subcategory !== '金色大花盆' && i.subcategory !== '未知飾品暫存區');
 
             document.getElementById('modal-title-text').textContent = `${category} (${normalItems.filter(i => i.isUnlocked).length}/${normalItems.length})`;
             const iconImg = document.getElementById('modal-header-img');
