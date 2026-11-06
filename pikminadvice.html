@@ -3682,15 +3682,7 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                         if (item.id.includes('Sticker_2')) item.subcategory = '藍色貼紙';
                         if (item.id.includes('Sticker_3')) item.subcategory = '橘色貼紙';
                     }
-                    // 【新增】26.11 週年紀念名稱正名升級 (確保舊玩家紀錄無縫轉移)
-                    if (item.category === '四週年紀念花盒') {
-                        item.category = '四週年紀念繁花禮盒';
-                        if (item.subcategory === '四週年紀念繁花禮盒');
-                    }
-                    if (item.category === '三週年紀念紙杯蛋糕') {
-                        item.category = '三週年紀念杯子蛋糕';
-                        if (item.subcategory === '三週年紀念杯子蛋糕');
-                    }
+                    
                 });
             } else {
                 // 【修正】移除容易導致誤判的空白轉換，直接使用標準換行分割
@@ -3775,6 +3767,49 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 "Ice_峇里島雕刻飾品皮克敏_Bali_Carving": "https://www.pikminwiki.com/images/f/fc/Decor_Ice_Balinese_Carving.png?bb8df"
 
             };
+
+            // ==========================================
+            // 【修復】2026.11 週年慶圖鑑正名與防呆修復系統
+            // ==========================================
+            myCollection.forEach(item => {
+                if (item.category === '四週年紀念花盒' || item.category === '四週年紀念繁花禮盒') {
+                    item.category = '四週年紀念繁花禮盒';
+                    // 只針對一般皮克敏改名，放過金色大花盆，避免誤傷
+                    if (item.colorName !== 'Gold' && item.colorName !== 'Huge') item.subcategory = '四週年紀念繁花禮盒';
+                }
+                if (item.category === '三週年紀念紙杯蛋糕' || item.category === '三週年紀念杯子蛋糕') {
+                    item.category = '三週年紀念杯子蛋糕';
+                    // 只針對一般皮克敏改名，放過金色大花盆，避免誤傷
+                    if (item.colorName !== 'Gold' && item.colorName !== 'Huge') item.subcategory = '三週年紀念杯子蛋糕';
+                }
+                
+                // 【救援程式】若上次更新導致金色大花盆被錯誤改名或脫鉤，將其強制修復回原本的子分類，並更新 ID
+                if (item.colorName === 'Gold') {
+                    if (item.category === '四週年紀念繁花禮盒') {
+                        item.subcategory = '金色大花盆';
+                        item.id = 'Gold_四週年紀念繁花禮盒';
+                    }
+                    if (item.category === '三週年紀念杯子蛋糕') {
+                        item.subcategory = '金色大花盆';
+                        item.id = 'Gold_三週年紀念杯子蛋糕';
+                    }
+                }
+            });
+
+            // 【清理】移除因為 Bug 而可能重複產生的多餘金色大花盆
+            let seenGolds = new Set();
+            myCollection = myCollection.filter(item => {
+                if (item.subcategory === '金色大花盆') {
+                    if (seenGolds.has(item.category)) return false; // 發現重複，直接剔除
+                    seenGolds.add(item.category);
+                }
+                return true;
+            });
+            // ==========================================
+
+            // 1. 強制把舊玩家的佔位灰圖，替換成最新的官方圖片
+            // (原本的程式碼保留不動...)
+            
 
             // 1. 強制把舊玩家的佔位灰圖，替換成最新的官方圖片
             myCollection.forEach(item => {
