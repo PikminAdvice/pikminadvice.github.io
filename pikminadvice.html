@@ -26,7 +26,7 @@
         // 6. 【防護與禮物】：若一般種類「升格」含稀有圖鑑，須將該類別加入 hiddenCategories 陣列。
         // ==========================================
 
-        const CURRENT_APP_VERSION = "261110v01"
+        const CURRENT_APP_VERSION = "261124v01"
 
         // 檢查是否需要顯示更新日誌
         function checkUpdateModal() {
@@ -2214,6 +2214,58 @@
             border-color: #333; /* 加上深色外框強調選中 */
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
+
+
+        /* === 暫停更新公告卡片 (方案 B) === */
+        .pause-notice-card {
+            display: block; /* 改為預設直接顯示 */
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 5px auto 15px auto;
+            padding: 14px 36px 14px 16px;
+            background: var(--card-bg);
+            border-left: 5px solid #F57C00;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+
+        .pause-notice-title {
+            font-weight: 900;
+            color: #F57C00;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .pause-notice-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            color: #888;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .pause-notice-close:hover {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+
+
     </style>
 </head>
 
@@ -2313,6 +2365,13 @@
     <!-- 【新增】搜尋結果容器 -->
     <div id="search-results" class="search-results"></div>
 
+    <!-- 【新增】暫停更新公告卡片 (方案 B) -->
+    <div id="pause-notice-card" class="pause-notice-card">
+        <button class="pause-notice-close" onclick="closePauseNotice()" title="關閉公告">✕</button>
+        <div class="pause-notice-title">📢 系統停止更新公告</div>
+        <div>因名稱爭議事件，開發者已退遊，此網站無限期 [停止更新]，台灣加油。<a href="https://www.4gamers.com.tw/news/detail/83224/pikmin-bloom-china-taiwan-taipei-in-game-controversy" target="_blank" rel="noopener noreferrer" style="color: #007de3; text-decoration: underline; font-weight: bold; margin-left: 4px;">相關新聞</a></div>
+    </div>
+
 
 
 
@@ -2374,24 +2433,14 @@
             </div>
         </div>
 
-        <div class="card-page-view">
-            <div class="view-row">
-                <span>總共有</span>
-                <span class="text-huge" id="page-view-count">194,713</span>
-                <span>次隊長造訪</span>
-            </div>
-            <div class="online-row">
-                <span style="font-size: 8px;">🟢</span><span> 在線：</span>
-                <span id="online-count">37</span>
-            </div>
-        </div>
+        
     </div>
 
 
 
 
     <div class="footer-info">
-        <span>Designed and developed by <b>Berice C.</b></span>
+        <span>因名稱爭議事件，開發者已退遊，此網站無限期 [停止更新]，台灣加油。<br>Designed and developed by <b>Berice C.</b></span>
     </div>
 
     <div class="bottom-panels" id="bottom-panels">
@@ -2897,6 +2946,13 @@
             <div
                 style="overflow-y:auto; height: 260px; text-align:left; font-size:14px; line-height:1.6; color:#444; padding-right: 5px;">
 
+                <div style="background: #fff8e1; border-left: 4px solid #F57C00; padding: 10px 12px; border-radius: 6px; margin-bottom: 15px;">
+                    <div style="font-weight:900; color:#F57C00; font-size:15px; margin-bottom: 4px;">📢 [ 2026.11.23 ] 停止更新公告</div>
+                    <div style="color: #444; font-size: 14px; line-height: 1.5;">
+                        因名稱爭議事件，開發者已退遊，此網站無限期 [停止更新]，台灣加油。<a href="https://www.4gamers.com.tw/news/detail/83224/pikmin-bloom-china-taiwan-taipei-in-game-controversy" target="_blank" rel="noopener noreferrer" style="color: #007de3; text-decoration: underline; font-weight: bold; margin-left: 4px;">相關新聞</a>
+                    </div>
+                </div>
+
                 <div style="font-weight:900; color:var(--text-color); font-size:16px; margin-bottom: 5px;">🌱 [
                     2026.11.10 ]</div>
                 <ul style="margin-top: 0; padding-left: 20px; color: #555;">
@@ -3008,7 +3064,7 @@
 
             <button class="welcome-btn" style="margin: 0 0 15px 0; font-size: 18px; padding: 12px; border-radius: 25px;"
                 onclick="executeForceUpdate()">
-                立即更新
+                我知道了
             </button>
 
             <label
@@ -5948,6 +6004,12 @@ https://pikmin.wiki.gallery/images/1/1e/Decor_Winged_Sneaker_Keychain.png`;
                 }
             }, { passive: false });
         });
+
+        // 📢 暫停更新公告卡片控制（僅本次隱藏，重整後會再次出現）
+        function closePauseNotice() {
+            const card = document.getElementById('pause-notice-card');
+            if (card) card.style.display = 'none';
+        }
 
         checkBackupWarning();
         initApp();
